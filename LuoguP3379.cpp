@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-const int N = 500005;
+const int N = 1000005;
 const int LOG_N = 20;
 int cnt, tmp, log_n, n, m, s;
 int logs[LOG_N];

@@ -40,6 +40,7 @@ inline void dp() {
             continue;
         }
         sum += a[i];
+        printf("Debug: i = %d; sum = %d;\n", i, sum);
         for (int j = sum; j >= a[i]; --j) {
             f[j] &= f[j - a[i]];
         }

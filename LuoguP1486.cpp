@@ -1,15 +1,11 @@
 #include <bits/stdc++.h>
-const int N = 100005;
-int min, n, plus, x, root, cnt;
-int val[N], father[N], lson[N], rson[N], rd[N], size[N];
-char ch;
 void readw(char &);
 void I();
 void S();
 int find(int);
-void dui(int);
+void xuan(int);
 int main() {
-    srand(15871);
+    srand(13758);
     scanf("%d %d", &n, &min);
     while (n--) {
         readw(ch);
@@ -21,10 +17,9 @@ int main() {
             I();
         } else if (ch == 'S') {
             min += x;
-            plus -= x;
             S();
         } else {
-            printf("%d\n", find(root) + plus);
+            printf("%d\n", find(root));
         }
     }
     return 0;
@@ -37,46 +32,11 @@ inline void readw(char &a) {  // This function helps the programmers to read a
     }
 }
 inline void I() {
-    if (!cnt) {
-        ++cnt;
-        size[cnt] = 1;
-        rd[cnt] = rand();
-        val[cnt] = x;
-        return;
-    }
     int tmp = root;
-    while (1) {
-        if (x < val[tmp]) {
-            if (!lson[tmp]) {
-                ++cnt;
-                father[cnt] = tmp;
-                val[cnt] = x;
-                size[cnt] = 1;
-                rd[cnt] = rand();
-                lson[tmp] = cnt;
-                break;
-            } else {
-                tmp = lson[tmp];
-            }
-        } else {
-            if (!rson[tmp]) {
-                ++cnt;
-                father[cnt] = tmp;
-                val[cnt] = x;
-                size[cnt] = 1;
-                rd[cnt] = rand();
-                rson[tmp] = cnt;
-                break;
-            } else {
-                tmp = rson[tmp];
-            }
-        }
+    for (int i = 1; i <= n; ++i) {
+        
     }
-    while (tmp) {
-        ++size[tmp];
-    }
-    dui(cnt);
 }
-inline void S() {
+inline void xuan(int x) {
     
 }

@@ -16,7 +16,6 @@ int main() {
     return 0;
 }
 inline void dfs(int x, int y) {
-    printf("Debug: dfs(int x = %d, int y = %d);\n", x, y);
     if (y > m) {
         return;
     }
@@ -40,9 +39,8 @@ inline void dp() {
             continue;
         }
         sum += a[i];
-        printf("Debug: i = %d; sum = %d;\n", i, sum);
         for (int j = sum; j >= a[i]; --j) {
-            f[j] &= f[j - a[i]];
+            f[j] |= f[j - a[i]];
         }
     }
     tmp = 0;

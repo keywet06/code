@@ -5,6 +5,8 @@ class node{
 } empty;
 node a[10];
 int n;
+void dfs(int);
+node update(node);
 int main() {
     scanf("%d", &n);
     memset(empty.a, 0, sizeof(empty.a));
@@ -14,5 +16,9 @@ int main() {
         }
         --a[1].a[i][0];
     }
+    dfs(1);
     return 0;
+}
+inline void dfs(int x) {
+
 }

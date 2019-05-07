@@ -10,7 +10,7 @@ int SPFA();
 int dfs(int, int);
 int main() {
     scanf("%d %d", &n, &m);
-    while (scanf("%d %d", &S, &T) != EOF) {
+    while (scanf("%d %d", &S, &T) && ~S && ~T) {
         insert(S, T, 1);
     }
     S = 0;

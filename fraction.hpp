@@ -5,77 +5,77 @@
 
 // Declare:
 namespace kw {
-    class fraction {
+    template<typename T> class fraction {
         private:
-            int gcd(int, int);
-            int lcm(int, int);
+            T gcd(T, T);
+            T lcm(T, T);
         public:
-            int fx, fy;
-            fraction();
-            fraction(int);
-            fraction(int, int);
+            T fx, fy;
+            fraction<T>();
+            fraction<T>(T);
+            fraction<T>(T, T);
             void update();
     };
-    fraction operator+(fraction, fraction);
-    fraction operator-(fraction, fraction);
-    fraction operator*(fraction, fraction);
-    fraction operator/(fraction, fraction);
-    int operator<(fraction, fraction);
-    int operator<=(fraction, fraction);
-    int operator>(fraction, fraction);
-    int operator>=(fraction, fraction);
-    int operator==(fraction, fraction);
-    int operator!=(fraction, fraction);
+    template<typename T> fraction<T> operator+(fraction<T>, fraction<T>);
+    template<typename T> fraction<T> operator-(fraction<T>, fraction<T>);
+    template<typename T> fraction<T> operator*(fraction<T>, fraction<T>);
+    template<typename T> fraction<T> operator/(fraction<T>, fraction<T>);
+    template<typename T> T operator<(fraction<T>, fraction<T>);
+    template<typename T> T operator<=(fraction<T>, fraction<T>);
+    template<typename T> T operator>(fraction<T>, fraction<T>);
+    template<typename T> T operator>=(fraction<T>, fraction<T>);
+    template<typename T> T operator==(fraction<T>, fraction<T>);
+    template<typename T> T operator!=(fraction<T>, fraction<T>);
 }  // namespace kw
 
 // Implementation:
 namespace kw {
-    inline int fraction::gcd(int x, int y) {
+    template<typename T> inline T fraction<T>::gcd(T x, T y) {
         if (y == 0) {
             return x;
         }
         return gcd(y, x % y);
     }
-    inline int fraction::lcm(int x, int y) { return x * y / gcd(x, y); }
-    inline fraction::fraction() { fx = fy = 1; }
-    inline fraction::fraction(int x) {
+    template<typename T> inline T fraction<T>::lcm(T x, T y) { return x * y / gcd(x, y); }
+    template<typename T> inline fraction<T>::fraction<T>() { fx = fy = 1; }
+    template<typename T> inline fraction<T>::fraction<T>(T x) {
         fx = x;
         fy = 1;
     }
-    inline fraction::fraction(int x, int y) {
+    template<typename T> inline fraction<T>::fraction<T>(T x, T y) {
         fx = x;
         fy = y;
     }
-    inline void fraction::update() {
-        int tmp = gcd(fx, fy);
+    template<typename T> inline void fraction<T>::update() {
+        T tmp = gcd(fx, fy);
         fx /= tmp;
         fy /= tmp;
     }
-    inline fraction operator+(fraction a, fraction b) {
-        fraction c(a.fx * b.fy + a.fy * b.fx, a.fy * b.fy);
+    template<typename T> inline fraction<T> operator+(fraction<T> a, fraction<T> b) {
+        fraction<T> c(a.fx * b.fy + a.fy * b.fx, a.fy * b.fy);
         c.update();
         return c;
     }
-    inline fraction operator-(fraction a, fraction b) {
-        fraction c(a.fx * b.fy - a.fy * b.fx, a.fy * b.fy);
+    template<typename T> inline fraction<T> operator-(fraction<T> a, fraction<T> b) {
+        fraction<T> c(a.fx * b.fy - a.fy * b.fx, a.fy * b.fy);
         c.update();
         return c;
     }
-    inline fraction operator*(fraction a, fraction b) {
-        fraction c(a.fx * b.fx, a.fy * b.fy);
+    template<typename T> inline fraction<T> operator*(fraction<T> a, fraction<T> b) {
+        fraction<T> c(a.fx * b.fx, a.fy * b.fy);
         c.update();
         return c;
     }
-    inline fraction operator/(fraction a, fraction b) {
-        fraction c(a.fx * b.fy, a.fy * b.fx);
+    template<typename T> inline fraction<T> operator/(fraction<T> a, fraction<T> b) {
+        fraction<T> c(a.fx * b.fy, a.fy * b.fx);
         c.update();
         return c;
     }
-    inline int operator<(fraction a, fraction b) { return a.fx * b.fy < a.fy * b.fx; }
-    inline int operator<=(fraction a, fraction b) { return a.fx * b.fy <= a.fy * b.fx; }
-    inline int operator>(fraction a, fraction b) { return a.fx * b.fy > a.fy * b.fx; }
-    inline int operator>=(fraction a, fraction b) { return a.fx * b.fy >= a.fy * b.fx; }
-    inline int operator==(fraction a, fraction b) { return a.fx * b.fy == a.fy * b.fx; }
-    inline int operator!=(fraction a, fraction b) { return a.fx * b.fy != a.fy * b.fx; }
+    template<typename T> inline T operator<(fraction<T> a, fraction<T> b) { return a.fx * b.fy < a.fy * b.fx; }
+    template<typename T> inline T operator<=(fraction<T> a, fraction<T> b) { return a.fx * b.fy <= a.fy * b.fx; }
+    template<typename T> inline T operator>(fraction<T> a, fraction<T> b) { return a.fx * b.fy > a.fy * b.fx; }
+    template<typename T> inline T operator>=(fraction<T> a, fraction<T> b) { return a.fx * b.fy >= a.fy * b.fx; }
+    template<typename T> inline T operator==(fraction<T> a, fraction<T> b) { return a.fx * b.fy == a.fy * b.fx; }
+    template<typename T> inline T operator!=(fraction<T> a, fraction<T> b) { return a.fx * b.fy != a.fy * b.fx; }
 }  // namespace kw
 #endif

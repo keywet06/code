@@ -6,7 +6,7 @@ class node{
 node a[10];
 int n;
 void dfs(int);
-node updata(node, int, int, int, int);
+node updata(node, int, int, int, int);  
 int operator==(node, node);
 int main() {
     scanf("%d", &n);
@@ -22,6 +22,6 @@ int main() {
 }
 inline void dfs(int x) {
     if (a[x] == empty) {
-
+        
     }
 }

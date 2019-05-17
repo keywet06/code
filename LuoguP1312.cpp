@@ -8,7 +8,7 @@ int n;
 void dfs(int);
 node updata(node, int, int, int, int);  
 int operator==(node, node);
-int main() {
+int main() {            
     scanf("%d", &n);
     memset(empty.a, 0, sizeof(empty.a));
     for (int i = 1; i <= 5; ++i) {

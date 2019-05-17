@@ -20,6 +20,10 @@ namespace kw {
     template<typename T> fraction<T> operator-(fraction<T>, fraction<T>);
     template<typename T> fraction<T> operator*(fraction<T>, fraction<T>);
     template<typename T> fraction<T> operator/(fraction<T>, fraction<T>);
+    template<typename T> fraction<T>& operator+=(fraction<T>&, fraction<T>);
+    template<typename T> fraction<T>& operator-=(fraction<T>&, fraction<T>);
+    template<typename T> fraction<T>& operator*=(fraction<T>&, fraction<T>);
+    template<typename T> fraction<T>& operator/=(fraction<T>&, fraction<T>);
     template<typename T> T operator<(fraction<T>, fraction<T>);
     template<typename T> T operator<=(fraction<T>, fraction<T>);
     template<typename T> T operator>(fraction<T>, fraction<T>);
@@ -71,6 +75,10 @@ namespace kw {
         c.update();
         return c;
     }
+    template<typename T> inline fraction<T>& operator+=(fraction<T>& a, fraction<T> b) { return a = a + b; }
+    template<typename T> inline fraction<T>& operator-=(fraction<T>& a, fraction<T> b) { return a = a - b; }
+    template<typename T> inline fraction<T>& operator*=(fraction<T>& a, fraction<T> b) { return a = a * b; }
+    template<typename T> inline fraction<T>& operator/=(fraction<T>& a, fraction<T> b) { return a = a / b; }
     template<typename T> inline T operator<(fraction<T> a, fraction<T> b) { return a.fx * b.fy < a.fy * b.fx; }
     template<typename T> inline T operator<=(fraction<T> a, fraction<T> b) { return a.fx * b.fy <= a.fy * b.fx; }
     template<typename T> inline T operator>(fraction<T> a, fraction<T> b) { return a.fx * b.fy > a.fy * b.fx; }

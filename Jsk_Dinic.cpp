@@ -1,29 +1,30 @@
-const int MAX_N = 100;  // X é›†åˆä¸­çš„é¡¶ç‚¹æ•°ä¸Šé™
-const int MAX_M = 10000;  // æ€»çš„è¾¹æ•°ä¸Šé™
-const int INF = 1000000000;  // æå¤§å€¼
+const int MAX_N = 100;  // X ¼¯ºÏÖĞµÄ¶¥µãÊıÉÏÏŞ
+const int MAX_M = 10000;  // ×ÜµÄ±ßÊıÉÏÏŞ
+const int INF = 1000000000;  // ¼«´óÖµ
 struct edge {
-    int v, c, next;  // v æ˜¯æŒ‡è¾¹çš„å¦ä¸€ä¸ªé¡¶ç‚¹ï¼Œc è¡¨ç¤ºå®¹é‡
+    int v, c, next;  // v ÊÇÖ¸±ßµÄÁíÒ»¸ö¶¥µã£¬c ±íÊ¾ÈİÁ¿
 } e[MAX_M];
 int p[MAX_N], eid;
 void init() {
     memset(p, -1, sizeof(p));
     eid = 0;
 }
-void insert(int u, int v, int c) {  // æ’å…¥ä¸€æ¡ä» u è¿å‘ vï¼Œå®¹é‡ä¸º c çš„å¼§
+void insert(int u, int v, int c) {  // ²åÈëÒ»Ìõ´Ó u Á¬Ïò v£¬ÈİÁ¿Îª c µÄ»¡
     e[eid].v = v;
     e[eid].c = c;
     e[eid].next = p[u];
     p[u] = eid++;
 }
-void addedge(int u, int v, int c) {  // ç”¨ insert2 æ¥æ’å…¥ç½‘ç»œä¸­çš„å¼§
+void addedge(int u, int v, int c) {  // ÓÃ insert2 À´²åÈëÍøÂçÖĞµÄ»¡
     insert(u, v, c);
-    insert(v, u, 0);  // æ’å…¥ä¸€æ¡æ–¹å‘ç›¸åã€å½“å‰å®¹é‡ä¸º 0 çš„å¼§
+    insert(v, u, 0);  // ²åÈëÒ»Ìõ·½ÏòÏà·´¡¢µ±Ç°ÈİÁ¿Îª 0 µÄ»¡
 }
-int S, T;  // S æ˜¯æºç‚¹ï¼ŒT æ˜¯æ±‡ç‚¹
-int d[MAX_N];  // å­˜å‚¨æ¯ä¸ªé¡¶ç‚¹çš„å±‚æ¬¡
+int S, T;  // S ÊÇÔ´µã£¬T ÊÇ»ãµã
+int d[MAX_N];  // ´æ´¢Ã¿¸ö¶¥µãµÄ²ã´Î
 bool bfs() {
     memset(d, -1, sizeof(d));
     queue<int> q;
+    
     q.push(S);
     d[S] = 0;
     while (!q.empty()) {
@@ -40,7 +41,7 @@ bool bfs() {
     return (d[T] != -1);
 }
 
-int dfs(int u, int flow) {  // flow è¡¨ç¤ºå½“å‰æœç´¢åˆ†æ”¯çš„æµé‡ä¸Šé™
+int dfs(int u, int flow) {  // flow ±íÊ¾µ±Ç°ËÑË÷·ÖÖ§µÄÁ÷Á¿ÉÏÏŞ
     if (u == T) {
         return flow;
     }
@@ -48,26 +49,26 @@ int dfs(int u, int flow) {  // flow è¡¨ç¤ºå½“å‰æœç´¢åˆ†æ”¯çš„æµé‡ä¸Šé™
     for (int i = p[u]; i != -1; i = e[i].next) {
         int v = e[i].v;
         if (e[i].c > 0 && d[u] + 1 == d[v]) {
-            int tmp = dfs(v, min(flow, e[i].c));  // é€’å½’è®¡ç®—é¡¶ç‚¹ vï¼Œç”¨ c(u, v) æ¥æ›´æ–°å½“å‰æµé‡ä¸Šé™
+            int tmp = dfs(v, min(flow, e[i].c));  // µİ¹é¼ÆËã¶¥µã v£¬ÓÃ c(u, v) À´¸üĞÂµ±Ç°Á÷Á¿ÉÏÏŞ
             flow -= tmp;
             e[i].c -= tmp;
             res += tmp;
-            e[i ^ 1].c += tmp;  // ä¿®æ”¹åå‘å¼§çš„å®¹é‡
-            if (flow == 0) {  // æµé‡è¾¾åˆ°ä¸Šé™ï¼Œä¸å¿…ç»§ç»­æœç´¢äº†
+            e[i ^ 1].c += tmp;  // ĞŞ¸Ä·´Ïò»¡µÄÈİÁ¿
+            if (flow == 0) {  // Á÷Á¿´ïµ½ÉÏÏŞ£¬²»±Ø¼ÌĞøËÑË÷ÁË
                 break;
             }
         }
     }
-    if (res == 0) {  // å½“å‰æ²¡æœ‰ç»è¿‡é¡¶ç‚¹ u çš„å¯è¡Œæµï¼Œä¸å†æœç´¢é¡¶ç‚¹ u
+    if (res == 0) {  // µ±Ç°Ã»ÓĞ¾­¹ı¶¥µã u µÄ¿ÉĞĞÁ÷£¬²»ÔÙËÑË÷¶¥µã u
         d[u] = -1;
     }
     return res;
 }
 
-int maxflow() {  // å‡½æ•°è¿”å›å€¼å°±æ˜¯æœ€å¤§æµçš„ç»“æœ
+int maxflow() {  // º¯Êı·µ»ØÖµ¾ÍÊÇ×î´óÁ÷µÄ½á¹û
     int res = 0;
     while (bfs()) {
-        res += dfs(S, INF);  // åˆå§‹æµé‡ä¸Šé™ä¸º INF
+        res += dfs(S, INF);  // ³õÊ¼Á÷Á¿ÉÏÏŞÎª INF
     }
     return res;
 }

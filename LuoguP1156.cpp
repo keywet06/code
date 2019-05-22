@@ -17,7 +17,10 @@ int main() {
     dp[0] = 10;
     dpmax = 10;
     for (int i = 1; i <= g; ++i) {
-        
+        for (int j = 0; j <= d; ++j) {
+            dp[j] += a[i].f;
+        }
+        dpmax += a[i].f;
     }
     return 0;
 }

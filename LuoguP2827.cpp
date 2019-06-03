@@ -1,13 +1,13 @@
 #include <bits/stdc++.h>
 const int N = 100005;
-double p;
+long double p;
 int n, m, u, v, t, q, x, y;
 int a[N];
 std::priority_queue<int> pq;
-std::queue<int> q1, q2, q3;
+std::priority_queue<int> q1, q2, q3;
 int main() {
     scanf("%d %d %d %d %d %d", &n, &m, &q, &u, &v, &t);
-    p = (double)(u) / (double)(v);
+    p = (long double)(u) / (long double)(v);
     for (int i = 1; i <= n; ++i) {
         scanf("%d", &a[i]);
     }
@@ -18,17 +18,17 @@ int main() {
     for (int i = 1; i <= m; ++i) {
         x = 0;
         y = -1e8;
-        if (!q1.empty() && q1.front() > y) {
+        if (!q1.empty() && q1.top() > y) {
             x = 1;
-            y = q1.front();
+            y = q1.top();
         }
-        if (!q2.empty() && q2.front() > y) {
+        if (!q2.empty() && q2.top() > y) {
             x = 2;
-            y = q2.front();
+            y = q2.top();
         }
-        if (!q3.empty() && q3.front() > y) {
+        if (!q3.empty() && q3.top() > y) {
             x = 3;
-            y = q3.front();
+            y = q3.top();
         }
         if (x == 1) {
             q1.pop();
@@ -48,15 +48,15 @@ int main() {
     }
     printf("\n");
     while (!q1.empty()) {
-        pq.push(q1.front());
+        pq.push(q1.top());
         q1.pop();
     }
     while (!q2.empty()) {
-        pq.push(q2.front());
+        pq.push(q2.top());
         q2.pop();
     }
     while (!q3.empty()) {
-        pq.push(q3.front());
+        pq.push(q3.top());
         q3.pop();
     }
     for (int i = 1; i <= m + n; ++i) {

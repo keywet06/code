@@ -44,6 +44,9 @@ int main() {
             printf("%d ", x);
         }
         q2.push((int)(x * p) - i * q);
+        q3.push(x - (int)(x * p) - i * q);
+    }
+    printf("\n");
     while (!q1.empty()) {
         pq.push(q1.top());
         q1.pop();

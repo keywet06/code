@@ -40,7 +40,8 @@ int main(int n, char* a[]) {
             puts("命令语法不正确。");
             puts("");
         }
-        puts("$ ———— 一款在windows环境下快速帮助你code的命令行程序");
+        puts("kwcmd ———— 一款在windows环境下快速帮助你code的命令行程序");
+        puts("\t版本号：v0.1.0");
         puts("\t作者：keywet06");
         puts("");
         puts("注意：本程序中 ‘-’ 不与 ‘/’ 、‘\\’ 混用。");

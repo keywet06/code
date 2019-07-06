@@ -8,9 +8,9 @@ int head[N], vis[N], dis[N], sta[N];
 void addtwoedge(int, int, int);
 void addoneedge(int, int, int);
 void insert(int, int, int);
-long long Dinic();
+int Dinic();
 int SPFA();
-long long dfs(int = S, int = inf);
+int dfs(int = S, int = inf);
 int main() {
     scanf("%d %d %d %d", &n, &m, &S, &T);
     while (m--) {
@@ -31,8 +31,8 @@ inline void insert(int x, int y, int z) {
     to[cnt] = y;
     liu[cnt] = z;
 }
-inline long long Dinic() {
-    long long tmp = 0;
+inline int Dinic() {
+    int tmp = 0;
     while (SPFA()) {
         tmp += dfs();
     }
@@ -61,7 +61,7 @@ inline int SPFA() {
     }
     return dis[T] != dis[0];
 }
-inline long long dfs(int v, int low) {
+inline int dfs(int v, int low) {
     if (v == T) {
         return low;
     }

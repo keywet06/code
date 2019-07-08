@@ -1,18 +1,28 @@
-/*
-	This C++ header file is writen by ywt.
-*/
 #ifndef TU_HPP
 #define TU_HPP
 #include <bits/stdc++.h>
-template<int n = 1000, int m = n * n> class Tu {
-    public:
-        int cnt;
-        int head[n], next[m], to[m];
+class Tu {
+    private:
+        class edge {
+            public:
+                int next, to;
+                int* data;
+        };
         int* arr[100];
+        std::vector<edge> ed;
+        std::map<int, int> head;
+    public:
         Tu();
         ~Tu();
-        void insert(int, int, int);
+        void addedge(int, int, int);
 };
-template<int n, int m> inline Tu<n, m>::Tu() {}
-template<int n, int m> inline Tu<n, m>::~Tu() {}
+inline Tu::Tu() {}
+inline Tu::~Tu() {}
+inline void Tu::addedge(int x, int y, int z) {
+    edge e;
+    e.next = head[x];
+    head[x] = ed.size();
+    e.to = y;
+    ed.push_back(e);
+}
 #endif

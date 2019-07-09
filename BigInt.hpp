@@ -36,6 +36,7 @@ namespace kw {
     BigInt& operator*=(BigInt&, BigInt);
     BigInt operator/(BigInt, int);
     BigInt& operator/=(BigInt&, int);
+    int operator%(BigInt, int);
     BigInt operator^(BigInt, int);
     BigInt& operator^=(BigInt&, int);
     std::istream& operator>>(std::istream&, BigInt&);
@@ -223,6 +224,13 @@ namespace kw {
         return tmp;
     }
     inline BigInt& operator^=(BigInt& a, int b) { return a = (a ^ b); }
+    inline int operator%(BigInt a, int b) {
+        long long ys = 0;
+        for (int i = a.length() - 1; ~i; --i) {
+            ys = (ys * 10 + a[i]) % b;
+        }
+        return ys;
+    }
     std::istream& operator>>(std::istream& in, BigInt& a) {
         std::string s;
         in >> s;

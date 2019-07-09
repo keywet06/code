@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 #include <conio.h>
 int op(char*, char*);
+int chcpinit();
 int main(int n, char* a[]) {
-    int f;
+    int f, flag = chcpinit();
     if (n == 2) {
         if (op(a[1], "-c")) {
             system("del *.in /s");
@@ -27,30 +28,24 @@ int main(int n, char* a[]) {
             s = s + (std::string)a[2];
             s = s + (std::string)".cpp -lm -O3";
             system(s.data());
-            std::string c;
-            system("chcp > chcp.tmp");
-            freopen("chcp.tmp", "r", stdin);
-            getline(std::cin, c);
-            freopen("con", "r", stdin);
-            system("del chcp.tmp");
-            if (c == (std::string)"æ´»åŠ¨ä»£ç é¡µ: 936") {
-                printf("ç¼–è¯‘å®Œæˆã€‚\n");
-            } else {
+            if (flag == 936) {
+                printf("±àÒëÍê³É¡£\n");
+            } else if (flag = 437) {
                 printf("Complie is over.\n");
             }
             s = (std::string)a[2];
             system(s.data());
-            if (c == (std::string)"æ´»åŠ¨ä»£ç é¡µ: 936") {
-                printf("ç¨‹åºå·²é€€å‡ºã€‚\n");
-            } else {
+            if (flag == 936) {
+                printf("³ÌĞòÒÑÍË³ö¡£\n");
+            } else if (flag == 437) {
                 printf("The program is over.\n");
             }
             while (_kbhit()) {
                 getchar();
             }
-            if (c == (std::string)"æ´»åŠ¨ä»£ç é¡µ: 936") {
-                printf("è¯·æŒ‰ä»»æ„é”®ç»§ç»­. . .");
-            } else {
+            if (flag == 936) {
+                printf("Çë°´ÈÎÒâ¼ü¼ÌĞø. . .");
+            } else if (flag == 437) {
                 printf("Press any key to continue . . .");
             }
             _getch();
@@ -65,27 +60,21 @@ int main(int n, char* a[]) {
             return 0;
         }
     }
-    system("chcp > chcp.tmp");
-    freopen("chcp.tmp", "r", stdin);
-    std::string s;
-    getline(std::cin, s);
-    freopen("con", "r", stdin);
-    system("del chcp.tmp");
-    if (s == (std::string)"æ´»åŠ¨ä»£ç é¡µ: 936") {
+    if (flag == 936) {
         if (!f) {
-            puts("å‘½ä»¤è¯­æ³•ä¸æ­£ç¡®ã€‚");
+            puts("ÃüÁîÓï·¨²»ÕıÈ·¡£");
             puts("");
         }
-        puts("kwcmd â€”â€”â€”â€” ä¸€æ¬¾åœ¨windowsç¯å¢ƒä¸‹å¿«é€Ÿå¸®åŠ©ä½ codeçš„å‘½ä»¤è¡Œç¨‹åº");
-        puts("\tç‰ˆæœ¬å·ï¼šv0.1.1");
-        puts("\tä½œè€…ï¼škeywet06");
+        puts("kwcmd ¡ª¡ª¡ª¡ª Ò»¿îÔÚwindows»·¾³ÏÂ¿ìËÙ°ïÖúÄãcodeµÄÃüÁîĞĞ³ÌĞò");
+        puts("\t°æ±¾ºÅ£ºv0.1.1");
+        puts("\t×÷Õß£ºkeywet06");
         puts("");
-        puts("æ³¨æ„ï¼šæœ¬ç¨‹åºä¸­ â€˜-â€™ ä¸ä¸ â€˜/â€™ ã€â€˜\\â€™ æ··ç”¨ã€‚");
-        puts("\t$ -h â€”â€”â€”â€” å¸®åŠ©ä¿¡æ¯");
-        puts("\t$ -c â€”â€”â€”â€” æ¸…é™¤æœ¬ç›®å½•ä¸‹æ‰€æœ‰å¤šä½™æ–‡ä»¶");
-        puts("\t$ -o <C++æºæ–‡ä»¶å> â€”â€”â€”â€” ç¼–è¯‘ä¸€ä»½C++æºä»£ç ï¼Œå…¶ä¸­ <C++æºæ–‡ä»¶å> ä¸åŒ…æ‹¬ â€œ.cppâ€");
-        puts("\t$ -r <C++æºæ–‡ä»¶å> â€”â€”â€”â€” ç¼–è¯‘å¹¶è¿è¡Œä¸€ä»½C++æºä»£ç ï¼Œå…¶ä¸­ <C++æºæ–‡ä»¶å> ä¸åŒ…æ‹¬ â€œ.cppâ€");
-    } else {
+        puts("×¢Òâ£º±¾³ÌĞòÖĞ ¡®-¡¯ ²»Óë ¡®/¡¯ ¡¢¡®\\¡¯ »ìÓÃ¡£");
+        puts("\t$ -h ¡ª¡ª¡ª¡ª °ïÖúĞÅÏ¢");
+        puts("\t$ -c ¡ª¡ª¡ª¡ª Çå³ı±¾Ä¿Â¼ÏÂËùÓĞ¶àÓàÎÄ¼ş");
+        puts("\t$ -o <C++Ô´ÎÄ¼şÃû> ¡ª¡ª¡ª¡ª ±àÒëÒ»·İC++Ô´´úÂë£¬ÆäÖĞ <C++Ô´ÎÄ¼şÃû> ²»°üÀ¨ ¡°.cpp¡±");
+        puts("\t$ -r <C++Ô´ÎÄ¼şÃû> ¡ª¡ª¡ª¡ª ±àÒë²¢ÔËĞĞÒ»·İC++Ô´´úÂë£¬ÆäÖĞ <C++Ô´ÎÄ¼şÃû> ²»°üÀ¨ ¡°.cpp¡±");
+    } else if (flag == 437) {
         if (!f) {
             puts("The command syntax is not right.");
             puts("");
@@ -113,4 +102,16 @@ inline int op(char *a, char *b) {
         }
     }
     return 1;
+}
+inline int chcpinit() {
+    system("chcp > chcp.tmp");
+    freopen("chcp.tmp", "r", stdin);
+    std::string s;
+    getline(std::cin, s);
+    freopen("con", "r", stdin);
+    system("del chcp.tmp");
+    if (s == (std::string)"»î¶¯´úÂëÒ³: 936") {
+        return 936;
+    }
+    return 437;
 }

@@ -3,8 +3,10 @@ const int N = 100005;
 int cnt, n, num, opt, root, x;
 int father[N], lson[N], rson[N], sum[N], data[N], val[N];
 void insert(int, int = root);
-void pushup(int);
 void updata(int);
+void leftrotate(int);
+void rightrotate(int);
+void pushup(int);
 void del(int = root);
 int rank(int = root);
 int prank(int = root);
@@ -39,7 +41,7 @@ int main() {
     }
     return 0;
 }
-void insert(int x, int v) {
+inline void insert(int x, int v) {
     if (data[v] < x) {
         if (lson[v]) {
             insert(x, lson[v]);
@@ -65,4 +67,16 @@ void insert(int x, int v) {
     }
     updata(v);
     pushup(v);
+}
+inline void updata(int v) {
+    if (val[v] < val[father[v]]) {
+        if (lson[father[v]] == v) {
+            leftrotate(v);
+        } else {
+            rightrotate(v);
+        }
+    }
+}
+inline void leftrotate(int v) {
+    
 }

@@ -1,8 +1,9 @@
 #include <bits/stdc++.h>
 #include <conio.h>
 int op(char*, char*);
+int chcpinit();
 int main(int n, char* a[]) {
-    int f;
+    int f, flag = chcpinit();
     if (n == 2) {
         if (op(a[1], "-c")) {
             system("del *.in /s");
@@ -27,30 +28,24 @@ int main(int n, char* a[]) {
             s = s + (std::string)a[2];
             s = s + (std::string)".cpp -lm -O3";
             system(s.data());
-            std::string c;
-            system("chcp > chcp.tmp");
-            freopen("chcp.tmp", "r", stdin);
-            getline(std::cin, c);
-            freopen("con", "r", stdin);
-            system("del chcp.tmp");
-            if (c == (std::string)"活动代码页: 936") {
+            if (flag == 936) {
                 printf("编译完成。\n");
-            } else {
+            } else if (flag = 437) {
                 printf("Complie is over.\n");
             }
             s = (std::string)a[2];
             system(s.data());
-            if (c == (std::string)"活动代码页: 936") {
+            if (flag == 936) {
                 printf("程序已退出。\n");
-            } else {
+            } else if (flag == 437) {
                 printf("The program is over.\n");
             }
             while (_kbhit()) {
                 getchar();
             }
-            if (c == (std::string)"活动代码页: 936") {
+            if (flag == 936) {
                 printf("请按任意键继续. . .");
-            } else {
+            } else if (flag == 437) {
                 printf("Press any key to continue . . .");
             }
             _getch();
@@ -65,13 +60,7 @@ int main(int n, char* a[]) {
             return 0;
         }
     }
-    system("chcp > chcp.tmp");
-    freopen("chcp.tmp", "r", stdin);
-    std::string s;
-    getline(std::cin, s);
-    freopen("con", "r", stdin);
-    system("del chcp.tmp");
-    if (s == (std::string)"活动代码页: 936") {
+    if (flag == 936) {
         if (!f) {
             puts("命令语法不正确。");
             puts("");
@@ -85,7 +74,7 @@ int main(int n, char* a[]) {
         puts("\t$ -c ———— 清除本目录下所有多余文件");
         puts("\t$ -o <C++源文件名> ———— 编译一份C++源代码，其中 <C++源文件名> 不包括 “.cpp”");
         puts("\t$ -r <C++源文件名> ———— 编译并运行一份C++源代码，其中 <C++源文件名> 不包括 “.cpp”");
-    } else {
+    } else if (flag == 437) {
         if (!f) {
             puts("The command syntax is not right.");
             puts("");
@@ -113,4 +102,16 @@ inline int op(char *a, char *b) {
         }
     }
     return 1;
+}
+inline int chcpinit() {
+    system("chcp > chcp.tmp");
+    freopen("chcp.tmp", "r", stdin);
+    std::string s;
+    getline(std::cin, s);
+    freopen("con", "r", stdin);
+    system("del chcp.tmp");
+    if (s == (std::string)"活动代码页: 936") {
+        return 936;
+    }
+    return 437;
 }

@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 const int N = 100005;
 int CLOCK, cnt, m, n, root, mod, x, y, z;
-int a[N], dfn[N], par[N], head[N], next[N], to[N], son[N], size[N], sum[N], ;
+int a[N], dfn[N], par[N], head[N], next[N], to[N], son[N], size[N], sum[N], deep[N], top[N];
 void insert(int, int);
 void addedge(int, int);
 void dfs1(int = root, int = root);
@@ -54,5 +54,27 @@ inline void addedge(int x, int y) {
 }
 inline void dfs1(int v, int p) {
     par[v] = p;
-
+    son[v] = 0;
+    size[v] = 1;
+    deep[v] = deep[p] + 1;
+    for (int u = head[v]; u; u = next[u]) {
+        if (to[u] == p) {
+            continue;
+        }
+        dfs1(to[u], v);
+        size[v] += size[to[u]];
+        if (size[to[u]] > size[son[v]]) {
+            son[v] = to[u];
+        }
+    }
+}
+inline void dfs2(int v, int p) {
+    dfn[v] = ++CLOCK;
+    top[v] = p;
+    if (son[v]) {
+        dfs2(son[v], p);
+    }
+    for (int u = head[v]; u; u = next[u]) {
+        if (to[u] == )
+    }
 }

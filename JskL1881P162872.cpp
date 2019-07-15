@@ -9,7 +9,7 @@ int par[N], son[N], sz[N], dep[N], top[N], dfn[N], who[N];
 int sum[N << 2], lz[N << 2];
 void pre(int, int);
 void dfs(int, int);
-void pushdown(int, int, int);
+    void pushdown(int, int, int);
 void update(int, int, int, int, int, int);
 int query(int, int, int, int, int);
 void pathC(int, int, int);
@@ -115,7 +115,7 @@ inline void pathC(int u, int v, int x) {
     while (top[u] != top[v]) {
         if (dep[top[u]] < dep[top[v]]) {
             swap(u, v);
-        }
+        } 
         update(1, n, 1, dfn[top[u]], dfn[u], x);
         u = par[top[u]];
     }

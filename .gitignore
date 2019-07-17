@@ -1,3 +1,6 @@
+*.in
+*.out
+*.ans
 *.exe
 test*
 .vscode

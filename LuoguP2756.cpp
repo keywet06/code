@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <windows.h>
 class edge {
    public:
     edge *next, *ano;
@@ -56,7 +55,7 @@ inline void insertliu(int x, int y, int z) {
 inline void addliu(int x, int y, int z) {
     insertliu(x, y, z);
     cnt->ano = cnt + 1;
-    insertliu(x, y, 0);
+    insertliu(y, x, 0);
     cnt->ano = cnt - 1;
 }
 inline int SPFA() {
@@ -110,8 +109,6 @@ inline int Dinic() {
     int ans = 0;
     while (SPFA()) {
         ans += dfs(n + m + 1, INF);
-        printf("%d\n", ans);
-        Sleep(100);
     }
     return ans;
 }

@@ -1,82 +1,117 @@
 #include <bits/stdc++.h>
-const int int_INF = 1 << 30;
-const int N = 1000005;
-int S, T, ans, cnt, n, m;
-int head[N], dis[N], next[N], to[N], liu[N];
-void insert(int, int, int);
-void insert2(int, int, int);
-void Dinic(int &, int, int);
+#include <windows.h>
+class edge {
+   public:
+    edge *next, *ano;
+    int to, liu;
+};
+const int INF = 0x3f3f3f3f;
+const int M = 1000005;
+const int N = 205;
+edge e[M];
+edge* cnt = e;
+edge* li[M];
+edge* head[N];
+int cnt_li, m, n, x, y;
+int vis[N], dis[N];
+void insertliu(int, int, int);
+void addliu(int, int, int);
 int SPFA();
 int dfs(int, int);
+int Dinic();
 int main() {
-    scanf("%d %d", &n, &m);
-    while (scanf("%d %d", &S, &T) && ~S && ~T) {
-        insert(S, T, 1);
+    scanf("%d %d", &m, &n);
+    scanf("%d %d", &x, &y);
+    while (~x) {
+        addliu(x, y, 1);
+        li[++cnt_li] = cnt;
+        scanf("%d %d", &x, &y);
     }
-    S = 0;
-    T = n + 1;
     for (int i = 1; i <= m; ++i) {
-        insert(S, i, 1);
+        addliu(m + n + 1, i, 1);
     }
-    for (int i = m + 1; i <= n; ++i) {
-        insert(i, T, 1);
+    for (int i = m + 1; i <= m + n; ++i) {
+        addliu(i, m + n + 2, 1);
     }
-    Dinic(ans, S, T);
-    printf("%d\n", ans);
+    x = Dinic();
+    if (!x) {
+        printf("No Solution!\n");
+    } else {
+        printf("%d\n", x);
+    }
+    for (int i = 1; i <= cnt_li; ++i) {
+        if (li[i]->liu) {
+            printf("%d %d\n", li[i]->to, li[i]->ano->to);
+        }
+    }
     return 0;
 }
-void insert(int x, int y, int z) {
-    insert2(x, y, z);
-    insert2(y, x, 0);
-}
-void insert2(int x, int y, int z) {
+inline void insertliu(int x, int y, int z) {
     ++cnt;
-    next[cnt] = head[x];
+    cnt->next = head[x];
     head[x] = cnt;
-    to[cnt] = y;
-    liu[cnt] = z;
+    cnt->to = y;
+    cnt->liu = z;
 }
-void Dinic(int &res, int S, int T) {
-    res = 0;
-    while (SPFA()) {
-        res += dfs(S, int_INF);
-    }
+inline void addliu(int x, int y, int z) {
+    insertliu(x, y, z);
+    cnt->ano = cnt + 1;
+    insertliu(x, y, 0);
+    cnt->ano = cnt - 1;
 }
-int SPFA() {
-    std::queue<int> q;
-    memset(dis, -1, sizeof(dis));
-    q.push(S);
-    dis[S] = 0;
-    while (!q.empty()) {
-        int u = q.front();
-        q.pop();
-        for (int v = head[u]; v; v = next[v]) {
-            if (dis[to[v]] == -1 && liu[v] > 0) {
-                q.push(to[v]);
-                dis[to[v]] = dis[u] + 1;
+inline int SPFA() {
+    std::queue<int> queue;
+    memset(dis, 127, sizeof(dis));
+    memset(vis, 0, sizeof(vis));
+    queue.push(m + n + 1);
+    dis[m + n + 1] = 0;
+    vis[m + n + 1] = 1;
+    while (!queue.empty()) {
+        int v = queue.front();
+        queue.pop();
+        for (edge* u = head[v]; u; u = u->next) {
+            if (u->liu && dis[v] + 1 < dis[u->to]) {
+                dis[u->to] = dis[v] + 1;
+                if (u->to == m + n + 2) {
+                    return 1;
+                }
+                if (!vis[u->to]) {
+                    queue.push(u->to);
+                    vis[u->to] = 1;
+                }
             }
         }
     }
-    return ~dis[T];
+    return 0;
 }
-int dfs(int u, int r) {
-    if (u == T) {
-        return r;
+inline int dfs(int v, int res) {
+    if (v == m + n + 2) {
+        return res;
     }
-    int tmp, l = 0;
-    for (int i = head[u]; i; i = next[i]) {
-        if (dis[to[i]] == dis[u] + 1 && liu[i]) {
-            tmp = dfs(to[i], std::min(r - l, liu[i]));
-            liu[i] -= tmp;
-            liu[i ^ 1] += tmp;
-            l += tmp;
-            if (l == r) {
+    int ans = 0, tmp;
+    for (edge* u = head[v]; u; u = u->next) {
+        if (u->liu && dis[u->to] == dis[v] + 1) {
+            tmp = dfs(u->to, std::min(res, u->liu));
+            u->liu -= tmp;
+            u->ano->liu += tmp;
+            ans += tmp;
+            res -= tmp;
+            if (!res) {
                 break;
             }
         }
     }
-    if (!l) {
-        dis[u] = -1;
+    if (!ans) {
+        dis[v] = 0;
     }
-    return l;
+    return ans;
+}
+inline int Dinic() {
+    int ans = 0;
+    while (SPFA()) {
+        ans += dfs(n + m + 1, INF);
+        printf("%d\n", ans);
+        Sleep(100);
+    }
+    return ans;
 }

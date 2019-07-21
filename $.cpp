@@ -5,7 +5,7 @@ int chcpinit();
 int main(int n, char* a[]) {
     int f, flag = chcpinit();
     if (n == 2) {
-        if (op(a[1], "-c")) {
+        if (op(a[1], (char *)"-c")) {
             system("del *.in /s");
             system("del *.out /s");
             system("del *.gch /s");
@@ -17,11 +17,11 @@ int main(int n, char* a[]) {
             system("rd tmp /s /q");
             return 0;
         }
-        if (op(a[1], "-h")) {
+        if (op(a[1], (char *)"-h")) {
             f = 1;
         }
     } else if (n == 3) {
-        if (op(a[1], "-r")) {
+        if (op(a[1], (char *)"-r")) {
             std::string s = "g++ -o ";
             s = s + (std::string)a[2];
             s = s + (std::string)" ";
@@ -50,7 +50,7 @@ int main(int n, char* a[]) {
             }
             _getch();
             return 0;
-        } else if (op(a[1], "-o")) {
+        } else if (op(a[1], (char *)"-o")) {
             std::string s = "g++ -o ";
             s = s + (std::string)a[2];
             s = s + (std::string)" ";

@@ -77,14 +77,11 @@ inline int lca(int x, int y) {
     if (deep[x] > deep[y]) {
         std::swap(x, y);
     }
-    // printf("Debug: x = %d; y = %d;\n", x, y);
     for (int i = deep[y] - deep[x]; i; i -= lowbit(i)) {
         y = father[y][logs[lowbit(i)]];
     }
-    // printf("Debug: x = %d; y = %d;\n", x, y);
     tmp = log_n;
     while (x != y) {
-        // printf("Debug: tmp = %d; x = %d; y = %d;\n", tmp, x, y);
         while (tmp > 0 && father[x][tmp] == father[y][tmp]) {
             --tmp;
         }
@@ -92,7 +89,6 @@ inline int lca(int x, int y) {
         y = father[y][tmp];
         --tmp;
     }
-    // printf("Debug: tmp = %d; x = %d; y = %d;\n", tmp, x, y);
     return x;
 }
 inline int lowbit(int x) { return x & (-x); }

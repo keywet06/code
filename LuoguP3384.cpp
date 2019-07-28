@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+const int M = 400005;
+const int N = 400005;
 // $file "kw/tu.hpp"
 #ifndef KW_TU_HPP
 #define KW_TU_HPP
@@ -10,17 +12,17 @@ namespace kw {
 namespace kw {
     class Tu {
         private:
-            class node {
+            class edge {
                 public:
-                    node* next;
+                    edge *next;
                     int to;
             };
         public:
-            typedef node* iterator;
+            typedef edge* iterator;
         private:
-            std::vector<node> ed;
             iterator cnt;
-            std::vector<iterator> head;
+            edge ed[M];
+            iterator head[N];
             void updatehead(int, iterator);
         public:
             Tu();
@@ -32,26 +34,15 @@ namespace kw {
 // Implementation:
 namespace kw {
     inline Tu::Tu() {
-        cnt = &(ed[0]) - 1;
+        cnt = ed;
     }
     inline void Tu::updatehead(int x, Tu::iterator it) {
-        if (head.size() <= x) {
-            while (head.size() > x) {
-                head.push_back(0);
-            }
-        }
         head[x] = it;
     }
     inline Tu::iterator Tu::gethead(int x) {
-        if (head.size() <= x) {
-            while (head.size() > x) {
-                head.push_back(0);
-            }
-        }
         return head[x];
     }
     inline void Tu::insert(int x, int y) {
-        ed.push_back((node){NULL, 0});
         ++cnt;
         cnt->next = gethead(x);
         updatehead(x, cnt);
@@ -71,24 +62,23 @@ struct point {
 struct spoint {
     public:
         long long sum, plus;
-}
-const int M = 200005;
-const int N = 100005;
-int CLOCK, m, n, p, r, x, y;
+};
+int CLOCK, m, n, mod, r, x, y;
 long long z;
 int undfn[N];
 point p[N];
 spoint sp[N];
 kw::Tu tu;
-void dfs1(int = 1, int = 0);
-void dfs2(int = 1, int = 1);
+void dfs1(int = r, int = 0);
+void dfs2(int = r, int = r);
 void build(int = 1, int = 1, int = n);
-long long fun(int, int);
-void update(int = 1, int = 1, int = n);
-long long query(int = 1, int  = 1, int = n);
-void updateS(int, int);
+long long fun(int, int, int, int);
+void update(int, int, int, int = 1, int = 1, int = n);
+long long query(int, int, int = 1, int = 1, int = n);
+void updateS(int, int, int);
+long long queryS(int, int);
 int main() {
-    scanf("%d %d %d %d", &m, &n, &p, &r);
+    scanf("%d %d %d %d", &n, &m, &r, &mod);
     for (int i = 1; i <= n; ++i) {
         scanf("%d", &p[i].val);
     }
@@ -98,6 +88,23 @@ int main() {
     }
     dfs1();
     dfs2();
+    build();
+    for (int i = 1; i <= m; ++i) {
+        scanf("%d", &x);
+        if (x == 1) {
+            scanf("%d %d %d", &x, &y, &z);
+            updateS(x, y, z);
+        } else if (x == 2) {
+            scanf("%d %d", &x, &y);
+            printf("%lld\n", queryS(x, y));
+        } else if (x == 3) {
+            scanf("%d %d", &x, &z);
+            update(p[x].dfn, p[x].tend, z);
+        } else {
+            scanf("%d", &x);
+            printf("%lld\n", query(p[x].dfn, p[x].tend));
+        }
+    }
     return 0;
 }
 inline void dfs1(int v, int fa) {
@@ -106,7 +113,7 @@ inline void dfs1(int v, int fa) {
     p[v].son = 0;
     p[v].fa = fa;
     p[v].deep = p[fa].deep + 1;
-    for (kw::Tu::iterator it = tu.gethead(v); it; ++it) {
+    for (kw::Tu::iterator it = tu.gethead(v); it; it = it->next) {
         if (it->to == fa) {
             continue;
         }
@@ -127,11 +134,11 @@ inline void dfs2(int v, int up) {
         return;
     }
     dfs2(p[v].son, up);
-    for (kw::Tu::iterator it = tu.gethead(v); it; ++it) {
+    for (kw::Tu::iterator it = tu.gethead(v); it; it = it->next) {
         if (it->to == p[v].fa || it->to == p[v].son) {
             continue;
         }
-        dfs2(p[v].son, p[v].son);
+        dfs2(it->to, it->to);
     }
     p[v].tend = CLOCK;
 }
@@ -145,36 +152,64 @@ inline void build(int v, int l, int r) {
     build(v << 1 | 1, mid + 1, r);
     sp[v].sum = sp[v << 1].sum + sp[v << 1 | 1].sum;
 }
-inline long long fun(int l, int r) {
+inline long long fun(int x, int y, int l, int r) {
     return std::min(y, r) - std::max(x, l) + 1;
 }
-inline void update(int v, int l, int r) {
-    sp[v].sum += fun(l, r) * z;
-    sp[v].sum %= p;
+inline void update(int x, int y, int z, int v, int l, int r) {
+    sp[v].sum += fun(x, y, l, r) * z;
+    sp[v].sum %= mod;
     if (x <= l && r <= y) {
-        plus += z;
+        sp[v].plus += z;
         return;
     }
     int mid = (l + r) >> 1;
     if (x <= mid) {
-        update(v << 1, l, mid);
+        update(x, y, z, v << 1, l, mid);
     }
     if (y > mid) {
-        update(v << 1 | 1, mid + 1, r);
+        update(x, y, z, v << 1 | 1, mid + 1, r);
     }
 }
-inline long long query(int v, int l, int r) {
-    long long tmp = sp[v].plus * fun(l, r) % p;
+inline long long query(int x, int y, int v, int l, int r) {
     if (x <= l && r <= y) {
-        return (sp[v].sum + tmp) % p;
+        return sp[v].sum;
     }
+    long long tmp = sp[v].plus * fun(x, y, l, r) % mod;
     int mid = (l + r) >> 1;
     if (x <= mid) {
-        tmp += query(v << 1, l, mid);
+        tmp += query(x, y, v << 1, l, mid);
     }
     if (y > mid) {
-        tmp += query(v << 1 | 1, mid + 1, r);
+        tmp += query(x, y, v << 1 | 1, mid + 1, r);
     }
-    return tmp % p;
+    return tmp % mod;
 }
-inline void update()
+inline void updateS(int x, int y, int z) {
+    while (p[x].up != p[y].up) {
+        if (p[p[x].up].deep < p[p[y].up].deep) {
+            std::swap(x, y);
+        }
+        update(p[p[x].up].dfn, p[x].dfn, z);
+        x = p[p[x].up].fa;
+    }
+    if (p[x].dfn > p[y].dfn) {
+        std::swap(x, y);
+    }
+    update(p[x].dfn, p[y].dfn, z);
+}
+inline long long queryS(int x, int y) {
+    long long tmp = 0;
+    while (p[x].up != p[y].up) {
+        if (p[p[x].up].deep < p[p[y].up].deep) {
+            std::swap(x, y);
+        }
+        tmp += query(p[x].dfn, p[p[x].up].dfn);
+        tmp %= mod;
+        x = p[p[x].up].fa;
+    }
+    if (p[x].dfn > p[y].dfn) {
+        std::swap(x, y);
+    }
+    tmp += query(p[x].dfn, p[y].dfn);
+    return tmp % mod;
+}

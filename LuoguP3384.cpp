@@ -92,13 +92,13 @@ int main() {
     for (int i = 1; i <= m; ++i) {
         scanf("%d", &x);
         if (x == 1) {
-            scanf("%d %d %d", &x, &y, &z);
+            scanf("%d %d %lld", &x, &y, &z);
             updateS(x, y, z);
         } else if (x == 2) {
             scanf("%d %d", &x, &y);
             printf("%lld\n", queryS(x, y));
         } else if (x == 3) {
-            scanf("%d %d", &x, &z);
+            scanf("%d %lld", &x, &z);
             update(p[x].dfn, p[x].tend, z);
         } else {
             scanf("%d", &x);
@@ -151,6 +151,7 @@ inline void build(int v, int l, int r) {
     build(v << 1, l, mid);
     build(v << 1 | 1, mid + 1, r);
     sp[v].sum = sp[v << 1].sum + sp[v << 1 | 1].sum;
+    sp[v].sum %= mod;
 }
 inline long long fun(int x, int y, int l, int r) {
     return std::min(y, r) - std::max(x, l) + 1;
@@ -160,6 +161,7 @@ inline void update(int x, int y, int z, int v, int l, int r) {
     sp[v].sum %= mod;
     if (x <= l && r <= y) {
         sp[v].plus += z;
+        sp[v].plus %= mod;
         return;
     }
     int mid = (l + r) >> 1;

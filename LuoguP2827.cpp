@@ -8,14 +8,14 @@ std::priority_queue<int> q1, q2, q3;
 int main() {
     scanf("%d %d %d %d %d %d", &n, &m, &q, &u, &v, &t);
     p = (long double)(u) / (long double)(v);
-    for (int i = 1; i <= n; ++i) {
+    for (register int i = 1; i <= n; ++i) {
         scanf("%d", &a[i]);
     }
     std::sort(a + 1, a + n + 1);
-    for (int i = n; i; --i) {
+    for (register int i = n; i; --i) {
         q1.push(a[i]);
     }
-    for (int i = 1; i <= m; ++i) {
+    for (register int i = 1; i <= m; ++i) {
         x = 0;
         y = -1e8;
         if (!q1.empty() && q1.top() > y) {
@@ -59,7 +59,7 @@ int main() {
         pq.push(q3.top());
         q3.pop();
     }
-    for (int i = 1; i <= m + n; ++i) {
+    for (register int i = 1; i <= m + n; ++i) {
         x = pq.top() + m * q;
         if (i % t == 0) {
             printf("%d ", x);

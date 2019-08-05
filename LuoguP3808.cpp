@@ -2,16 +2,21 @@
 const int C = 26;
 const int N = 2000005;
 char p[N];
-int ans, cnt, n, now;
-int is[N], next[N], vis[N];
+int ans, cnt, lp, n, now;
+int is[N], next[N];
 int trie[N][C];
 std::queue<int> queue;
 int main() {
     scanf("%d", &n);
+    ++cnt;
+    for (int i = 0; i < C; ++i) {
+        trie[0][i] = 1;
+    }
     for (int i = 1; i <= n; ++i) {
         scanf("%s", p);
-        now = 0;
-        for (int j = 0; p[j]; ++j) {
+        lp = strlen(p);
+        now = 1;
+        for (int j = 0; j < lp; ++j) {
             p[j] -= 'a';
             if (!trie[now][p[j]]) {
                 trie[now][p[j]] = ++cnt;
@@ -20,7 +25,7 @@ int main() {
         }
         ++is[now];
     }
-    queue.push(0);
+    queue.push(1);
     while (!queue.empty()) {
         int v = queue.front();
         queue.pop();
@@ -34,14 +39,13 @@ int main() {
         }
     }
     scanf("%s", p);
-    now = 0;
-    for (int i = 0; p[i]; ++i) {
+    lp = strlen(p);
+    now = 1;
+    for (int i = 0; i < lp; ++i) {
         p[i] -= 'a';
         now = trie[now][p[i]];
-        if (!vis[now]) {
-            vis[now] = 1;
-            ans += is[now];
-        }
+        ans += is[now];
+        is[now] = 0;
     }
     printf("%d\n", ans);
     return 0;

@@ -1,29 +1,31 @@
 #include <bits/stdc++.h>
 struct point {
-    int size;
+    long long size;
     point *lson, *rson;
 };
-const int M = 30000000;
-int ans, n, x;
+struct node {
+    long long a, b;
+};
+const long long M = 30000000;
+long long ans, n, x;
 point p[M];
 point *cnt = p;
-void insert(point*, int, int, int);
+void insert(point*, long long, long long, long long);
 point *dfs();
-int hebin(point*, point*, int, int);
+node hebin(point*, point*, long long, long long);
 int main() {
-    freopen("B.in", "r", stdin);
-    freopen("B.out", "w", stdout);
-    scanf("%d", &n);
+    // freopen("B.in", "r", stdin);
+    // freopen("B.out", "w", stdout);
+    scanf("%lld", &n);
     dfs();
-    printf("%d\n", ans);
+    printf("%lld\n", ans);
     return 0;
 }
-inline void insert(point *v, int l, int r) {
-    printf("insert(%d, %d, %d)\n", v - p, l, r);
+inline void insert(point *v, long long l, long long r) {
     if (l == r) {
         v->size = 1;
     } else {
-        int mid = (l + r) >> 1;
+        long long mid = (l + r) >> 1;
         v->size = 1;
         if (x <= mid) {
             insert(v->lson = ++cnt, l, mid);
@@ -32,42 +34,50 @@ inline void insert(point *v, int l, int r) {
         }
     }
 }
-inline void hebin(point *v1, point *v2, int l, int r) {
-    printf("hebin(%d, %d, %d, %d)\n", v1 - p, v2 - p, l, r);
+inline node hebin(point *v1, point *v2, long long l, long long r) {
     if (l == r) {
+        printf("l == r\n");
         ++v1->size;
-        return 0;
+        return (node){0, 0};
     }
-    int mid = (l + r) >> 1, lson1 = 0, rson1 = 0, lson2 = 0, rson2 = 0, ans = 0;
+    long long mid = (l + r) >> 1, lson1 = 0, rson1 = 0, lson2 = 0, rson2 = 0;
+    node a = (node){0, 0}, b = (node){0, 0};
     if (v1->lson) {
         lson1 = v1->lson->size;
     }
     if (v2->lson) {
-        lson2 = v2->rson->size;
+        lson2 = v2->lson->size;
     }
     if (v1->rson) {
-        rson1 = v1->lson->size;
+        rson1 = v1->rson->size;
     }
     if (v2->rson) {
         rson2 = v2->rson->size;
     }
     if (v1->lson && v2->lson) {
-        hebin(v1->lson, v2->lson, l, mid);
+        a = hebin(v1->lson, v2->lson, l, mid);
     }
     if (v1->rson && v2->rson) {
-        hebin(v1->rson, v2->rson, mid + 1, r);
+        b = hebin(v1->rson, v2->rson, mid + 1, r);
+    }
+    if (!v1->lson && v2->lson) {
+        v1->lson = v2->lson;
+    }
+    if (!v1->rson && v2->rson) {
+        v1->rson = v2->rson;
     }
     v1->size += v2->size;
-    ans += std::min(lson1 * rson2, rson1 * lson2);
+    return (node){lson1 * rson2 + a.a + b.a, lson2 * rson1 + a.b + b.b};
 }
 inline point *dfs() {
-    printf("dfs()\n");
-    scanf("%d", &x);
+    scanf("%lld", &x);
     point *tmp;
     if (x) {
         tmp = ++cnt;
         insert(tmp, 1, n);
         return tmp;
     }
+    node s = hebin(tmp = dfs(), dfs(), 1, n);
+    ans += std::min(s.a, s.b);
     return tmp;
 }

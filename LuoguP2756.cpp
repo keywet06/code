@@ -6,43 +6,52 @@ class edge {
 };
 const int INF = 0x3f3f3f3f;
 const int M = 1000005;
-const int N = 205;
+const int N = 20005;
 edge e[M];
 edge* cnt = e;
 edge* li[M];
 edge* head[N];
-int cnt_li, m, n, x, y;
-int vis[N], dis[N];
+int S = 20000, T = 20001, now, m, n, x, y, ans;
+int vis[N], dis[N], las[N], isq[N];
 void insertliu(int, int, int);
 void addliu(int, int, int);
 int SPFA();
 int dfs(int, int);
 int Dinic();
 int main() {
-    scanf("%d %d", &m, &n);
-    scanf("%d %d", &x, &y);
-    while (~x) {
-        addliu(x, y, 1);
-        li[++cnt_li] = cnt;
-        scanf("%d %d", &x, &y);
+    scanf("%d %d", &n, &m);
+    for (int i = 1; i <= n; ++i) {
+        addliu(S, 2 * i - 1, 1);
+        addliu(2 * i, T, 1);
     }
     for (int i = 1; i <= m; ++i) {
-        addliu(m + n + 1, i, 1);
+        scanf("%d %d", &x, &y);
+        addliu(2 * x - 1, 2 * y, 1);
     }
-    for (int i = m + 1; i <= m + n; ++i) {
-        addliu(i, m + n + 2, 1);
-    }
-    x = Dinic();
-    if (!x) {
-        printf("No Solution!\n");
-    } else {
-        printf("%d\n", x);
-    }
-    for (int i = 1; i <= cnt_li; ++i) {
-        if (li[i]->liu) {
-            printf("%d %d\n", li[i]->to, li[i]->ano->to);
+    ans = Dinic();
+    memset(vis, 0, sizeof(vis));
+    for (int j = 1; j <= n; ++j) {
+        if (!vis[j]) {
+            now = j;
+            while (1) {
+                printf("%d ", now);
+                vis[now] = 1;
+                x = 1;
+                for (edge *u = head[now * 2 - 1]; u; u = u->next) {
+                    if (u->liu == 0 && u->to != S) {
+                        now = (u->to + 1) / 2;
+                        x = 0;
+                        break;
+                    }
+                }
+                if (x) {
+                    break;
+                }
+            }
+            printf("\n");
         }
     }
+    printf("%d\n", n - ans);
     return 0;
 }
 inline void insertliu(int x, int y, int z) {
@@ -62,16 +71,17 @@ inline int SPFA() {
     std::queue<int> queue;
     memset(dis, 127, sizeof(dis));
     memset(vis, 0, sizeof(vis));
-    queue.push(m + n + 1);
-    dis[m + n + 1] = 0;
-    vis[m + n + 1] = 1;
+    queue.push(S);
+    dis[S] = 0;
+    vis[S] = 1;
     while (!queue.empty()) {
         int v = queue.front();
         queue.pop();
         for (edge* u = head[v]; u; u = u->next) {
             if (u->liu && dis[v] + 1 < dis[u->to]) {
                 dis[u->to] = dis[v] + 1;
-                if (u->to == m + n + 2) {
+                las[u->to] = v;
+                if (u->to == T) {
                     return 1;
                 }
                 if (!vis[u->to]) {
@@ -84,7 +94,7 @@ inline int SPFA() {
     return 0;
 }
 inline int dfs(int v, int res) {
-    if (v == m + n + 2) {
+    if (v == T) {
         return res;
     }
     int ans = 0, tmp;
@@ -108,7 +118,7 @@ inline int dfs(int v, int res) {
 inline int Dinic() {
     int ans = 0;
     while (SPFA()) {
-        ans += dfs(n + m + 1, INF);
+        ans += dfs(S, INF);
     }
     return ans;
 }

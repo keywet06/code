@@ -1,14 +1,8 @@
 {
-<<<<<<< HEAD
-    "version": "2.0.0",
-    "tasks": [
-        {
-=======
 // 有关 tasks.json 格式的文档，请参见
     // https://go.microsoft.com/fwlink/?LinkId=733558
     "version": "2.0.0",
     "tasks": [ {
->>>>>>> 345b19d6521e4ab31d826845f178af65e26e9cfd
             "type": "shell",
             "label": "g++.exe build active file",
             "command": "C:\\Program Files (x86)\\Dev-Cpp\\MinGW64\\bin\\g++.exe",
@@ -17,13 +11,8 @@
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
-<<<<<<< HEAD
-                "-lm",
-                "-O3",
-=======
                 "-O3",
                 "-lm",
->>>>>>> 345b19d6521e4ab31d826845f178af65e26e9cfd
                 "-std=c++11"
             ],
             "options": {
@@ -32,26 +21,6 @@
             "problemMatcher": [
                 "$gcc"
             ]
-<<<<<<< HEAD
-=======
-        }, {
-            "type": "shell",
-            "label": "User KwCmd to complie and run cpp file",
-            "command": "$.exe",
-            "args": [
-                "-r",
-                "${fileBasenameNoExtension}"
-            ],
-            "problemMatcher": []
-        }, {
-            "type": "shell",
-            "label": "User KwCmd to clear redundant file",
-            "command": "$.exe",
-            "args": [
-                "-c"
-            ],
-            "problemMatcher": []
->>>>>>> 345b19d6521e4ab31d826845f178af65e26e9cfd
         }
     ]
 }

@@ -1,20 +1,16 @@
 #include <bits/stdc++.h>
 namespace kw {
-template <typename T>
-T& tomin(T&, T);
-template <typename T>
-T& tomax(T&, T);
-}  // namespace kw
+    template <typename T> T& tomin(T&, T);
+    template <typename T> T& tomax(T&, T);
+}
 namespace kw {
-template <typename T>
-inline T& tomin(T& x, T y) {
-    return x = std::min(x, y);
+    template <typename T> inline T& tomin(T& x, T y) {
+        return x = std::min(x, y);
+    }
+    template <typename T> inline T& tomax(T& x, T y) {
+        return x = std::max(x, y);
+    }
 }
-template <typename T>
-inline T& tomax(T& x, T y) {
-    return x = std::max(x, y);
-}
-}  // namespace kw
 const int N = 2e5 + 5;
 char t[N], s[N];
 int ans, n, now, r;

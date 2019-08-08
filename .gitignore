@@ -3,3 +3,4 @@
 *.ans
 *.exe
 test*
+.vscode

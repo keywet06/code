@@ -1,11 +1,10 @@
 #include <bits/stdc++.h>
 #include <conio.h>
 int op(char*, char*);
-int chcpinit();
 int main(int n, char* a[]) {
-    int f, flag = chcpinit();
+    int f = 0;
     if (n == 2) {
-        if (op(a[1], (char*)"-c")) {
+        if (op(a[1], (char*)"clear")) {
             system("rm -rf *.in /s");
             system("rm -rf *.out /s");
             system("rm -rf *.gch /s");
@@ -17,40 +16,28 @@ int main(int n, char* a[]) {
             system("rm -rf tmp /s /q");
             return 0;
         }
-        if (op(a[1], (char*)"-h")) {
+        if (op(a[1], (char*)"help")) {
             f = 1;
         }
     } else if (n == 3) {
-        if (op(a[1], (char*)"-r")) {
+        if (op(a[1], (char*)"run")) {
             std::string s = "g++ -o ";
             s = s + (std::string)a[2];
             s = s + (std::string)" ";
             s = s + (std::string)a[2];
             s = s + (std::string)".cpp -lm -O3";
             system(s.data());
-            if (flag == 936) {
-                printf("??????锟斤�??\n");
-            } else if (flag = 437) {
-                printf("Complie is over.\n");
-            }
+            printf("Complie is over.\n");
             s = (std::string)a[2];
             system(s.data());
-            if (flag == 936) {
-                printf("???????????\n");
-            } else if (flag == 437) {
-                printf("The program is over.\n");
-            }
+            printf("The program is over.\n");
             while (_kbhit()) {
                 getchar();
             }
-            if (flag == 936) {
-                printf("???????????. . .");
-            } else if (flag == 437) {
-                printf("Press any key to continue . . .");
-            }
+            printf("Press any key to continue . . .");
             _getch();
             return 0;
-        } else if (op(a[1], (char*)"-o")) {
+        } else if (op(a[1], (char*)"compile")) {
             std::string s = "g++ -o ";
             s = s + (std::string)a[2];
             s = s + (std::string)" ";
@@ -60,35 +47,19 @@ int main(int n, char* a[]) {
             return 0;
         }
     }
-    if (flag == 936) {
-        if (!f) {
-            puts("?????????????");
-            puts("");
-        }
-        puts("kwcmd ???????? ?????windows??????????????code???????锟斤�????");
-        puts("\t?锟斤�????v0.1.1");
-        puts("\t?????keywet06");
+    if (!f) {
+        puts("The command syntax is not right.");
         puts("");
-        puts("??????????? ??-?? ???? ??/?? ????\\?? ???锟斤�??");
-        puts("\t$ -h ???????? ???????");
-        puts("\t$ -c ???????? ????????????锟斤�???????");
-        puts("\t$ -o <C++??????> ???????? ???????C++????????? <C++??????> ?????? ??.cpp??");
-        puts("\t$ -r <C++??????> ???????? ???????????C++????????? <C++??????> ?????? ??.cpp??");
-    } else if (flag == 437) {
-        if (!f) {
-            puts("The command syntax is not right.");
-            puts("");
-        }
-        puts("$ ---- A program that can help you to code");
-        puts("\tVersion: v0.1.1");
-        puts("\tWriter: keywet06");
-        puts("");
-        puts("Note: '-' in this program is not mixed with '/' and '\\'.");
-        puts("\t$ -h ---- help information");
-        puts("\t$ -c ---- clear all unnecessary files in this directory");
-        puts("\t$ -o <cpp file name> ---- compile a C++ source code where <cpp file name> does not include \".cpp\"");
-        puts("\t$ -c <cpp file name> ---- compile and run a C++ source code where <cpp file name> does not include \".cpp\"");
     }
+    puts("$ ---- A program that can help you to code");
+    puts("\tVersion: v0.1.2");
+    puts("\tWriter: keywet06");
+    puts("");
+    puts("Help infomation");
+    puts("\t$ help ---- help information");
+    puts("\t$ clear ---- clear all unnecessary files in this directory");
+    puts("\t$ run <cpp file name> ---- compile a C++ source code where <cpp file name> does not include \".cpp\"");
+    puts("\t$ compile <cpp file name> ---- compile and run a C++ source code where <cpp file name> does not include \".cpp\"");
     return 0;
 }
 inline int op(char *a, char *b) {
@@ -102,16 +73,4 @@ inline int op(char *a, char *b) {
         }
     }
     return 1;
-}
-inline int chcpinit() {
-    system("chcp > chcp.tmp");
-    freopen("chcp.tmp", "r", stdin);
-    std::string s;
-    getline(std::cin, s);
-    freopen("con", "r", stdin);
-    system("rm -rf chcp.tmp");
-    if (s == (std::string)"???????: 936") {
-        return 936;
-    }
-    return 437;
 }

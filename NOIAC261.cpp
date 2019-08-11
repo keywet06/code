@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 const int C = 5;
 const int T = 604529631;
+const int T_z = 549855;
 const int x_and = 1879048192;
 const int x_hl = 28;
 const int y_and = 234881024;
@@ -9,12 +10,13 @@ const int z_and = 33554431;
 const int lx[8] = {-2, -2, -1, -1, 1, 1, 2, 2};
 const int ly[8] = {-1, 1, -2, 2, -2, 2, -1, 1};
 char ch;
-int S, Ts, v, x, y, z, nx, ny, nz, to, mpv;
+int S, Ts, cnt, v, x, y, z, nx, ny, nz, to, mpv;
 std::map<int, int> map;
 std::queue<int> queue;
 void ReadRealChar(char&);
 void init();
 int Main();
+int check(int, int);
 int main() {
     scanf("%d", &Ts);
     while (Ts--) {
@@ -70,7 +72,7 @@ inline int Main() {
                 printf("%d\n", mpv);
                 return 0;
             }
-            if (!map[to] && mpv <= 7) {
+            if (check(to, 16 - mpv) && !map[to] && mpv <= 7) {
                 queue.push(to);
                 map[to] = mpv + 1;
             }
@@ -117,4 +119,10 @@ inline void ReadRealChar(char &a) {
     do {
         a = getchar();
     } while (a == '\n' || a == '\r' || a == ' ');
+}
+inline int check(int a, int b) {
+    for (cnt = 0, (a &= z_and) ^= T_z; a; ++cnt) {
+        a -= a & (-a);
+    }
+    return cnt <= b;
 }

@@ -1,4 +1,7 @@
+#ifndef STD_BITS_STDCPP_H
+#define STD_BITS_STDCPP_H
 #include <bits/stdc++.h>
+#endif
 const int N = 100005;
 struct node {
     int l, r;

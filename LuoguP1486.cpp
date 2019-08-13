@@ -1,42 +1,86 @@
 #include <bits/stdc++.h>
-void readw(char &);
-void I();
-void S();
-int find(int);
-void xuan(int);
+class point {
+    public:
+        point *lson, *rson, *fa;
+        int size, val;
+};
+const int N = 500005;
+char opt;
+int min, n, x, lazy;
+point po[N];
+point *cnt = po, *root, potmp;
+char ReadARealChar();
+void update(point*);
+void rotate(point*);
+void splay(point*);
+void makeroot(point*);
+void insert(int, point* = root);
+point *successor(int, point* = root);
+point *rank(int, point* = root);
 int main() {
-    srand(13758);
     scanf("%d %d", &n, &min);
-    while (n--) {
-        readw(ch);
+    for (int i = 1; i <= n; ++i) {
+        opt = ReadARealChar();
         scanf("%d", &x);
-        if (ch == 'A') {
-            min -= x;
-            plus += x;
-        } else if (ch == 'I') {
-            I();
-        } else if (ch == 'S') {
-            min += x;
-            S();
+        if (opt == 'I') {
+            if (root) {
+                insert(x - lazy);
+            } else {
+                root = ++cnt;
+                po[root]->size = 1;
+                po[root]->val = x;
+            }
+        } else if (opt == 'A') {
+            lazy += x;
+        } else if (opt == 'S') {
+            lazy -= x;
+            potmp = successor(x - lazy);
+            if (potmp) {
+                makeroot(potmp);
+                root->lson = 0;
+                update(root);
+            }
         } else {
-            printf("%d\n", find(root));
+            printf("%d\n", rank(x)->val);
         }
     }
     return 0;
 }
-inline void readw(char &a) {  // This function helps the programmers to read a
-                              // char without ' ', '\n' or '\r'.
-    a = getchar();
+inline char ReadARealChar() {
+    char a = getchar();
     while (a == ' ' || a == '\n' || a == '\r') {
         a = getchar();
     }
+    return a;
 }
-inline void I() {
-    int tmp = root;
-    for (int i = 1; i <= n; ++i) {
-        
+inline void update(point *v) {
+    v->size = (v->lson ? v->lson->size : 0) + (v->rson ? v->rson->size : 0);
+}
+inline void rotate(point *v) {
+    if (v->fa->lson == v) {
+        v->fa->lson = v->rson;
+        if (v->rson) {
+            v->rson->fa = v->fa;
+        }
     }
 }
-inline void xuan(int x) {
-    
+inline void splay(point *v) {
+    if (v->fa == root) {
+        if (root->lson == v) {
+            root->lson = v->rson;
+            if (v->rson) {
+                v->rson->fa = root;
+            }
+            v->rson = root;
+        } else {
+            root->rson = v->lson;
+            if (v->lson) {
+                v->lson->fa = root;
+            }
+            v->lson = root;
+        }
+        root->fa = v;
+        root = v;
+        root->fa = 0;
+    } else if (v->fa->lson == v && v->)
 }

@@ -2,48 +2,66 @@
 class point {
     public:
         point *lson, *rson, *fa;
-        int size, val;
+        int size, num, val;
 };
 const int N = 500005;
 char opt;
-int min, n, x, lazy;
+int min, n, x, lazy, num, ans;
 point po[N];
-point *cnt = po, *root, potmp;
+point *cnt = po, *root, *potmp;
 char ReadARealChar();
 void update(point*);
 void rotate(point*);
 void splay(point*);
 void makeroot(point*);
-void insert(int, point* = root);
-point *successor(int, point* = root);
-point *rank(int, point* = root);
+void insert(int);
+point *find(int);
+point *rank(int);
 int main() {
     scanf("%d %d", &n, &min);
     for (int i = 1; i <= n; ++i) {
         opt = ReadARealChar();
         scanf("%d", &x);
         if (opt == 'I') {
+            if (x < min) {
+                ++ans;
+                continue;
+            }
             if (root) {
                 insert(x - lazy);
             } else {
                 root = ++cnt;
-                po[root]->size = 1;
-                po[root]->val = x;
+                root->num = 1;
+                root->size = 1;
+                root->val = x;
             }
         } else if (opt == 'A') {
             lazy += x;
         } else if (opt == 'S') {
             lazy -= x;
-            potmp = successor(x - lazy);
-            if (potmp) {
-                makeroot(potmp);
-                root->lson = 0;
-                update(root);
+            fprintf(stderr, "D: insert(%d)\n", min - lazy - 1);
+            insert(min - lazy - 1);
+            fprintf(stderr, "D: OK1!\n");
+            potmp = find(min - lazy - 1);
+            fprintf(stderr, "D: OK2!\n");
+            makeroot(potmp);
+            fprintf(stderr, "D: OK3!\n");
+            if (!potmp->rson) {
+                ans += root->size - 1;
+                root = 0;
+                continue;
             }
+            fprintf(stderr, "D: OK4!\n");
+            rotate(potmp->rson);
+            fprintf(stderr, "D: OK5!\n");
+            ans += root->lson->size - 1;
+            root->lson = 0;
+            update(root);
         } else {
-            printf("%d\n", rank(x)->val);
+            printf("%d\n", x > (root ? root->size : 0) ? -1 : rank(root->size - x + 1)->val + lazy);
         }
     }
+    printf("%d\n", ans);
     return 0;
 }
 inline char ReadARealChar() {
@@ -54,9 +72,12 @@ inline char ReadARealChar() {
     return a;
 }
 inline void update(point *v) {
-    v->size = (v->lson ? v->lson->size : 0) + (v->rson ? v->rson->size : 0);
+    v->size = (v->lson ? v->lson->size : 0) + (v->rson ? v->rson->size : 0) + v->num;
 }
 inline void rotate(point *v) {
+    if (v->fa == root) {
+        root = v;
+    }
     if (v->fa->lson == v) {
         v->fa->lson = v->rson;
         if (v->rson) {
@@ -65,11 +86,7 @@ inline void rotate(point *v) {
         v->rson = v->fa;
         v->fa = v->rson->fa;
         if (v->fa) {
-            if (v->fa->lson == v->rson) {
-                v->fa->lson = v;
-            } else {
-                v->fa->rson = v;
-            }
+            (v->fa->lson == v->rson ? v->fa->lson : v->fa->rson) = v;
         }
         v->rson->fa = v;
         update(v->rson);
@@ -81,11 +98,7 @@ inline void rotate(point *v) {
         v->lson = v->fa;
         v->fa = v->lson->fa;
         if (v->fa) {
-            if (v->fa->rson == v->lson) {
-                v->fa->rson = v;
-            } else {
-                v->fa->lson = v;
-            }
+            (v->fa->rson == v->lson ? v->fa->rson : v->fa->lson) = v;
         }
         v->lson->fa = v;
         update(v->lson);
@@ -95,9 +108,6 @@ inline void rotate(point *v) {
 inline void splay(point *v) {
     if (v->fa == root) {
         rotate(v);
-        root->fa = v;
-        root = v;
-        root->fa = 0;
     } else if ((v->fa->lson == v && v->fa->fa->lson == v->fa) || (v->fa->rson == v && v->fa->fa->rson == v->fa)) {
         rotate(v->fa);
         rotate(v);
@@ -110,6 +120,47 @@ inline void makeroot(point *v) {
         splay(v);
     }
 }
-inline void insert(int, point *v) {
-    
+inline void insert(int x) {
+    point *v = root;
+    while (x != v->val && x < v->val ? v->lson : v->rson) {
+        v = x < v->val ? v->lson : v->rson;
+    }
+    if (x == v->val) {
+        ++v->num;
+    } else {
+        (++cnt)->fa = v;
+        v = (x < v->val ? v->lson : v->rson) = cnt;
+        v->num = 1;
+        v->size = 1;
+        v->val = x;
+    }
+    while (v != root) {
+        update(v);
+        v = v->fa;
+    }
+    update(root);
+    makeroot(cnt);
+}
+inline point *find(int x) {
+    point *v = root;
+    while (1) {
+        if (v->val == x) {
+            return v;
+        }
+        v = v->val < x ? v->lson : v->rson;
+    }
+    return 0;
+}
+inline point *rank(int x) {
+    point *v = root;
+    while (1) {
+        if (v->lson && x <= v->lson->size) {
+            v = v->lson;
+        } else if (v->rson && x > v->size - v->rson->size) {
+            v = v->rson;
+        } else {
+            return v;
+        }
+    }
+    return 0;
 }

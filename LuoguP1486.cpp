@@ -62,25 +62,54 @@ inline void rotate(point *v) {
         if (v->rson) {
             v->rson->fa = v->fa;
         }
+        v->rson = v->fa;
+        v->fa = v->rson->fa;
+        if (v->fa) {
+            if (v->fa->lson == v->rson) {
+                v->fa->lson = v;
+            } else {
+                v->fa->rson = v;
+            }
+        }
+        v->rson->fa = v;
+        update(v->rson);
+    } else {
+        v->fa->rson = v->lson;
+        if (v->lson) {
+            v->lson->fa = v->fa;
+        }
+        v->lson = v->fa;
+        v->fa = v->lson->fa;
+        if (v->fa) {
+            if (v->fa->rson == v->lson) {
+                v->fa->rson = v;
+            } else {
+                v->fa->lson = v;
+            }
+        }
+        v->lson->fa = v;
+        update(v->lson);
     }
+    update(v);
 }
 inline void splay(point *v) {
     if (v->fa == root) {
-        if (root->lson == v) {
-            root->lson = v->rson;
-            if (v->rson) {
-                v->rson->fa = root;
-            }
-            v->rson = root;
-        } else {
-            root->rson = v->lson;
-            if (v->lson) {
-                v->lson->fa = root;
-            }
-            v->lson = root;
-        }
+        rotate(v);
         root->fa = v;
         root = v;
         root->fa = 0;
-    } else if (v->fa->lson == v && v->)
+    } else if ((v->fa->lson == v && v->fa->fa->lson == v->fa) || (v->fa->rson == v && v->fa->fa->rson == v->fa)) {
+        rotate(v->fa);
+        rotate(v);
+    } else {
+        rotate(v);
+    }
+}
+inline void makeroot(point *v) {
+    while (v != root) {
+        splay(v);
+    }
+}
+inline void insert(int, point *v) {
+    
 }

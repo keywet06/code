@@ -1,10 +1,10 @@
 #ifndef KW_TU_HPP
-#define KW_TU_HPP
+#  define KW_TU_HPP
 // Head files
-#ifndef STD_BITS_STDCPP_H
-#define STD_BITS_STDCPP_H
-#include <bits/stdc++.h>
-#endif
+#  ifndef STD_BITS_STDCPP_H
+#    define STD_BITS_STDCPP_H
+#    include <bits/stdc++.h>
+#  endif
 // Class Definition
 namespace kw {
     template<int PointNum, int EdgeNum, typename DataType> class Tu;

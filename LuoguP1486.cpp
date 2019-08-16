@@ -33,27 +33,21 @@ int main() {
                 root = ++cnt;
                 root->num = 1;
                 root->size = 1;
-                root->val = x;
+                root->val = x - lazy;
             }
         } else if (opt == 'A') {
             lazy += x;
         } else if (opt == 'S') {
             lazy -= x;
-            fprintf(stderr, "D: insert(%d)\n", min - lazy - 1);
             insert(min - lazy - 1);
-            fprintf(stderr, "D: OK1!\n");
             potmp = find(min - lazy - 1);
-            fprintf(stderr, "D: OK2!\n");
             makeroot(potmp);
-            fprintf(stderr, "D: OK3!\n");
             if (!potmp->rson) {
                 ans += root->size - 1;
                 root = 0;
                 continue;
             }
-            fprintf(stderr, "D: OK4!\n");
             rotate(potmp->rson);
-            fprintf(stderr, "D: OK5!\n");
             ans += root->lson->size - 1;
             root->lson = 0;
             update(root);
@@ -121,25 +115,27 @@ inline void makeroot(point *v) {
     }
 }
 inline void insert(int x) {
-    point *v = root;
-    while (x != v->val && x < v->val ? v->lson : v->rson) {
+    point *v = root, *tmp;
+    while (x != v->val && (x < v->val ? v->lson : v->rson)) {
         v = x < v->val ? v->lson : v->rson;
     }
     if (x == v->val) {
         ++v->num;
+        tmp = v;
     } else {
         (++cnt)->fa = v;
         v = (x < v->val ? v->lson : v->rson) = cnt;
         v->num = 1;
         v->size = 1;
         v->val = x;
+        tmp = cnt;
     }
     while (v != root) {
         update(v);
         v = v->fa;
     }
     update(root);
-    makeroot(cnt);
+    makeroot(tmp);
 }
 inline point *find(int x) {
     point *v = root;
@@ -147,7 +143,7 @@ inline point *find(int x) {
         if (v->val == x) {
             return v;
         }
-        v = v->val < x ? v->lson : v->rson;
+        v = x < v->val ? v->lson : v->rson;
     }
     return 0;
 }
@@ -157,6 +153,7 @@ inline point *rank(int x) {
         if (v->lson && x <= v->lson->size) {
             v = v->lson;
         } else if (v->rson && x > v->size - v->rson->size) {
+            x -= v->size - v->rson->size;
             v = v->rson;
         } else {
             return v;

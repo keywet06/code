@@ -39,18 +39,21 @@ int main() {
             lazy += x;
         } else if (opt == 'S') {
             lazy -= x;
+            if (!root) {
+                continue;
+            }
             insert(min - lazy - 1);
             potmp = find(min - lazy - 1);
             makeroot(potmp);
-            if (!potmp->rson) {
-                ans += root->size - 1;
+            ans += root->size - 1;
+            if (!root->rson) {
                 root = 0;
                 continue;
             }
-            rotate(potmp->rson);
-            ans += root->lson->size - 1;
-            root->lson = 0;
+            root = root->rson;
+            root->fa = 0;
             update(root);
+            ans -= root->size;
         } else {
             printf("%d\n", x > (root ? root->size : 0) ? -1 : rank(root->size - x + 1)->val + lazy);
         }

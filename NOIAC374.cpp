@@ -167,6 +167,9 @@ class point {
         point *lson, *rson;
         long long min, val;
 };
+class data {
+    
+};
 long long CLOCK, sum, ans, m, n, x, y, z;
 long long lg[N], und[N];
 long long us[N][C];

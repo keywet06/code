@@ -283,8 +283,6 @@ inline void build(point *v, long long l, long long r) {
     update(v);
 }
 inline long long query(long long x, long long y, point *v, long long l, long long r) {
-    if (v == root) {
-    }
     if (x <= l && r <= y) {
         return v->min;
     }

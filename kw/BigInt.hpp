@@ -1,7 +1,10 @@
-#ifndef BIGINT_HPP
-#define BIGINT_HPP
+#ifndef KW_BIGINT_HPP
+#  define KW_BIGINT_HPP
 // Include:
-#include <bits/stdc++.h>
+#  ifndef STD_BITS_STDCPP_H
+#    define STD_BITS_STDCPP_H
+#    include <bits/stdc++.h>
+#  endif
 // Declare:
 namespace kw {
     class BigInt {
@@ -209,21 +212,10 @@ namespace kw {
         return c;
     }
     inline BigInt& operator/=(BigInt& a, int b) { return a = a / b; }
-    inline BigInt operator^(BigInt a, int b) {
-        if (!b) {
-            return 1;
-        }
-        BigInt c = a, tmp = 1;
-        while (b) {
-            if (b & 1) {
-                tmp *= c;
-            }
-            c *= c;
-            b >>= 1;
-        }
-        return tmp;
+    inline BigInt operator^(BigInt a, long long b) {
+        return b ? ((a * a) ^ (b / 2)) * (b & 1 ? a : 1) : 1;
     }
-    inline BigInt& operator^=(BigInt& a, int b) { return a = (a ^ b); }
+    inline BigInt& operator^=(BigInt& a, long long b) { return a = (a ^ b); }
     inline int operator%(BigInt a, int b) {
         long long ys = 0;
         for (int i = a.length() - 1; ~i; --i) {

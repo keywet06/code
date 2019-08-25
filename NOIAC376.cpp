@@ -1,17 +1,30 @@
-#include "BigInt.hpp"
-int n, x;
-kw::BigInt a, b;
+#include <bits/stdc++.h>
+unsigned long long a[10];
+int T;
 int main() {
-    scanf("%d", &n);
-    for (int i = 1; i <= n; ++i) {
-        a = 0;
-        for (int j = 1; j < 9; ++j) {
-            scanf("%d", &x);
-            a += (kw::BigInt(2) ^ x);
+    scanf("%d", &T);
+    while (T--) {
+        for (int i = 0; i <= 8; i++) {
+            scanf("%llu", &a[i]);
         }
-        std::cin >> b;
-        a += b;
-        std::cout << a << std::endl;
+        a[9] = 0;
+        if (a[8] == 0) {
+            for (int i = 0; i <= 7; i++) {
+                a[9] += (1LL << a[i]);
+            }
+            printf("%llu\n", a[9]);
+        } else {
+            a[8]--;
+            for (int i = 0; i <= 7; i++) {
+                a[9] += (1LL << a[i]);
+            }
+            a[9] += a[8];
+            if (a[9] == 18446744073709551615ULL) {
+                printf("18446744073709551616\n");
+            } else {
+                printf("%llu\n", a[9] + 1);
+            }
+        }
     }
     return 0;
 }

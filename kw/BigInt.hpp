@@ -23,27 +23,27 @@ namespace kw {
             void makelen(int);
             void zero();
             void carry();
-            int& operator[](int);
+            int& operator [] (int);
     };
-    int operator<(BigInt, BigInt);
-    int operator<=(BigInt, BigInt);
-    int operator>(BigInt, BigInt);
-    int operator>=(BigInt, BigInt);
-    int operator==(BigInt, BigInt);
-    int operator!=(BigInt, BigInt);
-    BigInt operator+(BigInt, BigInt);
-    BigInt& operator+=(BigInt&, BigInt);
-    BigInt operator-(BigInt, BigInt);
-    BigInt& operator-=(BigInt&, BigInt);
-    BigInt operator*(BigInt, BigInt);
-    BigInt& operator*=(BigInt&, BigInt);
-    BigInt operator/(BigInt, int);
-    BigInt& operator/=(BigInt&, int);
-    int operator%(BigInt, int);
-    BigInt operator^(BigInt, int);
-    BigInt& operator^=(BigInt&, int);
-    std::istream& operator>>(std::istream&, BigInt&);
-    std::ostream& operator<<(std::ostream&, BigInt);
+    int operator < (BigInt, BigInt);
+    int operator <= (BigInt, BigInt);
+    int operator > (BigInt, BigInt);
+    int operator >= (BigInt, BigInt);
+    int operator == (BigInt, BigInt);
+    int operator != (BigInt, BigInt);
+    BigInt operator + (BigInt, BigInt);
+    BigInt& operator += (BigInt&, BigInt);
+    BigInt operator - (BigInt, BigInt);
+    BigInt& operator -= (BigInt&, BigInt);
+    BigInt operator * (BigInt, BigInt);
+    BigInt& operator *= (BigInt&, BigInt);
+    BigInt operator / (BigInt, int);
+    BigInt& operator /= (BigInt&, int);
+    int operator % (BigInt, int);
+    BigInt operator ^ (BigInt, int);
+    BigInt& operator ^= (BigInt&, int);
+    std::istream& operator >> (std::istream&, BigInt&);
+    std::ostream& operator << (std::ostream&, BigInt);
 }
 // Implementation:
 namespace kw {
@@ -111,8 +111,8 @@ namespace kw {
         }
         zero();
     }
-    inline int& BigInt::operator[](int x) { return v[x]; }
-    inline int operator<(BigInt a, BigInt b) {
+    inline int& BigInt::operator [] (int x) { return v[x]; }
+    inline int operator < (BigInt a, BigInt b) {
         if (a.length() != b.length()) {
             return a.length() < b.length();
         }
@@ -123,7 +123,7 @@ namespace kw {
         }
         return 0;
     }
-    inline int operator<=(BigInt a, BigInt b) {
+    inline int operator <= (BigInt a, BigInt b) {
         if (a.length() != b.length()) {
             return a.length() < b.length();
         }
@@ -134,9 +134,9 @@ namespace kw {
         }
         return 1;
     }
-    inline int operator>(BigInt a, BigInt b) { return !(a <= b); }
-    inline int operator>=(BigInt a, BigInt b) { return !(a < b); }
-    inline int operator==(BigInt a, BigInt b) {
+    inline int operator > (BigInt a, BigInt b) { return !(a <= b); }
+    inline int operator >= (BigInt a, BigInt b) { return !(a < b); }
+    inline int operator == (BigInt a, BigInt b) {
         if (a.length() != b.length()) {
             return 0;
         }
@@ -147,8 +147,8 @@ namespace kw {
         }
         return 1;
     }
-    inline int operator!=(BigInt a, BigInt b) { return !(a == b); }
-    inline BigInt operator+(BigInt a, BigInt b) {
+    inline int operator != (BigInt a, BigInt b) { return !(a == b); }
+    inline BigInt operator + (BigInt a, BigInt b) {
         BigInt c;
         if (a.length() < b.length()) {
             c = b;
@@ -165,8 +165,8 @@ namespace kw {
         }
         return c;
     }
-    inline BigInt& operator+=(BigInt& a, BigInt b) { return a = a + b; }
-    inline BigInt operator-(BigInt a, BigInt b) {
+    inline BigInt& operator += (BigInt& a, BigInt b) { return a = a + b; }
+    inline BigInt operator - (BigInt a, BigInt b) {
         BigInt c = a;
         for (int i = 0; i < b.length(); ++i) {
             if (c[i] < b[i]) {
@@ -186,8 +186,8 @@ namespace kw {
         c.zero();
         return c;
     }
-    inline BigInt& operator-=(BigInt& a, BigInt b) { return a = a - b; }
-    inline BigInt operator*(BigInt a, BigInt b) {
+    inline BigInt& operator -= (BigInt& a, BigInt b) { return a = a - b; }
+    inline BigInt operator * (BigInt a, BigInt b) {
         BigInt c;
         c.makelen(a.length() + b.length() - 1);
         for (int i = 0; i < a.length(); ++i) {
@@ -198,8 +198,8 @@ namespace kw {
         c.carry();
         return c;
     }
-    inline BigInt& operator*=(BigInt& a, BigInt b) { return a = a * b; }
-    inline BigInt operator/(BigInt a, int b) {
+    inline BigInt& operator *= (BigInt& a, BigInt b) { return a = a * b; }
+    inline BigInt operator / (BigInt a, int b) {
         BigInt c;
         int yu = 0;
         c.makelen(a.length());
@@ -211,25 +211,25 @@ namespace kw {
         c.zero();
         return c;
     }
-    inline BigInt& operator/=(BigInt& a, int b) { return a = a / b; }
-    inline BigInt operator^(BigInt a, long long b) {
+    inline BigInt& operator /= (BigInt& a, int b) { return a = a / b; }
+    inline BigInt operator ^ (BigInt a, long long b) {
         return b ? ((a * a) ^ (b / 2)) * (b & 1 ? a : 1) : 1;
     }
-    inline BigInt& operator^=(BigInt& a, long long b) { return a = (a ^ b); }
-    inline int operator%(BigInt a, int b) {
+    inline BigInt& operator ^= (BigInt& a, long long b) { return a = (a ^ b); }
+    inline int operator % (BigInt a, int b) {
         long long ys = 0;
         for (int i = a.length() - 1; ~i; --i) {
             ys = (ys * 10 + a[i]) % b;
         }
         return ys;
     }
-    std::istream& operator>>(std::istream& in, BigInt& a) {
+    std::istream& operator >> (std::istream& in, BigInt& a) {
         std::string s;
         in >> s;
         a = (BigInt)s;
         return in;
     }
-    std::ostream& operator<<(std::ostream& out, BigInt a) {
+    std::ostream& operator << (std::ostream& out, BigInt a) {
         for (int i = a.length() - 1; ~i; --i) {
             out << a[i];
         }

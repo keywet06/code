@@ -25,8 +25,9 @@ int main(int n, char* a[]) {
             system(s.data());
             printf("Complie is over.\n");
             s = (std::string)a[2];
+            int c = clock();
             system(s.data());
-            printf("The program is over.\n");
+            printf("The program is over in %dms.\n", (clock() - c) / 1000);
             while (_kbhit()) {
                 getchar();
             }
@@ -44,7 +45,7 @@ int main(int n, char* a[]) {
         puts("");
     }
     puts("$ ---- A program that can help you to code");
-    puts("\tVersion: v0.1.3");
+    puts("\tVersion: v0.1.4");
     puts("\tWriter: keywet06");
     puts("");
     puts("Help infomation");

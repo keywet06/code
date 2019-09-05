@@ -21,16 +21,13 @@ int main(int n, char* a[]) {
         }
     } else if (n == 3) {
         if (op(a[1], (char*)"run")) {
-            std::string s = "g++ -o ";
-            s = s + (std::string)a[2];
-            s = s + (std::string)" ";
-            s = s + (std::string)a[2];
-            s = s + (std::string)".cpp -lm -O3";
+            std::string s = (std::string)"g++ -o " + (std::string)a[2] + (std::string)" " + (std::string)a[2] + (std::string)".cpp -lm -O3";
             system(s.data());
             printf("Complie is over.\n");
             s = (std::string)a[2];
+            int c = clock();
             system(s.data());
-            printf("The program is over.\n");
+            printf("The program is over in %dms.\n", (clock() - c) / 1000);
             while (_kbhit()) {
                 getchar();
             }
@@ -38,11 +35,7 @@ int main(int n, char* a[]) {
             _getch();
             return 0;
         } else if (op(a[1], (char*)"compile")) {
-            std::string s = "g++ -o ";
-            s = s + (std::string)a[2];
-            s = s + (std::string)" ";
-            s = s + (std::string)a[2];
-            s = s + (std::string)".cpp -lm -O3";
+            std::string s = (std::string)"g++ -o " + (std::string)a[2] + (std::string)" " + (std::string)a[2] + (std::string)".cpp -lm -O3";
             system(s.data());
             return 0;
         }
@@ -52,7 +45,7 @@ int main(int n, char* a[]) {
         puts("");
     }
     puts("$ ---- A program that can help you to code");
-    puts("\tVersion: v0.1.2");
+    puts("\tVersion: v0.1.4");
     puts("\tWriter: keywet06");
     puts("");
     puts("Help infomation");

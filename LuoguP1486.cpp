@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 class point {
     public:
-        point *lson, *rson, *fa;
+        point *son[2], *fa;
         int size, num, val;
 };
 const int N = 500005;
@@ -11,9 +11,9 @@ point po[N];
 point *cnt = po, *root, *potmp;
 char ReadARealChar();
 void update(point*);
+int fason(point*);
 void rotate(point*);
 void splay(point*);
-void makeroot(point*);
 void insert(int);
 point *find(int);
 point *rank(int);
@@ -24,7 +24,6 @@ int main() {
         scanf("%d", &x);
         if (opt == 'I') {
             if (x < min) {
-                ++ans;
                 continue;
             }
             if (root) {
@@ -39,18 +38,21 @@ int main() {
             lazy += x;
         } else if (opt == 'S') {
             lazy -= x;
+            if (!root) {
+                continue;
+            }
             insert(min - lazy - 1);
             potmp = find(min - lazy - 1);
-            makeroot(potmp);
-            if (!potmp->rson) {
-                ans += root->size - 1;
+            splay(potmp);
+            ans += root->size - 1;
+            if (!root->son[1]) {
                 root = 0;
                 continue;
             }
-            rotate(potmp->rson);
-            ans += root->lson->size - 1;
-            root->lson = 0;
+            root = root->son[1];
+            root->fa = 0;
             update(root);
+            ans -= root->size;
         } else {
             printf("%d\n", x > (root ? root->size : 0) ? -1 : rank(root->size - x + 1)->val + lazy);
         }
@@ -66,65 +68,52 @@ inline char ReadARealChar() {
     return a;
 }
 inline void update(point *v) {
-    v->size = (v->lson ? v->lson->size : 0) + (v->rson ? v->rson->size : 0) + v->num;
+    v->size = (v->son[0] ? v->son[0]->size : 0) + (v->son[1] ? v->son[1]->size : 0) + v->num;
+}
+inline int fason(point *v) {
+    return v->fa->son[1] == v;
 }
 inline void rotate(point *v) {
     if (v->fa == root) {
         root = v;
     }
-    if (v->fa->lson == v) {
-        v->fa->lson = v->rson;
-        if (v->rson) {
-            v->rson->fa = v->fa;
-        }
-        v->rson = v->fa;
-        v->fa = v->rson->fa;
-        if (v->fa) {
-            (v->fa->lson == v->rson ? v->fa->lson : v->fa->rson) = v;
-        }
-        v->rson->fa = v;
-        update(v->rson);
-    } else {
-        v->fa->rson = v->lson;
-        if (v->lson) {
-            v->lson->fa = v->fa;
-        }
-        v->lson = v->fa;
-        v->fa = v->lson->fa;
-        if (v->fa) {
-            (v->fa->rson == v->lson ? v->fa->rson : v->fa->lson) = v;
-        }
-        v->lson->fa = v;
-        update(v->lson);
+    int fsv = fason(v);
+    v->fa->son[fsv] = v->son[!fsv];
+    if (v->son[!fsv]) {
+        v->son[!fsv]->fa = v->fa;
     }
+    v->son[!fsv] = v->fa;
+    v->fa = v->son[!fsv]->fa;
+    if (v->fa) {
+        v->fa->son[(v->fa->son[fsv] != v->son[!fsv]) ^ fsv] = v;
+    }
+    v->son[!fsv]->fa = v;
+    update(v->son[!fsv]);
     update(v);
 }
 inline void splay(point *v) {
-    if (v->fa == root) {
-        rotate(v);
-    } else if ((v->fa->lson == v && v->fa->fa->lson == v->fa) || (v->fa->rson == v && v->fa->fa->rson == v->fa)) {
-        rotate(v->fa);
-        rotate(v);
-    } else {
-        rotate(v);
-    }
-}
-inline void makeroot(point *v) {
     while (v != root) {
-        splay(v);
+        if (v->fa == root) {
+            rotate(v);
+        } else if (fason(v) == fason(v->fa)) {
+            rotate(v->fa);
+            rotate(v);
+        } else {
+            rotate(v);
+        }
     }
 }
 inline void insert(int x) {
     point *v = root, *tmp;
-    while (x != v->val && (x < v->val ? v->lson : v->rson)) {
-        v = x < v->val ? v->lson : v->rson;
+    while (x != v->val && v->son[x > v->val]) {
+        v = v->son[x > v->val];
     }
     if (x == v->val) {
         ++v->num;
         tmp = v;
     } else {
         (++cnt)->fa = v;
-        v = (x < v->val ? v->lson : v->rson) = cnt;
+        v = v->son[x > v->val] = cnt;
         v->num = 1;
         v->size = 1;
         v->val = x;
@@ -135,7 +124,7 @@ inline void insert(int x) {
         v = v->fa;
     }
     update(root);
-    makeroot(tmp);
+    splay(tmp);
 }
 inline point *find(int x) {
     point *v = root;
@@ -143,18 +132,18 @@ inline point *find(int x) {
         if (v->val == x) {
             return v;
         }
-        v = x < v->val ? v->lson : v->rson;
+        v = v->son[x > v->val];
     }
     return 0;
 }
 inline point *rank(int x) {
     point *v = root;
     while (1) {
-        if (v->lson && x <= v->lson->size) {
-            v = v->lson;
-        } else if (v->rson && x > v->size - v->rson->size) {
-            x -= v->size - v->rson->size;
-            v = v->rson;
+        if (v->son[0] && x <= v->son[0]->size) {
+            v = v->son[0];
+        } else if (v->son[1] && x > v->size - v->son[1]->size) {
+            x -= v->size - v->son[1]->size;
+            v = v->son[1];
         } else {
             return v;
         }

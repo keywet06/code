@@ -22,7 +22,6 @@ int main() {
             s[i][j] -= 'a';
             if (!trie[now][s[i][j]]) {
                 trie[now][s[i][j]] = ++cnt;
-                // insert(now, cnt);
             }
             now = trie[now][s[i][j]];
             ++is[now];

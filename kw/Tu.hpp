@@ -39,6 +39,8 @@ namespace kw {
             void addedge(int, int, DataType);
             void delinsert(int, int);
             void deledge(int, int);
+            void delinsert(int, int, DataType);
+            void deledge(int, int, DataType);
             iterator GetIt(int, int);
     };
 }
@@ -87,6 +89,26 @@ namespace kw {
     template<int PointNum, int EdgeNum, typename DataType> inline void Tu<PointNum, EdgeNum, DataType>::deledge(int x, int y) {
         this->delinsert(x, y);
         this->delinsert(y, x);
+    }
+    template<int PointNum, int EdgeNum, typename DataType> inline void Tu<PointNum, EdgeNum, DataType>::delinsert(int x, int y, DataType z) {
+        while (this->GetHead(x) && this->GetHead(x)->to == y && this->GetHead(x)->data == z) {
+            this->head[x] = this->GetHead(x)->next;
+        }
+        typename Tu<PointNum, EdgeNum, DataType>::iterator its = this->GetHead(x);
+        for (typename Tu<PointNum, EdgeNum, DataType>::iterator it = this->GetHead(x); it;) {
+            while (it && it->to == y && it->data == z) {
+                its->next = it->next;
+                it = it->next;
+            }
+            its = it;
+            if (it) {
+                it = it->next;
+            }
+        }
+    }
+    template<int PointNum, int EdgeNum, typename DataType> inline void Tu<PointNum, EdgeNum, DataType>::deledge(int x, int y, DataType z) {
+        this->delinsert(x, y, z);
+        this->delinsert(y, x, z);
     }
     template<int PointNum, int EdgeNum, typename DataType> inline typename Tu<PointNum, EdgeNum, DataType>::iterator Tu<PointNum, EdgeNum, DataType>::GetIt(int x, int y) {
         typename Tu<PointNum, EdgeNum, DataType>::iterator it = 0;

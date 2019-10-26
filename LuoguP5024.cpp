@@ -97,7 +97,8 @@ int main() {
                 }
             }
             n0 = a && b ? dp[z][0] - dp[x][1] - dp[y][1] + rx1 + ry1 : INF;
-            n1 = dp[z][1] - std::min(dp[x][0], dp[x][1]) - std::min(dp[y][0], dp[y][1]) + (a ? rx1 : rx0) + (b ? ry1 : ry0);
+            n1 = dp[z][1] - std::min(dp[x][0], dp[x][1]) - std::min(dp[y][0],
+                dp[y][1]) + (a ? rx1 : rx0) + (b ? ry1 : ry0);
             x = z;
             rx0 = n0;
             rx1 = n1;
@@ -153,10 +154,18 @@ inline void dfs2(int v) {
         val[1][1][v][0] = dp[1][fa[v][0]] - std::min(dp[0][v], dp[1][v]);
     }
     for (int i = 1; 1 << i <= deep[v]; ++i) {
-        val[0][0][v][i] = (val[0][0][v][i] = std::min(as(0, 0, v, i - 1) + as(0, 0, fa[v][i - 1], i - 1), as(0, 1, v, i - 1) + as(1, 0, fa[v][i - 1], i - 1))) < INF ? val[0][0][v][i] : -1;
-        val[0][1][v][i] = (val[0][1][v][i] = std::min(as(0, 0, v, i - 1) + as(0, 1, fa[v][i - 1], i - 1), as(0, 1, v, i - 1) + as(1, 1, fa[v][i - 1], i - 1))) < INF ? val[0][1][v][i] : -1;
-        val[1][0][v][i] = (val[1][0][v][i] = std::min(as(1, 0, v, i - 1) + as(0, 0, fa[v][i - 1], i - 1), as(1, 1, v, i - 1) + as(1, 0, fa[v][i - 1], i - 1))) < INF ? val[1][0][v][i] : -1;
-        val[1][1][v][i] = (val[1][1][v][i] = std::min(as(1, 0, v, i - 1) + as(0, 1, fa[v][i - 1], i - 1), as(1, 1, v, i - 1) + as(1, 1, fa[v][i - 1], i - 1))) < INF ? val[1][1][v][i] : -1;        
+        val[0][0][v][i] = (val[0][0][v][i] = std::min(as(0, 0, v, i - 1) +
+            as(0, 0, fa[v][i - 1], i - 1), as(0, 1, v, i - 1) + as(1, 0,
+            fa[v][i - 1], i - 1))) < INF ? val[0][0][v][i] : -1;
+        val[0][1][v][i] = (val[0][1][v][i] = std::min(as(0, 0, v, i - 1) +
+            as(0, 1, fa[v][i - 1], i - 1), as(0, 1, v, i - 1) + as(1, 1,
+            fa[v][i - 1], i - 1))) < INF ? val[0][1][v][i] : -1;
+        val[1][0][v][i] = (val[1][0][v][i] = std::min(as(1, 0, v, i - 1) +
+            as(0, 0, fa[v][i - 1], i - 1), as(1, 1, v, i - 1) + as(1, 0,
+            fa[v][i - 1], i - 1))) < INF ? val[1][0][v][i] : -1;
+        val[1][1][v][i] = (val[1][1][v][i] = std::min(as(1, 0, v, i - 1) +
+            as(0, 1, fa[v][i - 1], i - 1), as(1, 1, v, i - 1) + as(1, 1,
+            fa[v][i - 1], i - 1))) < INF ? val[1][1][v][i] : -1;        
     }
     for (int u = head[v]; u; u = next[u]) {
         if (to[u] == fa[v][0]) {

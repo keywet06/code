@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 const int N = 100005;
-int cnt, n, opt, m;
+int cnt, n, opt, m, flag;
 int del[N];
 std::string x, y, lx, ly, llx, lly;
 std::string name[N];
@@ -37,8 +37,12 @@ int main() {
     std::sort(name + 1, name + cnt + 1);
     for (int i = 1; i <= cnt; ++i) {
         if (del[id(name[i])]) {
+            flag = 1;
             std::cout << name[i] << " " << del[id(name[i])] << std::endl;
         }
+    }
+    if (!flag) {
+        printf("None\n");
     }
     return 0;
 }

@@ -1,8 +1,12 @@
+.*
 *.in
 *.out
 *.ans
+*.gch
 *.exe
-*tmp
+*.tmp
+*.test
+*.log
+*.swp
 tmp*
 test*
-.vscode

@@ -4,9 +4,11 @@
 *.ans
 *.gch
 *.exe
-*.tmp
-*.test
 *.log
 *.swp
 tmp*
 test*
+*tmp
+*test
+*tmp*
+*test*

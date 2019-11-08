@@ -1,4 +1,5 @@
 .*
+# kwcode.begin
 *.in
 *.out
 *.ans

@@ -106,7 +106,7 @@ inline void tarjan(int v, int fa) {
     #if !defined(ONLINE_JUDGE) && defined(DEBUG)
     fprintf(stderr, "Debug: tarjan(Point Biconnected Component)(%d, %d);\n", v, fa);
     #endif
-    static std::queue<std::pair<int, std::pair<int, int> > > queue;
+    static std::stack<std::pair<int, std::pair<int, int> > > stack;
     static std::pair<int, std::pair<int, int> > pair;
     low[v] = dfn[v] = ++cnt;
     vis[v] = 1;
@@ -114,22 +114,20 @@ inline void tarjan(int v, int fa) {
         if (to[u] == fa) {
             continue;
         }
-        queue.push(std::make_pair(val[u], std::make_pair(v, to[u])));
+        stack.push(std::make_pair(val[u], std::make_pair(v, to[u])));
         if (!vis[to[u]]) {
             tarjan(to[u], v);
             low[v] = std::min(low[to[u]], low[v]);
-            puts("1");
             if (dfn[v] <= low[to[u]]) {
                 ++bcnt;
                 do {
-                    pair = queue.front();
-                    queue.pop();
+                    pair = stack.top();
+                    stack.pop();
                     set[pair.second.first].insert(bcnt);
                     set[pair.second.second].insert(bcnt);
                     bval[bcnt] = std::max(bval[bcnt], pair.first);
                 } while (pair.second.first != v || pair.second.second != to[u]);
             }
-            puts("0");
         } else {
             low[v] = std::min(low[v], dfn[to[u]]);
         }

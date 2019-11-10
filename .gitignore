@@ -1,4 +1,4 @@
-.*
+.vscode
 # kwcode.begin
 *.in
 *.out

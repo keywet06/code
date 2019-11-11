@@ -9,6 +9,7 @@
 *.swp
 tmp*
 test*
+*~
 *tmp
 *test
 *tmp*

@@ -1,5 +1,6 @@
 # todo
 
+- LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）
 - LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
 - hdu4348 To the moon
 - SPOJ10628 COT

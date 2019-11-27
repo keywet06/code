@@ -10,4 +10,4 @@
 - LuoguP5490 【模板】扫描线
 - POJ2932 Coneology
 - 51NOD2156 矩形中的线段
-- UOJ242
+- UOJ242 破坏蛋糕

@@ -1,6 +1,5 @@
-# todo
+## Todo
 
-- [ ] LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）
 - [ ] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
 - [ ] hdu4348 To the moon
 - [ ] SPOJ10628 COT
@@ -12,3 +11,14 @@
 - [ ] POJ2932 Coneology
 - [ ] 51NOD2156 矩形中的线段
 - [ ] UOJ242 破坏蛋糕
+
+---
+
+## Finished && Unused
+
+- [x] LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）
+
+---
+
+## Used
+

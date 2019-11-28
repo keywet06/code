@@ -81,11 +81,11 @@ template <typename ValueType, size_t length>
     while (!queue.empty()) {
         Node *v = queue.front();
         queue.pop();
-        if (!set.count(v->lson)) {
+        if (v->lson && !set.count(v->lson)) {
             set.insert(v->lson);
             queue.push(v->lson);
         }
-        if (!set.count(v->rson)) {
+        if (v->rson && !set.count(v->rson)) {
             set.insert(v->rson);
             queue.push(v->rson);
         }

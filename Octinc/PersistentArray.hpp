@@ -18,14 +18,14 @@ template <typename ValueType, size_t length>
         Node();
     };
     std::vector<Node *> version;
-    Node *NewVersion();
-    Node *NewVersion(size_t);
     Node *NewNode(Node *&);
     ValueType &query(Node *, size_t, size_t, size_t);
    public:
     PersistentArray();
     ~PersistentArray();
     void clear();
+    Node *NewVersion();
+    Node *NewVersion(size_t);
     ValueType &operator[](size_t);
     ValueType &operator()(size_t, size_t);
     size_t getVersion();

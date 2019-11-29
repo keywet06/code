@@ -1,10 +1,8 @@
 ## Todo
 
-- [ ] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
-- [ ] hdu4348 To the moon
 - [ ] SPOJ10628 COT
-- [ ] Hdu6601 Keep On everything But Triangle
-- [ ] Hdu6621 K-th Closest Distance
+- [ ] HDU6601 Keep On everything But Triangle
+- [ ] HDU6621 K-th Closest Distance
 - [ ] LuoguP4592 \[TJOI2018\] 异或
 - [ ] LuoguP5283 异或粽子
 - [ ] LuoguP5490 【模板】扫描线
@@ -14,11 +12,18 @@
 
 ---
 
+## Doing
+
+
+---
+
 ## Finished && Unused
+
+- [x] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
+- [x] HDU4348 To the moon
 
 ---
 
 ## Used
-
 
 - [x] LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）

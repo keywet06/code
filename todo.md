@@ -1,16 +1,16 @@
 ## Todo
 
-- [ ] LuoguP3402 �ɳ־û����鼯 (= BZOJ3673, BZOJ3674)
+- [ ] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
 - [ ] hdu4348 To the moon
 - [ ] SPOJ10628 COT
 - [ ] Hdu6601 Keep On everything But Triangle
 - [ ] Hdu6621 K-th Closest Distance
-- [ ] LuoguP4592 \[TJOI2018\] ���
-- [ ] LuoguP5283 �������
-- [ ] LuoguP5490 ��ģ�塿ɨ����
+- [ ] LuoguP4592 \[TJOI2018\] 异或
+- [ ] LuoguP5283 异或粽子
+- [ ] LuoguP5490 【模板】扫描线
 - [ ] POJ2932 Coneology
-- [ ] 51NOD2156 �����е��߶�
-- [ ] UOJ242 �ƻ�����
+- [ ] 51NOD2156 矩形中的线段
+- [ ] UOJ242 破坏蛋糕
 
 ---
 
@@ -21,4 +21,4 @@
 ## Used
 
 
-- [x] LuoguP3919 ��ģ�塿�ɳ־û����飨�ɳ־û��߶���/ƽ������
+- [x] LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）

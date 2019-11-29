@@ -19,11 +19,11 @@
 
 ## Finished && Unused
 
-- [x] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
-- [x] HDU4348 To the moon
 
 ---
 
 ## Used
 
 - [x] LuoguP3919 【模板】可持久化数组（可持久化线段树/平衡树）
+- [x] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
+- [x] HDU4348 To the moon

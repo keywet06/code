@@ -5,16 +5,16 @@ const int N = 100005;
 class node {
    public:
     int lson, rson;
-    int sum/*, deep*/;
+    short int sum, deep;
 };
 node nod[C];
 int cnt, n, m, x, y;
 int version[M];
-int &query(int, int, int, int = 1, int = n);
-// int &query2(int, int, int, int = 1, int = n);
+short int &query(int, int, int, int = 1, int = n);
+short int &query2(int, int, int, int = 1, int = n);
 int find(int, int &);
 void merge(int, int, int &);
-inline int &query(int x, int v, int flag, int l, int r) {
+inline short int &query(int x, int v, int flag, int l, int r) {
 	if (l == r) {
 		return nod[v].sum;
 	}
@@ -33,50 +33,50 @@ inline int &query(int x, int v, int flag, int l, int r) {
 		return query(x, nod[v].rson, flag, mid + 1, r);
 	}
 }
-// inline int &query2(int x, int v, int flag, int l, int r) {
-// 	if (l == r) {
-// 		return nod[v].deep;
-// 	}
-// 	int mid = (l + r) / 2;
-// 	if (x <= mid) {
-//         if (flag) {
-//             nod[++cnt] = nod[nod[v].lson];
-//             nod[v].lson = cnt;
-//         }
-// 		return query(x, nod[v].lson, flag, l, mid);
-// 	} else {
-//         if (flag) {
-//             nod[++cnt] = nod[nod[v].rson];
-//             nod[v].rson = cnt;
-//         }
-// 		return query(x, nod[v].rson, flag, mid + 1, r);
-// 	}
-// }
+inline short int &query2(int x, int v, int flag, int l, int r) {
+	if (l == r) {
+		return nod[v].deep;
+	}
+	int mid = (l + r) / 2;
+	if (x <= mid) {
+        if (flag) {
+            nod[++cnt] = nod[nod[v].lson];
+            nod[v].lson = cnt;
+        }
+		return query(x, nod[v].lson, flag, l, mid);
+	} else {
+        if (flag) {
+            nod[++cnt] = nod[nod[v].rson];
+            nod[v].rson = cnt;
+        }
+		return query(x, nod[v].rson, flag, mid + 1, r);
+	}
+}
 inline int find(int x, int &nodes) {
-    int *a = &query(x, nodes, 0);
+    short int *a = &query(x, nodes, 0);
     if (*a == x) {
         return *a;
     } else {
         int b = find(*a, nodes);
-        if (*a != b && !(cnt & 127)) {
-            query(*a, nodes, 1) = b;
-        }
+        // if (*a != b) {
+        //     query(*a, nodes, 1) = b;
+        // }
         return b;
     }
     return *a == x ? *a : find(*a, nodes);
 }
 inline void merge(int x, int y, int &nodes) {
-    // int *a = &query2(find(x, nodes), nodes, 0),
-    //   *b = &query2(find(y, nodes), nodes, 0);
-    // if (*a > *b) {
-    if (cnt & 1) {
+    short int *a = &query2(find(x, nodes), nodes, 0),
+      *b = &query2(find(y, nodes), nodes, 0);
+    if (*a > *b) {
+    // if (cnt & 1) {
         query(find(x, nodes), nodes, 1) = find(y, nodes);
-    } else {
-    // } else if (*a < *b) {
-        query(find(y, nodes), nodes, 1) = find(x, nodes);
     // } else {
-    //     query(find(x, nodes), nodes, 1) = find(y, nodes);
-    //     ++query2(find(y, nodes), nodes, 1);
+    } else if (*a < *b) {
+        query(find(y, nodes), nodes, 1) = find(x, nodes);
+    } else {
+        query(find(x, nodes), nodes, 1) = find(y, nodes);
+        ++query2(find(y, nodes), nodes, 1);
     }
 }
 int main() {

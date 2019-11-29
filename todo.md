@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] SPOJ10628 COT
 - [ ] HDU6601 Keep On everything But Triangle
 - [ ] HDU6621 K-th Closest Distance
 - [ ] LuoguP4592 \[TJOI2018\] 异或
@@ -14,6 +13,7 @@
 
 ## Doing
 
+- [ ] SPOJ10628 COT
 
 ---
 

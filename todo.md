@@ -13,12 +13,12 @@
 
 ## Doing
 
-- [ ] SPOJ10628 COT
 
 ---
 
 ## Finished && Unused
 
+- [x] SPOJ10628 COT
 
 ---
 

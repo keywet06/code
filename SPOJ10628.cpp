@@ -81,8 +81,9 @@ inline int query(int v1, int v2, int v3, int v4, int k, int l, int r) {
     if (l == r) {
         return l;
     }
-    int mid = l + r >> 1, tmp = node[node[v1].lson].size + node[node[v2].lson].size
-      - node[node[v3].lson].size - node[node[v4].rson].size;
+    int mid = l + r >> 1, tmp = node[node[v1].lson].size +
+      node[node[v2].lson].size - node[node[v3].lson].size -
+      node[node[v4].rson].size;
     if (k <= tmp) {
         return query(node[v1].lson, node[v2].lson, node[v3].lson, node[v4].rson
           , k, l, mid);

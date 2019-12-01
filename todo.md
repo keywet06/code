@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] HDU6601 Keep On everything But Triangle
 - [ ] HDU6621 K-th Closest Distance
 - [ ] LuoguP4592 \[TJOI2018\] 异或
 - [ ] LuoguP5283 异或粽子
@@ -18,6 +17,7 @@
 
 ## Finished && Unused
 
+- [x] HDU6601 Keep On everything But Triangle
 
 ---
 

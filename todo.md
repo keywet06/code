@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] HDU6621 K-th Closest Distance
 - [ ] LuoguP4592 \[TJOI2018\] 异或
 - [ ] LuoguP5283 异或粽子
 - [ ] LuoguP5490 【模板】扫描线
@@ -12,6 +11,7 @@
 
 ## Doing
 
+- [ ] HDU6621 K-th Closest Distance
 
 ---
 

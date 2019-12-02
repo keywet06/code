@@ -10,7 +10,6 @@
 
 ## Doing
 
-- [ ] LuoguP4592 \[TJOI2018\] 异或
 
 ---
 
@@ -18,6 +17,7 @@
 
 - [x] HDU6601 Keep On everything But Triangle
 - [x] HDU6621 K-th Closest Distance
+- [x] LuoguP4592 \[TJOI2018\] 异或
 
 ---
 

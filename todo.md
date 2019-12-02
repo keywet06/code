@@ -11,13 +11,13 @@
 
 ## Doing
 
-- [ ] HDU6621 K-th Closest Distance
 
 ---
 
 ## Finished && Unused
 
 - [x] HDU6601 Keep On everything But Triangle
+- [x] HDU6621 K-th Closest Distance
 
 ---
 

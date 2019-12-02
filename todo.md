@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LuoguP4592 \[TJOI2018\] 异或
 - [ ] LuoguP5283 异或粽子
 - [ ] LuoguP5490 【模板】扫描线
 - [ ] POJ2932 Coneology
@@ -11,6 +10,7 @@
 
 ## Doing
 
+- [ ] LuoguP4592 \[TJOI2018\] 异或
 
 ---
 

@@ -15,7 +15,6 @@
 
 ## Finished && Unused
 
-- [x] HDU6601 Keep On everything But Triangle
 - [x] HDU6621 K-th Closest Distance
 - [x] LuoguP4592 \[TJOI2018\] 异或
 
@@ -27,3 +26,4 @@
 - [x] LuoguP3402 可持久化并查集 (= BZOJ3673, BZOJ3674)
 - [x] HDU4348 To the moon
 - [x] SPOJ10628 COT
+- [x] HDU6601 Keep On everything But Triangle

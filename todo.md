@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LuoguP5283 异或粽子
 - [ ] LuoguP5490 【模板】扫描线
 - [ ] POJ2932 Coneology
 - [ ] 51NOD2156 矩形中的线段
@@ -10,6 +9,7 @@
 
 ## Doing
 
+- [ ] LuoguP5283 异或粽子
 
 ---
 

@@ -9,12 +9,12 @@
 
 ## Doing
 
-- [ ] LuoguP5283 异或粽子
 
 ---
 
 ## Finished && Unused
 
+- [ ] LuoguP5283 异或粽子
 
 ---
 

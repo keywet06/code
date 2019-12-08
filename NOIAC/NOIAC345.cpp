@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "fraction.hpp"
+#include "Fraction.hpp"
 const int N = 500005;
 int i, l, m, n, now, r, tmp, x, y;
 int ans[N], bigest[N], left[N], right[N], smallest[N];

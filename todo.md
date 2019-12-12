@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LuoguP5490 【模板】扫描线
 - [ ] POJ2932 Coneology
 - [ ] 51NOD2156 矩形中的线段
 - [ ] UOJ242 破坏蛋糕
@@ -14,7 +13,8 @@
 
 ## Finished && Unused
 
-- [ ] LuoguP5283 异或粽子
+- [x] LuoguP5283 异或粽子
+- [x] LuoguP5490 【模板】扫描线
 
 ---
 

@@ -27,3 +27,4 @@
 - [x] HDU6601 Keep On everything But Triangle
 - [x] HDU6621 K-th Closest Distance
 - [x] LuoguP4592 \[TJOI2018\] 异或
+- [x] LuoguP3360 普通平衡树

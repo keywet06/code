@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LOJ105 文艺平衡树 (= LuoguP3391)
 - [ ] LOJ10143 营业额统计 (= LuoguP2234)
 - [ ] LOJ10144 宠物收养所 (= LuoguP2286)
 - [ ] POJ2932 Coneology
@@ -11,6 +10,7 @@
 
 ## Doing
 
+- [ ] LOJ105 文艺平衡树 (= LuoguP3391)
 
 ---
 

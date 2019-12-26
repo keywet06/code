@@ -10,12 +10,12 @@
 
 ## Doing
 
-- [ ] LOJ105 文艺平衡树 (= LuoguP3391)
 
 ---
 
 ## Finished && Unused
 
+- [x] LOJ105 文艺平衡树 (= LuoguP3391)
 - [x] LuoguP5490 【模板】扫描线
 
 ---

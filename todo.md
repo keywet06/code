@@ -1,5 +1,8 @@
 ## Todo
 
+- [ ] LOJ105 文艺平衡树 (= LuoguP3391)
+- [ ] LOJ10143 营业额统计 (= LuoguP2234)
+- [ ] LOJ10144 宠物收养所 (= LuoguP2286)
 - [ ] POJ2932 Coneology
 - [ ] 51NOD2156 矩形中的线段
 - [ ] UOJ242 破坏蛋糕

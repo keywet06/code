@@ -170,32 +170,3 @@ class Splay {
 };
 } // namespace Octinc
 #endif
-int n, o, x;
-Octinc::Splay Splay;
-int main() {
-    std::ios::sync_with_stdio(0);
-    std::cin.tie(0);
-    std::cout.tie(0);
-    std::cin >> n;
-    for (int i = 1; i <= n; ++i) {
-        std::cin >> o >> x;
-        if (o == 1) {
-            Splay.insert(x);
-        } else if (o == 2) {
-            Splay.del(x);
-        } else if (o == 3) {
-            std::cout << Splay.rank(x) << std::endl;
-        } else if (o == 4) {
-            std::cout << Splay.kth(x)->val << std::endl;
-        } else if (o == 5) {
-            Splay.insert(x);
-            std::cout << Splay.lower()->val << std::endl;
-            Splay.del(x);
-        } else {
-            Splay.insert(x);
-            std::cout << Splay.upper()->val << std::endl;
-            Splay.del(x);
-        }
-    }
-    return 0;
-}

@@ -8,12 +8,12 @@
 
 ## Doing
 
-- [ ] LOJ10144 宠物收养所 (= LuoguP2286)
 
 ---
 
 ## Finished && Unused
 
+- [x] LOJ10144 宠物收养所 (= LuoguP2286)
 - [x] LOJ10143 营业额统计 (= LuoguP2234)
 - [x] LOJ105 文艺平衡树 (= LuoguP3391)
 - [x] LuoguP5490 【模板】扫描线

@@ -13,13 +13,13 @@
 
 ## Doing
 
-- [ ] LuoguP3812 【模板】线性基
 - [ ] LuoguP2042 \[NOI2005\] 维护数列
 
 ---
 
 ## Finished && Unused
 
+- [x] LuoguP3812 【模板】线性基
 - [x] LOJ10144 宠物收养所 (= LuoguP2286)
 - [x] LOJ10143 营业额统计 (= LuoguP2234)
 

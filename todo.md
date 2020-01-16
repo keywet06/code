@@ -1,5 +1,6 @@
 ## Todo
 
+- [ ] LuoguP3812 【模板】线性基
 - [ ] LuoguP4036 \[JSOI2008\] 火星人
 - [ ] LuoguP4309 \[TJOI2013\] 最长上升子序列
 - [ ] LuoguP2611 \[ZJOI2012\] 小蓝的好友

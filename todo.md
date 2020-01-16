@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LuoguP4036 \[JSOI2008\] 火星人
 - [ ] LuoguP4309 \[TJOI2013\] 最长上升子序列
 - [ ] LuoguP2611 \[ZJOI2012\] 小蓝的好友
 - [ ] LuoguP4027 \[NOI2007\] 货币兑换
@@ -13,6 +12,7 @@
 
 ## Doing
 
+- [ ] LuoguP4036 \[JSOI2008\] 火星人
 - [ ] LuoguP2042 \[NOI2005\] 维护数列
 
 ---

@@ -1,54 +1,63 @@
 #include <bits/stdc++.h>
-#define okline() fprintf(stderr, "Debug: Line %d is running\n", __LINE__)
 #if __cplusplus < 201103L && !defined(nullptr)
 #  define nullptr NULL
 #endif
 const int N = 100000;
 const int Np = N + 5;
-const long long mod = 1000000007;
+const int mod = 1e9 + 7;
 class node;
 extern node *root;
-extern long long j26[];
+extern unsigned long long j26[];
 class node {
    public:
     node *fa;
     node *son[2];
     char val;
     int size;
-    long long hsum;
+    unsigned long long hsum;
     inline node() {
         fa = son[0] = son[1] = nullptr;
         val = size = hsum = 0;
     }
-    inline int get() { return this && fa ? fa->son[1] == this : -1; }
-    inline node *getfa() { return this ? fa : nullptr; }
-    inline node *getson(int x) { return this ? son[x] : nullptr; }
-    inline char getval() { return this ? val : 0; }
-    inline int getsize() { return this ? size : 0; }
-    inline long long gethsum() { return this ? hsum : 0; }
-    inline node *pushup() {
-        size = son[0]->getsize() + son[1]->getsize() + 1;
-        hsum = (son[0]->gethsum() + j26[son[0]->getsize()] *
-          ((val + 26 * son[1]->gethsum()) % mod)) % mod;
+    inline void free() {
+        if (!this) {
+            return;
+        }
+        son[0]->free();
+        son[1]->free();
+        delete this;
     }
-    inline node *rotate() {
-        int t = get();
+    inline int G() { return fa->son[1] == this; }
+    inline node *Fa() { return this ? fa : nullptr; }
+    inline node *Son(int x) { return this ? son[x] : nullptr; }
+    inline char Val() { return this ? val : 0; }
+    inline int Size() { return this ? size : 0; }
+    inline unsigned long long Hsum() { return this ? hsum : 0; }
+    inline void pushup() {
+        size = son[0]->Size() + son[1]->Size() + 1;
+        hsum = (son[0]->Hsum() + j26[son[0]->Size()] *
+          (val + 26 * son[1]->Hsum() % mod)) % mod;
+    }
+    inline void rotate() {
+        int t = G();
         if (fa->son[t] = son[!t]) {
             son[!t]->fa = fa;
         }
         son[!t] = fa;
         if (fa = fa->fa) {
-            fa->son[son[!t]->get()] = this;
+            fa->son[son[!t]->G()] = this;
         }
         son[!t]->fa = this;
         son[!t]->pushup();
         pushup();
-        return fa ? this : root = this;
+        if (!fa) {
+            root = this;
+        }
     }
-    inline node *splay() {
-        while (this != root) {
-            if (fa->fa) {
-                (get() == fa->get() ? fa : this)->rotate();
+    inline void splay() {
+        while (fa) {
+            if (fa->fa && fa->G() == G()) {
+                fa->rotate();
             }
             rotate();
         }
@@ -57,12 +66,13 @@ class node {
 inline node *findrank(int kth) {
     node *now = root;
     while (1) {
-        if (kth <= now->son[0]->getsize()) {
+        if (kth <= now->son[0]->Size()) {
             now = now->son[0];
         } else {
-            kth -= now->son[0]->getsize() + 1;
+            kth -= now->son[0]->Size() + 1;
             if (!kth) {
-                return now->splay();
+                now->splay();
+                return now;
             }
             now = now->son[1];
         }
@@ -79,58 +89,35 @@ inline node *insert(char val, int kth) {
     node *now = root;
     int t;
     while (1) {
-        if (!now->son[t = kth <= now->son[0]->getsize()]) {
+        if (!now->son[t = kth > now->son[0]->Size()]) {
             break;
         }
-        if (t) {
+        if (!t) {
             now = now->son[0];
         } else {
-            kth -= now->son[0]->getsize() + 1;
+            kth -= now->son[0]->Size() + 1;
             now = now->son[1];
         }
     }
     (now->son[t] = new node)->fa = now;
+    now->size = 1;
     (now = now->son[t])->val = now->hsum = val;
-    return now->splay();
+    now->splay();
+    return now;
 }
 inline int query(int l, int r) {
-    fprintf(stderr, "Debug: query(%d, %d);\n", l, r);
     node *now = findrank(r + 2);
-    okline();
     findrank(l);
-    okline();
     if (now != root->son[1]) {
-        fprintf(stderr, "Debug: now: {\n");
-        fprintf(stderr, "Debug:     this: 0x%08X, \n", now);
-        fprintf(stderr, "Debug:     fa: {\n");
-        fprintf(stderr, "Debug:         this: 0x%08X, \n", now->fa);
-        fprintf(stderr, "Debug:         fa: 0x%08X, \n", now->fa->fa);
-        fprintf(stderr, "Debug:         son: [0x%08X, 0x%08X]\n", now->fa->son[0], now->fa->son[1]);
-        fprintf(stderr, "Debug:     },\n");
-        fprintf(stderr, "Debug:     son: [{\n");
-        fprintf(stderr, "Debug:         this: 0x%08X, \n", now->son[0]);
-        fprintf(stderr, "Debug:         fa: 0x%08X, \n", now->son[0]->fa);
-        fprintf(stderr, "Debug:         son: [0x%08X, 0x%08X]\n", now->son[0]->son[0], now->son[0]->son[1]);
-        fprintf(stderr, "Debug:     }, {\n");
-        fprintf(stderr, "Debug:         this: 0x%08X, \n", now->son[1]);
-        fprintf(stderr, "Debug:         fa: 0x%08X, \n", now->son[1]->fa);
-        fprintf(stderr, "Debug:         son: [0x%08X, 0x%08X]\n", now->son[1]->son[0], now->son[1]->son[1]);
-        fprintf(stderr, "Debug:     }]\n");
-        fprintf(stderr, "Debug: }\n");
-        okline();
         now->rotate();
     }
-    okline();
     return root->son[1]->son[0]->hsum;
 }
-int n, x, y, l, r, mid;
-long long j26[Np];
-node *root;
+int n, x, y, l, r, mid, T;
+unsigned long long j26[Np];
+node *root, *tmp;
 std::string str;
-int main() {
-    std::ios::sync_with_stdio(0);
-    std::cin.tie(0);
-    std::cout.tie(0);
+int Main() {
     j26[0] = 1;
     for (int i = 1; i < Np; ++i) {
         j26[i] = j26[i - 1] * 26 % mod;
@@ -146,11 +133,17 @@ int main() {
         std::cin >> str;
         if (str[0] == 'Q') {
             std::cin >> x >> y;
+            if (x > y) {
+                std::swap(x, y);
+            }
             l = 1;
             r = root->size - y - 1;
+            if (query(x, x) != query(y, y)) {
+                std::cout << 0 << std::endl;
+                continue;
+            }
             while (l < r) {
                 mid = l + r + 1 >> 1;
-                fprintf(stderr, "Debug: l = %d; r = %d; mid = %d;\n", l, r, mid);
                 if (query(x, x + mid - 1) != query(y, y + mid - 1)) {
                     r = mid - 1;
                 } else {
@@ -160,12 +153,25 @@ int main() {
             std::cout << l << std::endl;
         } else if (str[0] == 'R') {
             std::cin >> x >> str;
-            findrank(x + 1)->val = str[0] - 'a';
-            root->pushup();
+            (tmp = findrank(x + 1))->val = str[0] - 'a';
+            tmp->pushup();
+            tmp->splay();
         } else {
             std::cin >> x >> str;
-            insert(x + 1, str[0]);
+            insert(str[0], x + 1);
         }
+    }
+    root->free();
+    root = nullptr;
+    return 0;
+}
+int main() {
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0);
+    std::cout.tie(0);
+    std::cin >> T;
+    while (T--) {
+        Main();
     }
     return 0;
 }

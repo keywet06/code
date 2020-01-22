@@ -1,6 +1,5 @@
 ## Todo
 
-- [ ] LuoguP4309 \[TJOI2013\] 最长上升子序列
 - [ ] LuoguP2611 \[ZJOI2012\] 小蓝的好友
 - [ ] LuoguP4027 \[NOI2007\] 货币兑换
 - [ ] LuoguP3721 \[AH2017/HNOI2017\] 单旋
@@ -12,6 +11,7 @@
 
 ## Doing
 
+- [ ] LuoguP4309 \[TJOI2013\] 最长上升子序列
 - [ ] LuoguP2042 \[NOI2005\] 维护数列
 
 ---

@@ -1,24 +1,19 @@
 #include <bits/stdc++.h>
-#define okline() fprintf(stderr, "Debug: Line %d is running.\n", __LINE__);
 #if __cplusplus < 201103L && !defined(nullptr)
-#define nullptr NULL
+#  define nullptr NULL
 #endif
-
 class node;
 class iterater;
 
 class iterater {
    public:
     unsigned int __node;
-    node *operator->() {
-        return (node *)(__node);
-    }
-    iterater &operator=(node *x) {
-        __node = (unsigned int)(x);
-        return *this;
-    }
+    iterater();
+    iterater(unsigned int);
+    iterater(node *);
+    node *operator*();
+    node *operator->();
 };
-
 class node {
    public:
     iterater fa;
@@ -42,31 +37,31 @@ class node {
     int rank();
 };
 
+iterater newnode();
+void deletenode(iterater);
 void insert(iterater, int, int *, int *);
-
 iterater insert(int, int *, int *);
 iterater find(int);
 iterater split(int, int);
 iterater remove(int, int);
 
+const int N = 1000000;
+const int Np = N + 5;
+int cnt, n, m, p, x, y;
+int a[Np], trast[Np];
+node nd[Np];
 iterater root;
+std::string str;
 
 int t0(int);
 
-inline void insert(iterater now, int t, int *start, int *end) {
-    if (start == end) {
-        return;
-    }
-    (now->son[t] = new node)->fa = now;
-    now = now->son[t];
-    int *middle = start + (end - start >> 1);
-    now->val = *middle;
-    insert(now, 0, start, middle);
-    insert(now, 1, middle + 1, end);
-    now->pushup();
-}
+inline iterater::iterater() {}
+inline iterater::iterater(unsigned int x) { __node = x; }
+inline iterater::iterater(node *x) { __node = x ? x - nd : 0; }
+inline node *iterater::operator*() { return __node ? nd + __node : nullptr; }
+inline node *iterater::operator->() { return __node ? nd + __node : nullptr; }
 inline node::node() {
-    fa = son[0] = son[1] = nullptr;
+    fa = son[0] = son[1] = 0u;
     lazy = 0;
     size = 1;
 }
@@ -75,22 +70,22 @@ inline void node::free() {
     if (this) {
         son[0]->free();
         son[1]->free();
-        delete this;
+        deletenode(this);
     }
 }
-inline int node::G() { return fa->son[1] == this; }
+inline int node::G() { return *fa->son[1] == this; }
 inline int node::Val() { return this ? val : 0; }
 inline int node::Size() { return this ? size : 0; }
 inline int node::Ans(int x, int y) { return this ? ans[x][y] : 0; }
 inline iterater node::pushdown() {
     if (lazy & 2) {
-        if (son[0]) {
+        if (*son[0]) {
             son[0]->lazy |= 2;
             son[0]->val = val;
             son[0]->ans[0][0] = son[0]->ans[0][1] = son[0]->ans[1][0] =
               t0((son[0]->ans[1][1] = son[0]->size * val) - val) + val;
         }
-        if (son[1]) {
+        if (*son[1]) {
             son[1]->lazy |= 2;
             son[1]->val = val;
             son[1]->ans[0][0] = son[1]->ans[0][1] = son[1]->ans[1][0] =
@@ -99,12 +94,12 @@ inline iterater node::pushdown() {
         lazy ^= 2;
     }
     if (lazy & 1) {
-        if (son[0]) {
+        if (*son[0]) {
             son[0]->lazy ^= 1;
             std::swap(son[0]->son[0], son[0]->son[1]);
             std::swap(son[0]->ans[0][1], son[0]->ans[1][0]);
         }
-        if (son[1]) {
+        if (*son[1]) {
             son[1]->lazy ^= 1;
             std::swap(son[1]->son[0], son[1]->son[1]);
             std::swap(son[1]->ans[0][1], son[1]->ans[1][0]);
@@ -118,29 +113,29 @@ inline iterater node::pushup() {
     ans[1][1] = son[0]->Ans(1, 1) + val + son[1]->Ans(1, 1);
     ans[0][0] = std::max(std::max(son[0]->Ans(0, 0), son[1]->Ans(0, 0)), 
       t0(son[0]->Ans(0, 1)) + val + t0(son[1]->Ans(1, 0)));
-    ans[0][1] = std::max(son[1] ? son[1]->Ans(0, 1) : val,
+    ans[0][1] = std::max(*son[1] ? son[1]->Ans(0, 1) : val,
       t0(son[0]->Ans(0, 1)) + val + son[1]->Ans(1, 1));
-    ans[1][0] = std::max(son[0] ? son[0]->Ans(1, 0) : val,
+    ans[1][0] = std::max(*son[0] ? son[0]->Ans(1, 0) : val,
       t0(son[1]->Ans(1, 0)) + val + son[0]->Ans(1, 1));
     return this;
 }
 inline iterater node::rotate() {
     int t = G();
     pushdown();
-    if (fa->son[t] = son[!t]) {
+    if (*(fa->son[t] = son[!t])) {
         son[!t]->fa = fa;
     }
     son[!t] = fa;
-    if (fa = fa->fa) {
+    if (*(fa = fa->fa)) {
         fa->son[son[!t]->G()] = this;
     }
     son[!t]->fa = this;
     son[!t]->pushup();
-    return fa ? pushup() : root = pushup();
+    return *fa ? pushup() : root = pushup();
 }
 inline iterater node::splay() {
-    while (fa) {
-        if (fa->fa && fa->G() == G()) {
+    while (*fa) {
+        if (*fa->fa && fa->G() == G()) {
             fa->rotate();
         }
         rotate();
@@ -151,19 +146,32 @@ inline int node::rank() {
     splay();
     return son[0]->Size() + 1;
 }
+inline iterater newnode() { return &(nd[trast[++cnt]] = nd[0]); }
+inline void deletenode(iterater x) { trast[cnt--] = x.__node; }
+inline void insert(iterater now, int t, int *start, int *end) {
+    if (start == end) {
+        return;
+    }
+    (now->son[t] = newnode())->fa = now;
+    int *middle = start + (end - start >> 1);
+    now->val = *middle;
+    insert(now, 0, start, middle);
+    insert(now, 1, middle + 1, end);
+    now->pushup();
+}
 inline iterater insert(int rk, int *start, int *end) {
-    if (!root) {
-        insert(root = new node, 0, start, end);
+    if (!*root) {
+        insert(root = newnode(), 0, start, end);
         root = root->son[0];
-        delete root->fa;
-        root->fa = nullptr;
+        deletenode(root->fa);
+        root->fa = 0u;
         return root;
     }
     iterater now = root;
     int t;
     while (1) {
         now->pushdown();
-        if (!now->son[t = rk > now->son[0]->Size()]) {
+        if (!*now->son[t = rk > now->son[0]->Size()]) {
             break;
         }
         if (t) {
@@ -197,34 +205,32 @@ inline iterater split(int l, int r) {
     }
     iterater now = find(r + 1);
     find(l - 1);
-    if (root->son[1] != now) {
+    if (*root->son[1] != *now) {
         now->rotate();
     }
     return root->son[1]->son[0];
 }
 inline iterater remove(int l, int r) {
     iterater now = split(l, r);
-    if (now == root) {
+    if (*now == *root) {
         root->free();
-        return root = nullptr;
+        return root = 0u;
     }
     int t = now->G();
-    delete (now = now->fa)->son[t];
-    now->son[t] = nullptr;
+    deletenode((now = now->fa)->son[t]);
+    now->son[t] = 0u;
     now->pushup()->splay();
-    return nullptr;
+    return 0u;
 }
 inline int t0(int x) { return std::max(x, 0); }
 
-const int N = 500000;
-const int Np = N + 5;
-int n, m, p, x, y;
-int a[N];
-std::string str;
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0);
     std::cout.tie(0);
+    for (int i = 1; i <= N; ++i) {
+        trast[i] = i;
+    }
     std::cin >> n >> m;
     for (int i = 0; i < n; ++i) {
         std::cin >> a[i];

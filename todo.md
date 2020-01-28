@@ -18,12 +18,6 @@
 
 ## Finished && Unused
 
-- [x] LuoguP4036 \[JSOI2008\] 火星人
-- [x] LuoguP3812 【模板】线性基
-- [x] LOJ10144 宠物收养所 (= LuoguP2286)
-- [x] LOJ10143 营业额统计 (= LuoguP2234)
-- [x] LuoguP3195 \[HNOI2008\] 玩具装箱TOY /【模板】斜率优化
-- [x] LuoguP4072 \[SDOI2016\]征途
 
 ---
 
@@ -40,3 +34,9 @@
 - [x] HDU6621 K-th Closest Distance
 - [x] LuoguP4592 \[TJOI2018\] 异或
 - [x] LuoguP3360 普通平衡树
+- [x] LuoguP4036 \[JSOI2008\] 火星人
+- [x] LuoguP3812 【模板】线性基
+- [x] LOJ10144 宠物收养所 (= LuoguP2286)
+- [x] LOJ10143 营业额统计 (= LuoguP2234)
+- [x] LuoguP3195 \[HNOI2008\] 玩具装箱TOY /【模板】斜率优化
+- [x] LuoguP4072 \[SDOI2016\]征途

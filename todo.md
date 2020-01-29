@@ -40,3 +40,5 @@
 - [x] LOJ10143 营业额统计 (= LuoguP2234)
 - [x] LuoguP3195 \[HNOI2008\] 玩具装箱TOY /【模板】斜率优化
 - [x] LuoguP4072 \[SDOI2016\]征途
+- [x] LuoguP1721 \[NOI2016\]国王饮水记
+- [x] LuoguP1737 \[NOI2016\]旷野大计算

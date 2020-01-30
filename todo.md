@@ -42,3 +42,5 @@
 - [x] LuoguP4072 \[SDOI2016\]征途
 - [x] LuoguP1721 \[NOI2016\]国王饮水记
 - [x] LuoguP1737 \[NOI2016\]旷野大计算
+- [x] LuoguP1450 硬币购物
+- [x] LuoguP2764 最小路径覆盖问题

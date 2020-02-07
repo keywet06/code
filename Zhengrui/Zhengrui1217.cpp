@@ -2,40 +2,50 @@
 const int N = 500;
 const int Z = 10001;
 const int mod = 10007;
-int n, k, cnt;
+int n, k;
 int p[Z];
 int b[N][N];
-long long ans, sum;
+long long ans, ssum, scnt, sum;
 int main() {
     std::cin >> n >> k;
+    int Z = 11;
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < n; ++j) {
             std::cin >> b[i][j];
+            if (b[i][j] >= Z) {
+                Z = 10001;
+            }
         }
     }
-    for (int i = 0; i < n - k + 1; ++i) {
-        for (int j = 0; j < n - k + 1; ++j) {
-            cnt = sum = 0;
-            for (int x = 0; x < k; ++x) {
-                for (int y = 0; y < k; ++y) {
-                    ++p[b[i + x][j + y]];
-                    sum += b[i + x][j + y];
-                }
+    for (int i = 0; i <= n - k; ++i) {
+        sum = 0;
+        for (int x = 0; x < k; ++x) {
+            for (int y = 0; y < k - 1; ++y) {
+                ++p[b[i + x][y]];
+                sum += b[i + x][y];
             }
-            cnt -= k * k;
-            for (int i = 0; i < Z; ++i) {
-                if (!p[i]) {
+        }
+        for (int j = 0; j <= n - k; ++j) {
+            for (int x = 0; x < k; ++x) {
+                ++p[b[i + x][j + k - 1]];
+                sum += b[i + x][j + k - 1];
+            }
+            ssum = sum;
+            scnt = -k * k;
+            for (int l = 0; l < Z; ++l) {
+                if (!p[l]) {
                     continue;
                 }
-                cnt += p[i];
-                sum -= p[i] * i;
-                ans += i * cnt + sum;
-                cnt += p[i];
-                sum -= p[i] * i;
+                scnt += 2 * p[l];
+                ssum -= 2 * p[l] * l;
+                (ans += p[l] * (l * scnt + ssum)) %= mod;
             }
-            ans %= mod;
-            memset(p, 0, sizeof(p));
+            for (int x = 0; x < k; ++x) {
+                --p[b[i + x][j]];
+                sum -= b[i + x][j];
+            }
         }
+        memset(p, 0, sizeof(p));
     }
     std::cout << ans << std::endl;
     return 0;

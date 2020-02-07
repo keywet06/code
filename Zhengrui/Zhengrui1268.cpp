@@ -1,33 +1,10 @@
 #include <bits/stdc++.h>
 
-const char debug[] = "Debug: ";
-const char tab[] = "    ";
 const int B = 2;
 const int Ba = 1000000000;
 const int N = 100000;
 const int Np = N + 5;
 const int mod = 998244353;
-
-class Stree;
-class S2tree;
-
-class Stree {
-   public:
-    class node;
-    int root;
-    class node {
-       public:
-        int lson, rson, sum, lazy;
-        void pushup();
-    };
-    Stree();
-    int gsum(int, int);
-};
-class S2tree {
-   public:
-    class node;
-    int root;
-};
 
 namespace Subtask1 {
 long long its(int, int);
@@ -38,8 +15,6 @@ int n;
 long long ans;
 long long dp[Np];
 long long b[Np][B][B];
-std::vector<Stree::node> poolS;
-std::vector<S2tree::node> poolS1;
 
 namespace Subtask1 {
 inline long long its(int x, int y) {
@@ -69,8 +44,8 @@ int main() {
     for (int i = 1; i <= n; ++i) {
         std::cin >> b[i][0][0] >> b[i][1][0] >> b[i][0][1] >> b[i][1][1];
     }
-    if (n <= 1000) {
+    // if (n <= 1000) {
         return Subtask1::main();
-    }
+    // }
     return 0;
 }

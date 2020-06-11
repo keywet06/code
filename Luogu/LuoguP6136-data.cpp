@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 const int N = 110005;
 char ch;
-int root, tp, n, opt, x, cnt, u, t, f;
+int root, tp, n, opt, x, cnt, u, t, f, last, ans;
 int val[N], num[N], size[N], fa[N];
 int son[N][2];
 void printtree();
@@ -48,7 +48,6 @@ inline void insert(int x) {
     while (f) {
         if (x == val[u = f]) {
             ++num[u];
-            ++size[u];
             splay(u);
             return;
         }
@@ -58,7 +57,6 @@ inline void insert(int x) {
     fa[cnt] = u;
     val[cnt] = x;
     num[cnt] = size[cnt] = 1;
-    printtree();
     splay(cnt);
 }
 inline void find(int x) {
@@ -80,8 +78,8 @@ inline void del(int x) {
         root = 0;
         return;
     }
-    find(x);
     printtree();
+    find(x);
     if (num[root] > 1) {
         --num[root];
         --size[root];
@@ -104,7 +102,7 @@ inline void del(int x) {
         splay(u);
     } else {
         son[son[root][0]][1] = son[root][1];
-        fa[son[root][1]] = son[root][0];
+        fa[son[root][1]] = son[son[root][0]][1];
         root = son[root][0];
         makeempty(fa[root]);
         fa[root] = 0;
@@ -134,7 +132,6 @@ inline void lowerbound(int x) {
 }
 inline void upperbound(int x) {
     insert(x);
-    printtree();
     int u = son[root][1];
     while (son[u][0]) u = son[u][0];
     del(x);
@@ -143,12 +140,10 @@ inline void upperbound(int x) {
 inline void printtree() {
     return;
     system("\"C:\\Program Files\\Git\\bin\\bash\" 36m.tmp");
-    int x = 0;
     for (int i = 1; i <= cnt; ++i) {
         if (!num[i]) {
             continue;
         }
-        ++x;
         fprintf(stderr, "Debug: node[%d] = {\n", i);
         fprintf(stderr, "Debug:     val: %d,\n", val[i]);
         fprintf(stderr, "Debug:     fa: %d,\n", fa[i]);
@@ -157,44 +152,31 @@ inline void printtree() {
         fprintf(stderr, "Debug:     size: %d\n", size[i]);
         fprintf(stderr, "Debug: };\n");
     }
-    fprintf(stderr, "Debug: number of points is %d\n", x);
-    fprintf(stderr, "Debug: root of the tree is %d\n", root);
-    system("\"C:\\Program Files\\Git\\bin\\bash\" 0m.tmp");
-}
-inline void numtree() {
-    return;
-    system("\"C:\\Program Files\\Git\\bin\\bash\" 36m.tmp");
-    int x = 0;
-    for (int i = 1; i <= cnt; ++i) {
-        x += (bool)(num[i]);
-    }
-    fprintf(stderr, "Debug: number of points is %d\n", x);
-    fprintf(stderr, "Debug: root of the tree is %d\n", root);
     system("\"C:\\Program Files\\Git\\bin\\bash\" 0m.tmp");
 }
 int main() {
-    // x = read();
+    x = read();
     n = read();
-    // for (int i = 1; i <= x; ++i) val[i] = read();
-    // std::sort(val + 1, val + x + 1);
-    // root = 1;
-    // for (int i = 1; i <= x; ++i) {
-    //     if (i > 1 && val[i] == val[i - 1]) {
-    //         ++num[cnt];
-    //         continue;
-    //     }
-    //     size[++cnt] = x - i + 1;
-    //     son[cnt][1] = cnt + 1;
-    //     fa[cnt] = cnt - 1;
-    //     num[cnt] = 1;
-    //     val[cnt] = val[i];
-    // }
-    // for (int i = cnt + 1; i <= x; ++i) val[i] = 0;
-    // son[cnt][1] = 0;
+    for (int i = 1; i <= x; ++i) val[i] = read();
+    std::sort(val + 1, val + x + 1);
+    root = 1;
+    for (int i = 1; i <= x; ++i) {
+        if (i > 1 && val[i] == val[i - 1]) {
+            ++num[cnt];
+            continue;
+        }
+        size[++cnt] = x - i + 1;
+        son[cnt][1] = cnt + 1;
+        fa[cnt] = cnt - 1;
+        num[cnt] = 1;
+        val[cnt] = val[i];
+    }
+    for (int i = cnt + 1; i <= x; ++i) val[i] = 0;
+    son[cnt][1] = 0;
     for (int i = 1; i <= n; ++i) {
         printtree();
         opt = read();
-        x = read();
+        x = read() ^ last;
         if (opt == 1) {
             insert(x);
         } else if (opt == 2) {
@@ -202,19 +184,19 @@ int main() {
         } else if (opt == 3) {
             insert(x);
             find(x);
-            printf("%d\n", size[son[root][0]] + 1);
+            ans ^= last = size[son[root][0]] + 1;
             del(x);
         } else if (opt == 4) {
             rank(x);
-            printf("%d\n", val[root]);
+            ans ^= last = val[root];
         } else if (opt == 5) {
             lowerbound(x);
-            printf("%d\n", val[root]);
+            ans ^= last = val[root];
         } else {
-            printtree();
             upperbound(x);
-            printf("%d\n", val[root]);
+            ans ^= last = val[root];
         }
     }
+    printf("%d\n", ans);
     return 0;
 }

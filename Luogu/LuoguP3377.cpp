@@ -1,29 +1,27 @@
 #include <bits/stdc++.h>
 const int N = 100005;
 class node;
-extern int is[];
 extern node nd[];
-class node {
-   public:
-    int l, r, f, v, d, t, p;
-    void update() {
-        if (nd[l].d < nd[r].d) {
-            std::swap(l, r);
-        }
-        d = nd[r].d + 1;
-    }
+struct node {
+    int l, r, v, d, t;
 };
 int n, m, opt, x, y;
-int is[N];
 node nd[N];
 int t(int x) { return nd[x].t == x ? x : nd[x].t = t(nd[x].t); }
 int merge(int a, int b) {
     if (!a || !b) return a + b;
     if (nd[a].v > nd[b].v || nd[a].v == nd[b].v && a > b) std::swap(a, b);
     nd[a].r = merge(nd[a].r, b);
-    nd[nd[a].r].t = nd[nd[a].r].f = a;
-    nd[a].update();
+    nd[nd[a].l].t = nd[nd[a].r].t = nd[a].t = a;
+    if (nd[nd[a].l].d < nd[nd[a].r].d) std::swap(nd[a].l, nd[a].r);
+    nd[a].d = nd[nd[a].r].d + 1;
     return a;
+}
+void pop(int x) {
+    nd[x].v = 0;
+    nd[nd[x].l].t = nd[x].l;
+    nd[nd[x].r].t = nd[x].r;
+    nd[x].t = merge(nd[x].l, nd[x].r);
 }
 int main() {
     std::ios::sync_with_stdio(0);
@@ -33,27 +31,21 @@ int main() {
     for (int i = 1; i <= n; ++i) {
         std::cin >> nd[i].v;
         nd[i].t = i;
-        is[i] = 1;
     }
     nd[0].d = -1;
     for (int i = 1; i <= m; ++i) {
         std::cin >> opt;
         if (opt == 1) {
             std::cin >> x >> y;
-            if (is[x] && is[y] && t(x) != t(y)) {
-                merge(x, y);
-            }
+            if (!(nd[x].v && nd[y].v)) continue;
+            x = t(x), y = t(y);
+            if (x != y) merge(x, y);
         } else {
             std::cin >> x;
-            if (is[x]) {
+            if (nd[x].v) {
                 x = t(x);
                 std::cout << nd[x].v << '\n';
-                is[x] = 0;
-                nd[x].t = nd[x].l;
-                nd[x].l = nd[x].l;
-                nd[x].r = nd[x].r;
-                nd[nd[x].l].f = nd[nd[x].r].f = 0;
-                merge(nd[x].l, nd[x].r);
+                pop(x);
             } else {
                 std::cout << -1 << '\n';
             }

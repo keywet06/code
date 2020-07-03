@@ -1,27 +1,16 @@
 #include <bits/stdc++.h>
 const int N = 100005;
-struct node {
-    int l, r, v, t, f, s, h, e, d; // ls, rs, val, top, fa, size, sum, lead, dis
-};
 int n, m, x;
+int size[N], fa[N], root[N], val[N], dis[N], left[N], right[N];
 long long ans;
-node d[N];
-int merge(int a, int b) {
+long long sum[N], lead[N];
+inline int merge(int a, int b) {
     if (!a || !b) return a + b;
-    if (d[a].v < d[b].v) std::swap(a, b);
-    d[a].r = merge(d[a].r, b);
-    d[d[a].l].t = d[d[a].r].t = d[a].t = a;
-    d[a].h = d[d[a].l].h + d[d[a].r].h;
-    d[a].s = d[d[a].l].s + d[d[a].r].s;
-    if (d[d[a].l].d < d[d[a].r].d) std::swap(d[a].l, d[a].r);
-    d[a].d = d[d[a].r].d + 1;
+    if (val[a] < val[b]) std::swap(a, b);
+    right[a] = merge(right[a], b);
+    if (dis[left[a]] < dis[right[a]]) std::swap(left[a], right[a]);
+    dis[a] = dis[right[a]] + 1;
     return a;
-}
-int t(int x) { return d[x].t == x ? x : d[x].t = t(d[x].t); }
-int pop(int x) {
-    d[d[x].l].t = d[x].l;
-    d[d[x].r].t = d[x].r;
-    return d[x].t = merge(d[x].l, d[x].r);
 }
 int main() {
     std::ios::sync_with_stdio(0);
@@ -29,17 +18,22 @@ int main() {
     std::cout.tie(0);
     std::cin >> n >> m;
     for (int i = 1; i <= n; ++i) {
-        std::cin >> d[i].f >> d[i].v >> d[i].e;
-        d[i].h = d[i].v;
-        d[i].e = std::max(d[i].e, d[d[i].f].e);
-        d[i].t = i;
-        d[i].s = 1;
+        std::cin >> fa[i] >> val[i] >> lead[i];
+        root[i] = i;
+        sum[i] = val[i];
+        size[i] = 1;
+        ans = std::max(ans, lead[i]);
     }
-    d[0].d = -1;
     for (int i = n; i; --i) {
-        ans = std::max(ans, 1ll * d[t(i)].s * d[i].e);
-        merge(d[i].f, x = t(i));
-        while (d[x].h > m) x = pop(x);
+        root[fa[i]] = merge(root[fa[i]], root[i]);
+        size[fa[i]] += size[i];
+        sum[fa[i]] += sum[i];
+        while (sum[fa[i]] > m) {
+            sum[fa[i]] -= val[root[fa[i]]];
+            root[fa[i]] = merge(left[root[fa[i]]], right[root[fa[i]]]);
+            --size[fa[i]];
+        }
+        ans = std::max(ans, size[fa[i]] * lead[fa[i]]);
     }
     std::cout << ans << std::endl;
     return 0;

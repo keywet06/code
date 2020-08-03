@@ -41,6 +41,7 @@ int main() {
             list.push_back(k);
             now = put = 1;
             left = k;
+            if (i == 128) std::cerr << "Debug: 1: " << now << std::endl;
             for (int j = 1; j < list.size(); ++j) {
                 t = list[j] - list[j - 1];
                 now = (now * C[left][t]) % mod;
@@ -49,6 +50,7 @@ int main() {
             }
             le -= left = f;
             o = 1;
+            if (i == 128) std::cerr << "Debug: 2: " << now << std::endl;
             while (o < list.size() && list[o] <= k - left) ++o;
             if (o < list.size()) {
                 now = (now * A[list[o] - list[o - 1]][list[o] - k + left]) % mod;
@@ -57,16 +59,20 @@ int main() {
                     now = (now * A[t][t]) % mod;
                 }
             }
+            if (i == 128) std::cerr << "Debug: 3: " << now << std::endl;
             le -= left = le % k;
             for (o = 1; o < list.size() && list[o] < left; ++o) {
                 t = list[o] - list[o - 1];
                 now = (now * A[t][t]) % mod;
             }
+            if (i == 128) std::cerr << "Debug: 4: " << now << std::endl;
             if (o != list.size()) {
                 t = list[o] - list[o - 1];
                 now = (now * A[t][left - list[o - 1]]) % mod;
             }
+            if (i == 128) std::cerr << "Debug: 5: " << now << std::endl;
             now = (now * power(put, le / k)) % mod;
+            if (i == 128) std::cerr << "Debug: " << i << " " << now << std::endl;
             (ans += l & 1 ? now : mod - now) %= mod;
         }
         std::cout << ans << std::endl;

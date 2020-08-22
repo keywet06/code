@@ -2,54 +2,52 @@
 #pragma GCC optimize("unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 #include <bits/stdc++.h>
-const int C = 2;
-const int N = 10005;
-const int K = 505;
+const int N = 10101;
+const int M = 515;
 const int mod = 998244353;
-int n, k, x, y;
-long long ans;
-long long t[C][K];
-long long dp[N][C][K];
-std::vector<int> to[N];
-inline void dfs(int u, int f) {
-    register int i, j, flag = 1;
-    for (auto v : to[u]) {
-        if (v == f) continue;
-        dfs(v, u);
-        for (j = 1; j <= k; ++j) {
-            t[0][j] = dp[u][0][j];
-            t[1][j] = dp[u][1][j];
-            dp[u][0][j] = dp[u][1][j] = 0;
-        }
-        for (i = 1; i <= k; ++i) {
-            t[0][0] = 1;
-            dp[u][0][i] = t[0][i] + dp[v][1][i];
-            dp[u][1][i] = t[1][i] + dp[v][1][i] + t[0][i - 1];
-            for (j = 1; j < k; ++j) {
-                dp[u][0][i] += t[0][j] * dp[v][1][i - j] % mod;
-                dp[u][1][i] += t[0][j] * dp[v][1][i - j] % mod;
-                dp[u][1][i] += t[1][j] * dp[v][1][i - j] % mod;
+std::vector<int> g[N];
+int n, ans, K;
+int sz[N];
+int tmp[M], tmq[M];
+int dp[N][M], dq[N][M];
+void dfs(int x, int fa = -1) {
+    dp[x][0] = 1;
+    dq[x][1] = 1;
+    sz[x] = 1;
+    for (int i : g[x])
+        if (i != fa) {
+            dfs(i, x);
+            for (int j = 0; j <= sz[x]; ++j) {
+                for (int k = 0; k <= sz[i] && j + k <= K; ++k) {
+                    tmp[j + k] =
+                        (tmp[j + k] + (long long)dp[x][j] * dp[i][k]) % mod;
+                    tmq[j + k] = (tmq[j + k] + (long long)dp[x][j] * dq[i][k] +
+                                  (long long)dq[x][j] * dp[i][k]) %
+                                 mod;
+                }
             }
-            dp[u][0][i] %= mod;
-            dp[u][1][i] %= mod;
+            sz[x] = std::min(K, sz[x] + sz[i]);
+            for (int j = 0; j <= sz[x]; ++j) {
+                dp[x][j] = tmp[j];
+                dq[x][j] = tmq[j];
+                tmp[j] = tmq[j] = 0;
+            }
         }
-    }
+    for (int j = 1; j <= sz[x]; ++j) dp[x][j] = dq[x][j];
+    dp[x][1] = (dp[x][1] + mod - 1) % mod;
 }
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0);
-    std::cout.tie(0);
-    std::cin >> n >> k;
+    std::cin >> n >> K;
     for (int i = 1; i < n; ++i) {
+        int x, y;
         std::cin >> x >> y;
-        to[x].push_back(y);
-        to[y].push_back(x);
+        g[x].push_back(y);
+        g[y].push_back(x);
     }
-    dfs(1, 1);
-    ans = 1;
-    for (int i = 1; i <= k; ++i) {
-        ans += dp[1][1][i];
-    }
-    std::cout << ans % mod << std::endl;
+    dfs(1);
+    for (int i = 0; i <= K; ++i) ans = (ans + dp[1][i]) % mod;
+    std::cout << ans << '\n';
     return 0;
 }

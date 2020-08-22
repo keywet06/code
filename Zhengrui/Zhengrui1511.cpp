@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+<<<<<<< HEAD
 const int mod = 998244353;
 inline void mo(int& x) { x >= mod ? x -= mod : 0; }
 inline int mo1(int x) { return x >= mod ? x - mod : x; }
@@ -68,5 +69,22 @@ int main() {
     int ans = 0;
     for (int x = 0; x < pw[n]; ++x) mo(ans += f[x][0]);
     printf("%d\n", ans);
+=======
+const int N = 105;
+int n, K, ans;
+int l[N], r[N];
+inline void dfs(int c, int sum) {
+    if (c > n) {
+        ans += !sum;
+        return;
+    }
+    for (int i = l[c]; i <= r[c]; ++i) dfs(c + 1, sum ^ i);
+}
+int main() {
+    std::cin >> n;
+    for (int i = 1; i <= n; ++i) std::cin >> l[i] >> r[i];
+    dfs(1, 0);
+    std::cout << ans << std::endl;
+>>>>>>> 406ef0d98a484a2613e66fd396bfc311917cd6ec
     return 0;
 }

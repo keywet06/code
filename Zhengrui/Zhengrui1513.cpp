@@ -1,7 +1,7 @@
-#pragma GCC optimize("Ofast")
-#pragma GCC optimize("unroll-loops")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
 #include <bits/stdc++.h>
+const int N = 10005;
+int n, Q, l, r, k;
+int a[N], dp[N];
 const int P = 200000005;
 const int N = 200005;
 const int X = 20000005;
@@ -37,15 +37,11 @@ inline int dfs(int u, int f) {
     }
 }
 int main() {
-    std::ios::sync_with_stdio(0);
-    std::cin.tie(0);
-    std::cout.tie(0);
-    std::cin >> n >> k;
-    for (int i = 1; i < n; ++i) {
-        std::cin >> x >> y;
-        to[x].push_back(std::make_pair(y, z));
-        to[y].push_back(std::make_pair(x, z));
+    std::cin >> n >> Q;
+    for (int i = 1; i <= n; ++i) std::cin >> a[i];
+    while (Q--) {
+        std::cin >> l >> r >> k;
+
     }
-    
     return 0;
 }

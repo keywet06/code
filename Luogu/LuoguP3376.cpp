@@ -1,85 +1,72 @@
 #include <bits/stdc++.h>
-const int N = 10005;
-const int M = 100005;
-const int inf = 0x3fffffff;
-int S, T, cnt, m, n, x, y, z;
-int next[M], to[M], liu[M];
-int head[N], vis[N], dis[N], sta[N];
-void addtwoedge(int, int, int);
-void addoneedge(int, int, int);
-void insert(int, int, int);
-int Dinic();
-int SPFA();
-int dfs(int = S, int = inf);
-int main() {
-    scanf("%d %d %d %d", &n, &m, &S, &T);
-    while (m--) {
-        scanf("%d %d %d", &x, &y, &z);
-        addoneedge(x, y, z);
-    }
-    printf("%lld\n", Dinic());
-    return 0;
+const int N = 505;
+const int M = 10005;
+int S, T, n, m, x, y, z, cnt = 1;
+int head[N], dis[N], vis[N];
+int next[M], to[M];
+long long flow[M];
+inline void insert(int x, int y, int z) {
+    next[++cnt] = head[x];
+    head[x] = cnt;
+    to[cnt] = y;
+    flow[cnt] = z;
 }
-inline void addoneedge(int x, int y, int z) {
+inline void addedge(int x, int y, int z) {
     insert(x, y, z);
     insert(y, x, 0);
 }
-inline void insert(int x, int y, int z) {
-    ++cnt;
-    next[cnt] = head[x];
-    head[x] = cnt;
-    to[cnt] = y;
-    liu[cnt] = z;
-}
-inline int Dinic() {
-    int tmp = 0;
-    while (SPFA()) {
-        tmp += dfs();
-    }
-    return tmp;
-}
 inline int SPFA() {
     memset(dis, 127, sizeof(dis));
-    memset(vis, 0, sizeof(vis));
     std::queue<int> queue;
     queue.push(S);
     dis[S] = 0;
-    sta[S] = 1;
+    vis[S] = 1;
     while (!queue.empty()) {
-        int v = queue.front();
+        int u = queue.front();
         queue.pop();
-        sta[v] = 0;
-        for (int u = head[v]; u; u = next[u]) {
-            if (liu[u] && dis[v] + 1 < dis[to[u]]) {
-                dis[to[u]] = dis[v] + 1;
-                if (!sta[to[u]]) {
-                    queue.push(to[u]);
-                    sta[to[u]] = 1;
+        vis[u] = 0;
+        for (int e = head[u]; e; e = next[e]) {
+            if (flow[e] && dis[u] + 1 < dis[to[e]]) {
+                dis[to[e]] = dis[u] + 1;
+                if (!vis[to[e]]) {
+                    queue.push(to[e]);
+                    vis[to[e]] = 1;
                 }
             }
         }
     }
     return dis[T] != dis[0];
 }
-inline int dfs(int v, int low) {
-    if (v == T) {
-        return low;
+inline long long dfs(int u, long long limit) {
+    if (u == T) return limit;
+    long long rlow = 0, used = 0;
+    for (int e = head[u]; e; e = next[e]) {
+        if (!flow[e] || dis[to[e]] != dis[u] + 1) continue;
+        if (!(rlow = dfs(to[e], std::min(limit - used, flow[e])))) continue;
+        used += rlow;
+        flow[e] -= rlow;
+        flow[e ^ 1] += rlow;
+        if (used == limit) break;
     }
-    int res = 0;
-    for (int u = head[v]; u; u = next[u]) {
-        if (liu[u] && dis[v] + 1 == dis[to[u]]) {
-            int tmp = dfs(to[u], std::min(low, liu[u]));
-            res += tmp;
-            low -= tmp;
-            liu[u] -= tmp;
-            liu[((u + 1) ^ 1) - 1] += tmp;
-            if (!low) {
-                break;
-            }
-        }
+    if (!used) dis[u] = 0;
+    return used;
+}
+inline long long Dinic() {
+    long long ans = 0;
+    while (SPFA()) {
+        ans += dfs(S, 4611686018427387903);
     }
-    if (!res) {
-        dis[v] = 0;
+    return ans;
+}
+int main() {
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0);
+    std::cout.tie(0);
+    std::cin >> n >> m >> S >> T;
+    for (int i = 1; i <= m; ++i) {
+        std::cin >> x >> y >> z;
+        addedge(x, y, z);
     }
-    return res;
+    std::cout << Dinic() << std::endl;
+    return 0;
 }

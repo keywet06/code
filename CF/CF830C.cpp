@@ -1,3 +1,7 @@
+// oct code object CF/CF830C.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF830Cx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF830Cx2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -52,10 +56,11 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+double exp = 1e-8;
+int64 mods[] = {347480897 /* CCCK */};
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -133,3 +138,30 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 105;
+
+int64 n, k, m, s, t, q;
+int64 a[N];
+
+int main() {
+    oct::sync();
+    std::cin >> n >> k;
+    for (int i = 1; i <= n; ++i) {
+        std::cin >> a[i], k += a[i], oct::mad(m, a[i] - 1);
+    }
+    for (int64 l = 1, r; l <= m; l = r + 1) {
+        r = 1e18, s = 0;
+        for (int i = 1; i <= n; ++i) {
+            if (a[i] - 1 < l) continue;
+            s += (a[i] - 1) / l, oct::mid(r, (a[i] - 1) / ((a[i] - 1) / l));
+        }
+        t = k / (s + n);
+        if (l <= t) oct::mad(q, std::min(t, r));
+    }
+    if (m < k / n) oct::mad(q, k / n);
+    std::cout << q << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF830C.cpp

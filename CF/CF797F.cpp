@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF797F.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF797Fx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF797Fx2eCPP
+
+// oct code object pre-document.cpp
+#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
+#define OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -12,7 +16,7 @@
 #ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -132,4 +136,48 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 
 }  // namespace oct
 
-#endif  // oct code end pre-document
+#endif  // oct code end pre-document.cpp
+
+const int B = 2;
+const int N = 5005;
+const int M = 500004;
+const int64 INF = 10000000000000;
+
+struct nh {
+    int p, c;
+};
+
+int flag;
+int vis[N], q[N];
+int64 sum[N];
+int64 dp[B][N];
+nh c[M];
+
+inline int cmp(nh x, nh y) { return x.p < y.p; }
+inline int64 get_val(int k) { return dp[flag][k] - sum[k]; }
+inline void g(int j, int k) { dp[flag ^ 1][j] = dp[flag][k] + sum[j] - sum[k]; }
+
+int main() {
+    int n, m, s = 0;
+    std::cin >> n >> m;
+    for (int j = 1; j <= n; ++j) std::cin >> vis[j];
+    for (int i = 1; i <= m; ++i) std::cin >> c[i].p >> c[i].c, s += c[i].c;
+    if (s < n) return std::cout << -1 << std::endl, 0;
+    std::sort(vis + 1, vis + n + 1);
+    std::sort(c + 1, c + m + 1, cmp);
+    for (int j = 1; j <= n; ++j) dp[flag ^ 1][j] = INF;
+    for (int i = 1; i <= m; ++i) {
+        int head = 1, tail = 0;
+        flag ^= 1;
+        for (int j = 0; j <= n; ++j) {
+            if (j) sum[j] = sum[j - 1] + abs(vis[j] - c[i].p);
+            while (head <= tail && j - q[head] > c[i].c) ++head;
+            while (head <= tail && get_val(q[tail]) >= get_val(j)) --tail;
+            q[++tail] = j, g(j, q[head]);
+        }
+    }
+    std::cout << dp[flag ^ 1][n] << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF797F.cpp

@@ -1,3 +1,7 @@
+// oct code object Zhengrui/Zhengrui1635.cpp
+#ifndef OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1635x2eCPP
+#define OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1635x2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -52,10 +56,10 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+double exp = 1e-8;
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -133,3 +137,54 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 2005;
+const int P = 998244353;
+
+int n;
+int a[N], p[N];
+int64 inv[N], re[N], pre[N];
+int64 f[N][N], v[N][N], C[N][N];
+
+inline int64 power(int64 x, int y) {
+    return y ? power(x * x % P, y / 2) * (y & 1 ? x : 1) % P : 1;
+}
+
+int main() {
+    oct::sync();
+    std::cin >> n;
+    for (int i = 0; i <= n; ++i) {
+        C[i][0] = 1;
+        for (int j = 1; j <= i; ++j) {
+            C[i][j] = (C[i - 1][j] + C[i - 1][j - 1]) % P;
+        }
+    }
+    for (int i = 1; i <= n; ++i) {
+        v[i][0] = 1;
+        for (int j = 1; j <= n && i * j <= n; ++j) {
+            v[i][j] = 1ll * v[i][j - 1] * C[i * j - 1][i - 1] % P;
+        }
+    }
+    for (int i = 1; i <= n; ++i) std::cin >> a[i];
+    std::sort(a + 1, a + n + 1);
+    for (int i = n; i >= 1; --i) {
+        p[i] = p[i + 1];
+        while (a[n - p[i]] >= i) ++p[i];
+    }
+    f[n + 1][0] = 1;
+    for (int i = n; i >= 1; --i) {
+        for (int j = 0; j <= p[i]; ++j) {
+            if (f[i + 1][j]) {
+                (f[i][j] += f[i + 1][j]) %= P;
+                for (int k = 1; i * k <= p[i] - j; ++k) {
+                    (f[i][j + i * k] +=
+                     1ll * f[i + 1][j] * C[p[i] - j][i * k] % P * v[i][k]) %= P;
+                }
+            }
+        }
+    }
+    std::cout << f[1][n] << std::endl;
+    return 0;
+}
+
+#endif  // oct code end Zhengrui/Zhengrui1635.cpp

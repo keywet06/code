@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF798D.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF798Dx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF798Dx2eCPP
+
+// oct code object pre-document.cpp
+#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
+#define OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -12,7 +16,7 @@
 #ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -132,4 +136,26 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 
 }  // namespace oct
 
-#endif  // oct code end pre-document
+#endif  // oct code end pre-document.cpp
+
+const int N = 100005;
+
+int n;
+int a[N], b[N], p[N];
+std::set<int> ans;
+
+int main() {
+    oct::sync();
+    std::cin >> n, p[n] = n;
+    for (int i = 0; i < n; ++i) std::cin >> a[i], p[i] = i;
+    for (int i = 0; i < n; ++i) std::cin >> b[i];
+    std::sort(p, p + n, [](int x, int y) { return a[x] > a[y]; });
+    ans.insert(p[0]);
+    for (int i = 1; i < n; ++++i) ans.insert(p[i + (b[p[i]] <= b[p[i + 1]])]);
+    std::cout << n / 2 + 1 << std::endl;
+    for (int u : ans) std::cout << u + 1 << ' ';
+    std::cout << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF798D.cpp

@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF786C.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF786Cx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF786Cx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -133,3 +136,52 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int B = 2;
+const int N = 100005;
+
+struct node {
+    int num, pre, nxt;
+};
+
+int n;
+int col[N], v[N], vol[N];
+int mq[N][B];
+node rr[N];
+
+int main() {
+    oct::sync();
+    std::cin >> n;
+    for (int i = 1; i <= n; i++) {
+        std::cin >> rr[i].num, rr[i].pre = v[rr[i].num], v[rr[i].num] = i;
+        col[i] = i, vol[i] = 1, mq[i][1] = i;
+    }
+    for (int i = n; i >= 1; i--) rr[i].nxt = v[rr[i].num], v[rr[i].num] = i;
+    for (int i = 1; i <= n; i++) {
+        int j = col[1] + 1, k = 1, st = 1, h = i & 1, l = 2;
+        int now = mq[1][h], nxt = mq[2][h];
+        mq[k][h ^ 1] = now;
+        while (j <= n) {
+            if (rr[j].pre >= st) {
+                col[now]++;
+                if (rr[j].nxt > col[nxt] || rr[j].nxt == j++) {
+                    if (!--vol[nxt]) nxt = mq[++l][h];
+                }
+            } else if (vol[now] < i) {
+                ++vol[now], ++col[now];
+                if (rr[j].nxt > col[nxt] || rr[j].nxt == j++) {
+                    if (!--vol[nxt]) nxt = mq[++l][h];
+                }
+            } else {
+                st = col[now] + 1, j = col[nxt] + 1, now = nxt;
+                nxt = mq[++l][h], mq[++k][h ^ 1] = now;
+                if (j > n) break;
+            }
+        }
+        std::cout << k << ' ';
+    }
+    std::cout << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF786C.cpp

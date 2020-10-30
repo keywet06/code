@@ -1,3 +1,7 @@
+// oct code object Zhengrui/Zhengrui1634.cpp
+#ifndef OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1634x2eCPP
+#define OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1634x2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -52,10 +56,10 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+double exp = 1e-8;
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -133,3 +137,62 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int C = 30;
+const int N = 600005;
+
+int T, n, m, u, v;
+int p[N], pu[N], pv[N], pd[N];
+int fa[N][C];
+std::vector<int> to[N];
+
+inline void dfs(int u, int f) {
+    p[u] = p[f] + 1, fa[u][0] = f;
+    for (int i = 1; i < C; ++i) fa[u][i] = fa[fa[u][i - 1]][i - 1];
+    for (int v : to[u]) {
+        if (v != f) dfs(v, u);
+    }
+}
+inline int gfa(int u, int d) {
+    for (int i = C - 1; ~i; --i) u = 1 << i & d ? fa[u][i] : u;
+    return u;
+}
+inline int lca(int u, int v) {
+    if (p[u] < p[v]) std::swap(u, v);
+    u = gfa(u, p[u] - p[v]);
+    for (int i = C - 1; ~i; --i) {
+        if (fa[u][i] != fa[v][i]) u = fa[u][i], v = fa[v][i];
+    }
+    return u == v ? u : fa[u][0];
+}
+inline int top(int u, int v, int d) { return gfa(lca(u, v), d); }
+inline int dis(int u, int v) { return p[u] + p[v] - (p[lca(u, v)] << 1); }
+inline bool ist(int u, int v, int d, int x) {
+    return dis(u, x) + dis(v, x) <= d;
+}
+
+int Main() {
+    std::cin >> n >> m;
+    for (int i = 1; i <= n; ++i) to[i].clear();
+    for (int i = 1; i < n; ++i) std::cin >> u >> v, to[u].pub(v), to[v].pub(u);
+    p[1] = 0, dfs(1, 1), u = 1;
+    for (int i = 1; i <= m; ++i) {
+        std::cin >> pu[i] >> pv[i] >> pd[i];
+        v = top(pu[i], pv[i], pd[i] - dis(pu[i], pv[i]) >> 1);
+        if (p[v] > p[u]) u = v;
+    }
+    for (int i = 1; i <= m; ++i) {
+        if (!ist(pu[i], pv[i], pd[i], u)) return std::cout << "NIE" << '\n', 0;
+    }
+    std::cout << "TAK " << u << '\n';
+    return 0;
+}
+
+int main() {
+    oct::sync();
+    std::cin >> T;
+    while (T--) Main();
+    return 0;
+}
+
+#endif  // oct code end Zhengrui/Zhengrui1634.cpp

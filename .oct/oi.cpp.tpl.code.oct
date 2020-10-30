@@ -1,0 +1,9 @@
+// oct code object %{name}%
+#ifndef OCT_CODE_OBJECT_%{NAME}%
+#define OCT_CODE_OBJECT_%{NAME}%
+
+%[oct code object pre-document.cpp]%
+
+
+
+#endif // oct code end %{name}%

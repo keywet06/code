@@ -1,0 +1,5 @@
+// oct code object stl/%{dir}%
+#ifndef OCT_CODE_OBJECT_STLx2f%{DIR}%
+#define OCT_CODE_OBJECT_STLx2f%{DIR}%
+#include <%{dir}%>
+#endif // oct code end stl/%{dir}%

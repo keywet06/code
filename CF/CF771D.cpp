@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF771D.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF771Dx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF771Dx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -69,7 +72,7 @@ bool in(_Tp x, _Tp y, _Tp l, _Tp r);
 template <typename _Tp>
 _Tp sqr(_Tp x);
 template <typename _Tp>
-_Tp power(_Tp x, int64 tm);
+_Tp power(_Tp x, int64 m);
 template <typename _Tp>
 void sort(_Tp &x, _Tp &y);
 template <typename _Tp1, typename _Tp2>
@@ -108,9 +111,8 @@ inline _Tp sqr(_Tp x) {
     return x * x;
 }
 template <typename _Tp>
-inline _Tp power(_Tp x, int64 tm) {
-    return tm == 1 ? x
-                   : (tm & 1 ? power(x * x, tm / 2) * x : power(x * x, tm / 2));
+inline _Tp power(_Tp x, int64 m) {
+    return m == 1 ? x : (m & 1 ? power(x * x, m / 2) * x : power(x * x, m / 2));
 }
 template <typename _Tp>
 inline void sort(_Tp &x, _Tp &y) {
@@ -133,3 +135,52 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 80;
+const int INF = 1e9 + 5;
+
+int ans, n;
+int dp[N][N][N][2];
+std::vector<int> V, K, X;
+
+int solve(const std::vector<int> &v, int l, int r) {
+    int cnt = 0;
+    for (int i = l; i < v.size() && v[i] < r; ++i) ++cnt;
+    return cnt;
+}
+
+int main() {
+    std::cin >> n;
+    std::string s;
+    std::cin >> s;
+    for (int i = 0; i < n; ++i) {
+        (s[i] == 'V' ? V : (s[i] == 'K' ? K : X)).pub(i);
+    }
+    memset(dp, 30, sizeof(dp)), dp[0][0][0][0] = 0;
+    for (int v = 0; v <= V.size(); ++v) {
+        for (int k = 0; k <= K.size(); ++k) {
+            for (int x = 0; x <= X.size(); ++x) {
+                for (int type = 0; type < 2; ++type) {
+                    auto r = [&](int where) {
+                        return solve(V, v, where) + solve(K, k, where) +
+                               solve(X, x, where);
+                    };
+                    int w = dp[v][k][x][type];
+                    if (v < V.size()) oct::mid(dp[v + 1][k][x][1], w + r(V[v]));
+                    if (k < K.size() && !type) {
+                        oct::mid(dp[v][k + 1][x][0], w + r(K[k]));
+                    }
+                    if (x < X.size()) oct::mid(dp[v][k][x + 1][0], w + r(X[x]));
+                }
+            }
+        }
+    }
+    ans = dp[N][N][N][2];
+    for (int i = 0; i < 2; ++i) {
+        oct::mid(ans, dp[V.size()][K.size()][X.size()][i]);
+    }
+    std::cout << ans << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF771D.cpp

@@ -1,5 +1,5 @@
 .vscode/*
-# kwcode.begin
+# octinc exfiles begin
 *.in
 *.out
 *.ans
@@ -8,9 +8,13 @@
 *.log
 *.swp
 tmp*
+temp*
 test*
 *~
 *tmp
+*temp
 *test
 *tmp*
+*temp*
 *test*
+# octinc exfiles end

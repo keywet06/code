@@ -1,3 +1,7 @@
+// oct code object CF/CF832C.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF832Cx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF832Cx2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -37,7 +41,8 @@ using int8 = signed char;
 using int16 = short int;
 using int32 = int;
 using int64 = long long;
-using ldb = long double;
+using dr = double;
+using ldr = long double;
 using pi5 = std::pair<int32, int32>;
 using pi6 = std::pair<int64, int64>;
 using pi56 = std::pair<int32, int64>;
@@ -52,10 +57,11 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+dr exp = 1e-8;
+int64 mods[] = {347480897 /* CCCK */};
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -86,6 +92,9 @@ inline void sync(int pre) {
     std::cout.flags(std::ios::fixed);
     std::cout.precision(pre);
     std::cout.setf(std::ios::showpoint);
+    std::cerr.flags(std::ios::fixed);
+    std::cerr.precision(pre);
+    std::cerr.setf(std::ios::showpoint);
 }
 template <typename _Tp>
 inline _Tp &mad(_Tp &x, _Tp y) {
@@ -133,3 +142,38 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int B = 10;
+const int C = 20;
+
+int64 n, ans, xl, xr;
+int64 a[C], b[C], cnt[C];
+
+inline void work(int64 *a, int64 x) {
+    n = 0;
+    while (x) a[++n] = x % B, x /= B;
+}
+inline int64 ask(int64 p, int64 l, int64 r) {
+    if (p == 0 || l + r == 0) return 1;
+    int64 L = l ? a[p] : 0, R = r ? b[p] : 9;
+    for (int64 i = L; i <= R; ++i) {
+        if (!cnt[i]) continue;
+        --cnt[i];
+        if (ask(p - 1, l & (i == L), r & (i == R))) return ++cnt[i], 1;
+        ++cnt[i];
+    }
+    return 0;
+}
+inline void dfs(int64 p, int64 s) {
+    if (p == 9) return cnt[p] = s, ans += ask(n, 1, 1), void(0);
+    for (int64 i = 0; i <= s; ++i) cnt[p] = i, dfs(p + 1, s - i);
+}
+
+int main() {
+    oct::sync();
+    std::cin >> xl >> xr, work(a, xl), work(b, xr), dfs(0, n);
+    std::cout << ans << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF833C.cpp

@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF778D.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF778Dx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF778Dx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -133,3 +136,68 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 55;
+
+int n, m;
+char s[N][N], t[N][N];
+std::vector<pi5> stp;
+
+inline char getc() {
+    char c = getchar();
+    while (c == ' ' || c == '\n') c = getchar();
+    return c;
+}
+inline void rotate(int x, int y) {
+    stp.pub(pi5(x, y));
+    if (s[x][y] == 'L') {
+        s[x][y] = s[x][y + 1] = 'U', s[x + 1][y] = s[x + 1][y + 1] = 'D';
+    } else {
+        s[x][y] = s[x + 1][y] = 'L', s[x][y + 1] = s[x + 1][y + 1] = 'R';
+    }
+}
+inline void dfs(int x, int y) {
+    if (s[x][y] == 'L') return;
+    if (s[x][y + 1] == 'L') dfs(x + 1, y + 1), rotate(x, y + 1);
+    rotate(x, y);
+}
+inline std::vector<pi5> change() {
+    int tn = n, tm = m;
+    std::map<char, char> map;
+    map['U'] = 'L', map['D'] = 'R', map['L'] = 'U', map['R'] = 'D';
+    if (m & 1) {
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) t[j][i] = map[s[i][j]];
+        }
+        memcpy(s, t, sizeof(t)), std::swap(tn, tm);
+    }
+    stp.clear();
+    for (int i = 1; i <= tn; ++i) {
+        for (int j = 1; j <= tm; ++j) {
+            if (s[i][j] == 'U') dfs(i, j);
+        }
+    }
+    if (m & 1) {
+        for (auto &t : stp) std::swap(t.fir, t.sec);
+    }
+    return stp;
+}
+
+int main() {
+    std::cin >> n >> m;
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) s[i][j] = getc();
+    }
+    std::vector<pi5> pre = change();
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) s[i][j] = getc();
+    }
+    std::vector<pi5> sre = change();
+    std::cout << pre.size() + sre.size() << std::endl;
+    for (auto t : pre) std::cout << t.fir << ' ' << t.sec << std::endl;
+    reverse(sre.begin(), sre.end());
+    for (auto t : sre) std::cout << t.fir << ' ' << t.sec << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF778D.cpp

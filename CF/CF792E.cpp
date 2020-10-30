@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF792E.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF792Ex2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF792Ex2eCPP
+
+// oct code object pre-document.cpp
+#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
+#define OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -12,7 +16,7 @@
 #ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -132,4 +136,42 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 
 }  // namespace oct
 
-#endif  // oct code end pre-document
+#endif  // oct code end pre-document.cpp
+
+const int N = 505;
+int n, res = -1;
+int a[N];
+int64 ans;
+
+bool check(int k, int ret, int id) {
+    for (int i = 1; i <= n; ++i) {
+        int p = a[i] / k, q = a[i] % k;
+        if (ret && q > p) return 0;
+        if (ret) continue;
+        if (q > p) k--, ret = 1, p = a[i] / k, q = a[i] % k;
+        if (q > p) return 0;
+    }
+    return res = k, 1;
+}
+
+int main() {
+    std::cin >> n;
+    for (int i = 1; i <= n; ++i) std::cin >> a[i];
+    std::sort(a + 1, a + n + 1);
+    if (a[1] == 1) {
+        for (int i = 2; i <= n; ++i) {
+            ans += a[i] & 1 ? (a[i] - 1 >> 1) + 1 : a[i] >> 1;
+        }
+        std::cout << ans + 1 << std::endl;
+        return 0;
+    }
+    for (int i = 1; i * i <= a[1]; ++i) {
+        int k = a[1] / i, ret = a[1] % i;
+        if (check(k, ret, i)) break;
+    }
+    for (int i = 1; i <= n; ++i) ans += (a[i] + res) / (res + 1);
+    std::cout << ans << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF792E.cpp

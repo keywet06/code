@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF796E.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF796Ex2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF796Ex2eCPP
+
+// oct code object pre-document.cpp
+#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
+#define OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -12,7 +16,7 @@
 #ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -132,4 +136,62 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 
 }  // namespace oct
 
-#endif  // oct code end pre-document
+#endif  // oct code end pre-document.cpp
+
+const int B = 2;
+const int N = 1005;
+const int M = 60;
+
+int n, p, K, x, y;
+int a[N], b[N];
+int dp[B][N][M][M];
+
+inline void update(int &now, int &pre, int i, int j, int k, int l) {}
+
+int main() {
+    oct::sync();
+    std::cin >> n >> p >> K;
+    std::cin >> x;
+    for (int i = 1; i <= x; ++i) std::cin >> y, a[y] = 1;
+    std::cin >> x;
+    for (int i = 1; i <= x; ++i) std::cin >> y, b[y] = 1;
+    if (p * K >= (n << 1)) {
+        int ans = 0;
+        for (int i = 1; i <= n; ++i) ans += a[i] | b[i];
+        return std::cout << ans << std::endl, 0;
+    }
+    memset(dp, -0x3f, sizeof(dp));
+    dp[0][0][0][0] = 0;
+    register int i, j, k, l, tmp, now, pre, tk, tl, t;
+    for (int i = 1; i <= n; ++i) {
+        now = i & 1, pre = now ^ 1;
+        memset(dp[now], -0x3f, sizeof(dp[now]));
+        for (j = 0; j <= p; ++j) {
+            for (k = 0; k <= K; ++k) {
+                for (l = 0; l <= K; ++l) {
+                    tmp = dp[pre][j][k][l], t = a[i] | b[i];
+                    tk = std::max(k - 1, 0), tl = std::max(l - 1, 0);
+                    oct::mad(dp[now][j][tk][tl], tmp);
+                    if (k) oct::mad(dp[now][j][k - 1][tl], tmp + a[i]);
+                    oct::mad(dp[now][j + 1][K - 1][tl], tmp + a[i]);
+                    if (l) oct::mad(dp[now][j][tk][l - 1], tmp + b[i]);
+                    oct::mad(dp[now][j + 1][tk][K - 1], tmp + b[i]);
+                    if (k && l) oct::mad(dp[now][j][k - 1][l - 1], tmp + t);
+                    if (k) oct::mad(dp[now][j + 1][k - 1][K - 1], tmp + t);
+                    if (l) oct::mad(dp[now][j + 1][K - 1][l - 1], tmp + t);
+                    oct::mad(dp[now][j + 2][K - 1][K - 1], tmp + t);
+                }
+            }
+        }
+    }
+    int ans = 0;
+    for (int j = 0; j <= p; ++j) {
+        for (int k = 0; k <= K; ++k) {
+            for (int l = 0; l <= K; ++l) oct::mad(ans, dp[n & 1][j][k][l]);
+        }
+    }
+    std::cout << ans << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF796E.cpp

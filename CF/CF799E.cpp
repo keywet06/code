@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF799E.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF799Ex2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF799Ex2eCPP
+
+// oct code object pre-document.cpp
+#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
+#define OCT_CODE_OBJECT_PREx2dDOCUMENTx2eCPP
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -12,7 +16,7 @@
 #ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -132,4 +136,81 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 
 }  // namespace oct
 
-#endif  // oct code end pre-document
+#endif  // oct code end pre-document.cpp
+
+const int N = 200010;
+const int M = N << 2;
+int64 ans;
+int n, m, k, na, nb, nc, nd, t;
+int A[N], B[N], C[N], D[N], v[N], tag[N], p[N], ta[N], tb[N], td[N];
+int ca[M], cb[M], cd[M];
+int64 sa[N], sb[N], sd[N], ref[N];
+
+bool cmp(const int &a, const int &b) { return v[a] < v[b]; }
+void insert(int l, int r, int x, int a, int b, int c) {
+    if (c == 0) ca[x] = b;
+    if (c == 1) cb[x] = b;
+    if (c == 2) cd[x] = b;
+    if (l == r) return;
+    int mid = (l + r) >> 1;
+    a <= mid ? insert(l, mid, x << 1, a, b, c)
+             : insert(mid + 1, r, x << 1 | 1, a, b, c);
+}
+int64 query(int l, int r, int x, int a) {
+    if (l == r) {
+        return sa[std::max(ca[x], a)] + sb[std::max(cb[x], a)] + sd[cd[x]] -
+               ref[l] * (std::max(ca[x], a) + std::max(cb[x], a) + cd[x] + k -
+                         a - m);
+    }
+    int mid = (l + r) >> 1, t = std::max(ca[x << 1], a) +
+                                std::max(cb[x << 1], a) + cd[x << 1] + k - a;
+    return t >= m ? query(l, mid, x << 1, a) : query(mid + 1, r, x << 1 | 1, a);
+}
+void build(int l, int r, int x) {
+    if (l == r) return ca[x] = ta[l], cb[x] = tb[l], cd[x] = td[l], void(0);
+    int mid = (l + r) >> 1;
+    build(l, mid, x << 1), build(mid + 1, r, x << 1 | 1);
+    ca[x] = ca[x << 1 | 1], cb[x] = cb[x << 1 | 1], cd[x] = cd[x << 1 | 1];
+}
+int main() {
+    std::cin >> n >> m >> k;
+    int i, a, b;
+    for (i = 1; i <= n; ++i) std::cin >> v[i], p[i] = i;
+    std::sort(p + 1, p + n + 1, cmp);
+    for (i = 1; i <= n; ++i) {
+        if (i == 1 || v[p[i]] > ref[t]) ref[++t] = v[p[i]];
+        v[p[i]] = t;
+    }
+    std::cin >> a;
+    for (i = 1; i <= a; ++i) std::cin >> b, tag[b] |= 1;
+    std::cin >> a;
+    for (i = 1; i <= a; ++i) std::cin >> b, tag[b] |= 2;
+    for (i = 1; i <= n; ++i) {
+        if (tag[i] == 0) D[++nd] = ref[v[i]], td[v[i]]++;
+        if (tag[i] == 1) A[++na] = ref[v[i]], ta[v[i]]++;
+        if (tag[i] == 2) B[++nb] = ref[v[i]], tb[v[i]]++;
+        if (tag[i] == 3) C[++nc] = ref[v[i]];
+    }
+    std::sort(A + 1, A + na + 1), std::sort(B + 1, B + nb + 1);
+    std::sort(C + 1, C + nc + 1), std::sort(D + 1, D + nd + 1);
+    for (i = 1; i <= t; ++i) {
+        ta[i] += ta[i - 1], tb[i] += tb[i - 1], td[i] += td[i - 1];
+    }
+    for (i = 1; i <= na; ++i) sa[i] = sa[i - 1] + A[i];
+    for (i = 1; i <= nb; ++i) sb[i] = sb[i - 1] + B[i];
+    for (i = 1; i <= nd; ++i) sd[i] = sd[i - 1] + D[i];
+    int64 sum = 0;
+    ans = 1ll << 60;
+    build(0, t, 1);
+    for (i = 0; i <= std::min(nc, m); ++i) {
+        sum += C[i];
+        if (std::min(na, nb) >= k - i && 2 * k - i <= m &&
+            i + na + nb + nd >= m) {
+            ans = std::min(ans, sum + query(0, t, 1, k - i));
+        }
+    }
+    std::cout << (ans == 1ll << 60 ? -1 : ans) << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF799E.cpp

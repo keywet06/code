@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF767E.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF767Ex2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF767Ex2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -69,7 +72,7 @@ bool in(_Tp x, _Tp y, _Tp l, _Tp r);
 template <typename _Tp>
 _Tp sqr(_Tp x);
 template <typename _Tp>
-_Tp power(_Tp x, int64 tm);
+_Tp power(_Tp x, int64 m);
 template <typename _Tp>
 void sort(_Tp &x, _Tp &y);
 template <typename _Tp1, typename _Tp2>
@@ -108,9 +111,8 @@ inline _Tp sqr(_Tp x) {
     return x * x;
 }
 template <typename _Tp>
-inline _Tp power(_Tp x, int64 tm) {
-    return tm == 1 ? x
-                   : (tm & 1 ? power(x * x, tm / 2) * x : power(x * x, tm / 2));
+inline _Tp power(_Tp x, int64 m) {
+    return m == 1 ? x : (m & 1 ? power(x * x, m / 2) * x : power(x * x, m / 2));
 }
 template <typename _Tp>
 inline void sort(_Tp &x, _Tp &y) {
@@ -133,3 +135,42 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 100005;
+
+struct pair {
+    int64 x, w;
+    bool operator<(const pair &oth) const {
+        return w > oth.w || (w == oth.w && x < oth.x);
+    }
+    pair() {}
+    pair(int64 xx, int64 ww) { x = xx, w = ww; }
+};
+
+int64 n, m, ang;
+int64 v[N], c[N], a[N], b[N];
+pair h;
+std::priority_queue<pair> que;
+
+int main() {
+    oct::sync();
+    std::cin >> n >> m;
+    for (int i = 1; i <= n; ++i) {
+        std::cin >> v[i], a[i] = v[i] / 100, v[i] %= 100;
+        if (!v[i] && a[i]) v[i] = 100, --a[i];
+    }
+    for (int i = 1; i <= n; ++i) std::cin >> c[i];
+    for (int i = 1; i <= n; ++i) {
+        que.push(pair(i, (100 - v[i]) * c[i]));
+        m -= v[i], b[i] += v[i];
+        while (m < 0) {
+            h = que.top(), que.pop();
+            m += 100, ++a[h.x], b[h.x] = 0, ang += h.w;
+        }
+    }
+    std::cout << ang << '\n';
+    for (int i = 1; i <= n; ++i) std::cout << a[i] << ' ' << b[i] << '\n';
+    return 0;
+}
+
+#endif  // oct code end CF/CF767E.cpp

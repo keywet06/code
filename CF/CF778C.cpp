@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF773D.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF773Dx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF773Dx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -69,7 +72,7 @@ bool in(_Tp x, _Tp y, _Tp l, _Tp r);
 template <typename _Tp>
 _Tp sqr(_Tp x);
 template <typename _Tp>
-_Tp power(_Tp x, int64 tm);
+_Tp power(_Tp x, int64 m);
 template <typename _Tp>
 void sort(_Tp &x, _Tp &y);
 template <typename _Tp1, typename _Tp2>
@@ -108,9 +111,8 @@ inline _Tp sqr(_Tp x) {
     return x * x;
 }
 template <typename _Tp>
-inline _Tp power(_Tp x, int64 tm) {
-    return tm == 1 ? x
-                   : (tm & 1 ? power(x * x, tm / 2) * x : power(x * x, tm / 2));
+inline _Tp power(_Tp x, int64 m) {
+    return m == 1 ? x : (m & 1 ? power(x * x, m / 2) * x : power(x * x, m / 2));
 }
 template <typename _Tp>
 inline void sort(_Tp &x, _Tp &y) {
@@ -133,3 +135,46 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int C = 26;
+const int N = 600005;
+
+char c;
+int cnt, n, u, v, s, p;
+int ans[N];
+int trie[N][C];
+
+int merge(int x, int y) {
+    if (!x || !y) return x + y;
+    int tmp = ++cnt;
+    for (int i = 0; i < 26; ++i) trie[tmp][i] = merge(trie[x][i], trie[y][i]);
+    return tmp;
+}
+void dfs(int u, int level) {
+    int now = n + 1;
+    cnt = now;
+    for (int i = 0; i < 26; ++i) {
+        if (trie[u][i]) now = merge(now, trie[u][i]);
+    }
+    ans[level] += cnt - n - 1;
+    for (int i = 0; i < 26; ++i) {
+        if (trie[u][i]) dfs(trie[u][i], level + 1);
+    }
+}
+
+int main() {
+    oct::sync();
+    std::cin >> n;
+    for (int i = 1; i < n; ++i) {
+        std::cin >> u >> v >> c, trie[u][c - 'a'] = v;
+    }
+    dfs(1, 1);
+    for (int i = 1; i <= n; ++i) {
+        if (s < ans[i]) s = ans[i], p = i;
+    }
+    std::cout << n - s << std::endl;
+    std::cout << p << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF773D.cpp

@@ -1,3 +1,7 @@
+// oct code object CF/CF825G.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF825Gx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF825Gx2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -52,10 +56,11 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+double exp = 1e-8;
+int64 mods[] = {347480897 /* CCCK */};
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -133,3 +138,33 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 1000005;
+
+void dfs(int u, int f);
+
+int n, q, u, v, r, w, l;
+int dis[N];
+std::vector<int> to[N];
+
+inline void dfs(int u, int f) {
+    dis[u] = std::min(u, dis[f]);
+    for (int v : to[u]) {
+        if (v != f) dfs(v, u);
+    }
+}
+
+int main() {
+    oct::sync();
+    std::cin >> n >> q;
+    for (int i = 1; i < n; ++i) std::cin >> u >> v, to[u].pub(v), to[v].pub(u);
+    std::cin >> r >> r, r = r % n + 1, w = dis[r] = r, dfs(r, r);
+    while (--q) {
+        std::cin >> v >> u, u = (u + l) % n + 1;
+        if (v == 1) oct::mid(w, dis[u]);
+        if (v == 2) std::cout << (l = std::min(w, dis[u])) << '\n';
+    }
+    return 0;
+}
+
+#endif  // oct code end CF/CF825G.cpp

@@ -1,3 +1,7 @@
+// oct code object Zhengrui/Zhengrui1633.cpp
+#ifndef OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1633x2eCPP
+#define OCT_CODE_OBJECT_ZHENGRUIx2fZHENGRUI1633x2eCPP
+
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
 #define OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -9,10 +13,10 @@
 #endif
 
 // oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
+#define OCT_CODE_OBJECT_STLx2fBITSx2fSTDCx2bx2bx2fH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif  // oct code end stl/bits/stdc++.h
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -52,10 +56,10 @@ class priority_queue
 /* Array tn4 is the 4-direction changes in coordinate system.
  * The directions in order is {rght, up, left, down}.
  */
-const int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-const int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                       {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-const double exp = 1e-8;
+int tn4[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int tn8[8][2] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
+                 {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
+double exp = 1e-8;
 
 void sync(int pre = 8);
 template <typename _Tp>
@@ -133,3 +137,66 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+using std::make_pair;
+using pair = std::pair<int, pi5>;
+
+const int N = 70;
+const int U = N >> 2;
+const int V = 1 << U;
+const int M = 500;
+
+int cnt, unt, n, m, u, v, w, a, b, inf, p, r;
+int f[N], s[N], head[N], id[N];
+int next[M], to[M], val[M];
+int d[N][V];
+pair o;
+std::queue<pair> q;
+
+inline void insert(int u, int v, int w) {
+    next[++cnt] = head[u], head[u] = cnt, to[cnt] = v, val[cnt] = w;
+}
+inline void addedge(int u, int v, int w) { insert(u, v, w), insert(v, u, w); }
+inline int find(int u) { return u == f[u] ? u : f[u] = find(f[u]); }
+inline void merger(int u, int v) { s[u] += s[v] * (u != v), f[v] = u; }
+inline void merge(int u, int v) { merger(find(u), find(v)); }
+
+int main() {
+    std::cin >> n >> m >> a >> b;
+    for (int i = 0; i < n; ++i) f[i] = i, s[i] = 1;
+    while (m--) {
+        std::cin >> u >> v >> w, addedge(--u, --v, w);
+        if (w == a) merge(u, v);
+    }
+    memset(id, -1, sizeof(id));
+    for (int i = 0; i < n; ++i) {
+        if (f[i] == i && s[i] > 3) id[i] = unt++;
+    }
+    for (int i = 0; i < n; ++i) id[i] = id[find(i)];
+    memset(d, 63, sizeof(d)), inf = d[0][0];
+    v = ~id[0] ? 1 << id[0] : 0;
+    d[0][v] = 0, q.push(mkp(0, mkp(0, v)));
+    while (q.size()) {
+        o = q.front(), q.pop(), p = o.fir, u = o.sec.fir, w = o.sec.sec;
+        if (d[u][w] != p) continue;
+        for (int e = head[u]; e; e = next[e]) {
+            if (val[e] == b && find(u) == find(to[e]) ||
+                id[u] != (v = id[to[e]]) && ~v && 1 << v & w) {
+                continue;
+            }
+            v = w | (~id[to[e]] ? 1 << id[to[e]] : 0);
+            if (d[to[e]][v] <= d[u][w] + val[e]) continue;
+            d[to[e]][v] = d[u][w] + val[e];
+            q.push(mkp(d[to[e]][v], mkp(to[e], v)));
+        }
+    }
+    for (int u = 0; u < n; ++u) {
+        p = d[u][0];
+        for (int v = 1; v < 1 << unt; ++v) oct::mid(p, d[u][v]);
+        std::cout << p << ' ';
+    }
+    std::cout << std::endl;
+    return 0;
+}
+
+#endif  // oct code end Zhengrui/Zhengrui1633.cpp

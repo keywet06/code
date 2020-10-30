@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF772D.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF772Dx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF772Dx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -69,7 +72,7 @@ bool in(_Tp x, _Tp y, _Tp l, _Tp r);
 template <typename _Tp>
 _Tp sqr(_Tp x);
 template <typename _Tp>
-_Tp power(_Tp x, int64 tm);
+_Tp power(_Tp x, int64 m);
 template <typename _Tp>
 void sort(_Tp &x, _Tp &y);
 template <typename _Tp1, typename _Tp2>
@@ -108,9 +111,8 @@ inline _Tp sqr(_Tp x) {
     return x * x;
 }
 template <typename _Tp>
-inline _Tp power(_Tp x, int64 tm) {
-    return tm == 1 ? x
-                   : (tm & 1 ? power(x * x, tm / 2) * x : power(x * x, tm / 2));
+inline _Tp power(_Tp x, int64 m) {
+    return m == 1 ? x : (m & 1 ? power(x * x, m / 2) * x : power(x * x, m / 2));
 }
 template <typename _Tp>
 inline void sort(_Tp &x, _Tp &y) {
@@ -133,3 +135,51 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int N = 1000010;
+const int64 P = 1000000007;
+
+int n, len;
+int64 ans, i, x;
+int64 a[N], b[N], c[N], f[N], bt[N];
+
+inline void fwt() {
+    register int h, i;
+    for (h = 1; h < len; h *= 10) {
+        for (i = len - 1; ~i; --i) {
+            if (i / h % 10) {
+                a[i - h] = (a[i - h] + a[i]) % P;
+                b[i - h] = (b[i - h] + b[i]) % P;
+                c[i - h] = (c[i - h] + c[i]) % P;
+            }
+        }
+    }
+}
+inline void ufwt() {
+    register int h, i;
+    for (h = 1; h < len; h *= 10) {
+        for (i = 0; i < len; ++i) {
+            if (i / h % 10) f[i - h] = (f[i - h] - f[i] + P) % P;
+        }
+    }
+}
+
+int main() {
+    std::cin >> n;
+    for (i = 1; i <= n; i++) {
+        std::cin >> x, ++a[x], b[x] = (b[x] + x) % P, c[x] = (c[x] + x * x) % P;
+    }
+    len = 1000000;
+    fwt();
+    for (bt[0] = i = 1; i <= n; i++) bt[i] = (bt[i - 1] << 1) % P;
+    for (i = 0; i < len; i++) {
+        if (!a[i]) continue;
+        f[i] = a[i] == 1 ? c[i] : bt[a[i] - 2] * (b[i] * b[i] % P + c[i]) % P;
+    }
+    ufwt();
+    for (i = 0; i < len; i++) ans ^= f[i] * i;
+    std::cout << ans << '\n';
+    return 0;
+}
+
+#endif  // oct code end CF/CF772D.cpp

@@ -1,6 +1,10 @@
-// oct code object pre-document
-#ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
-#define OCT_CODE_OBJECT_PREx2dDOCUMENT
+// oct code object CF/CF780F.cpp
+#ifndef OCT_CODE_OBJECT_CFx2fCF780Fx2eCPP
+#define OCT_CODE_OBJECT_CFx2fCF780Fx2eCPP
+
+// oct code insert pre-document
+#ifndef OCT_CODE_INSERT_PREx2dDOCUMENT
+#define OCT_CODE_INSERT_PREx2dDOCUMENT
 
 #if defined(ONLINE_JUDGE) && !defined(LUOGU)
 #pragma GCC optimize("Ofast")
@@ -8,11 +12,10 @@
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,abm,mmx,avx,tune=native")
 #endif
 
-// oct code object stl/bits/stdc++.h
-#ifndef OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
-#define OCT_CODE_OBJECT_STL_BITSx2fSTDCx2bx2bx2fH
+#ifndef STL_BITS__2F_STDCx2Bx2Bx2FH
+#define STL_BITS__2F_STDCx2Bx2Bx2FH
 #include <bits/stdc++.h>
-#endif // oct code end stl/bits/stdc++.h
+#endif
 
 #define debug std::cerr << "Debug(" << __LINE__ << "): "
 #ifdef ONLINE_JUDGE
@@ -133,3 +136,65 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 }  // namespace oct
 
 #endif  // oct code end pre-document
+
+const int L = 61;
+const int N = 500;
+const int INF = 0x3f3f3f3f;
+
+struct mat {
+   public:
+    int r, c;
+    std::bitset<N> a[N + 5];
+    std::bitset<N> &operator[](int x);
+    void init(int _r, int _c);
+};
+
+int read();
+mat operator*(mat x, mat y);
+
+int n, m, opt, u, v, p;
+int64 ans;
+mat f[L + 5][2], a, b;
+
+inline int read() {
+    static int x;
+    return std::cin >> x, x;
+}
+inline std::bitset<N> &mat::operator[](int x) { return a[x]; }
+inline void mat::init(int _r, int _c) {
+    r = _r, c = _c;
+    for (int i = 1; i <= r; ++i) a[i].reset();
+}
+inline mat operator*(mat x, mat y) {
+    mat s;
+    s.init(x.r, y.c);
+    for (int i = 1; i <= x.r; ++i) {
+        for (int k = 1; k <= x.c; ++k) {
+            if (x[i][k]) s[i] |= y[k];
+        }
+    }
+    return s;
+}
+
+int main() {
+    oct::sync();
+    n = read(), m = read();
+    f[0][0].init(n, n), f[0][1].init(n, n);
+    for (int i = 1; i <= m; ++i) {
+        u = read(), v = read(), p = read(), f[0][p][u][v] = 1;
+    }
+    for (int k = 1; k <= L; ++k) {
+        f[k][0] = f[k - 1][0] * f[k - 1][1];
+        f[k][1] = f[k - 1][1] * f[k - 1][0];
+    }
+    a.init(1, n), a[1][1] = 1;
+    for (int k = L; ~k; --k) {
+        b = a * f[k][opt];
+        if (b[1].count()) a = b, opt ^= 1, ans += (1ll << k);
+        if (ans > int64(1e18)) return std::cout << -1 << std::endl, 0;
+    }
+    std::cout << ans << std::endl;
+    return 0;
+}
+
+#endif  // oct code end CF/CF780F.cpp

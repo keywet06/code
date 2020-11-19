@@ -1,46 +1,65 @@
 #include <bits/stdc++.h>
-const int M = 1005;
-const int N = 15;
-const int INF = 100000000;
-int n, m, ans, x, y, z;
-int dp[M];
-int dis[N];
-int edge[N][N];
-void dfs(int x) {
-    int tmp;
-    for (int i = 1; i <= n; ++i) {
-        if (!((1 << (i - 1)) & x)) {
-            continue;
-        }
-        for (int j = 1; j <= n; ++j) {
-            if (((1 << (j - 1)) & x) == 0 && edge[i][j] != INF &&
-                dp[x | (1 << (j - 1))] > dp[x] + dis[i] * edge[i][j]) {
-                tmp = dis[j];
-                dis[j] = dis[i] + 1;
-                dp[x | (1 << (j - 1))] = dp[x] + dis[i] * edge[i][j];
-                dfs(x | (1 << (j - 1)));
-                dis[j] = tmp;
+
+namespace oct {
+
+void ios();
+
+inline void ios() {
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0), std::cout.tie(0);
+}
+
+}  // namespace oct
+
+const int C = 20;
+
+int ans = INT_MAX >> 4, tmp, cot, cnt, n, m, p;
+int ry[C], rt[C], d[C];
+int c[C][C], cr[C][C];
+
+inline bool cmp(int a, int b) { return c[p][a] < c[p][b]; }
+
+inline void dfs(int num, int node) {
+    for (int i = num; i <= cnt; i++) {
+        if (cot + tmp * rt[ry[i]] >= ans) return;
+        for (int j = node; j <= d[ry[i]]; j++) {
+            if (!rt[cr[ry[i]][j]]) {
+                cnt++, ry[cnt] = cr[ry[i]][j];
+                tmp -= c[ry[cnt]][cr[ry[cnt]][1]];
+                cot += c[ry[i]][ry[cnt]] * rt[ry[i]];
+                rt[ry[cnt]] = rt[ry[i]] + 1, dfs(i, j + 1);
+                cot -= c[ry[i]][ry[cnt]] * rt[ry[i]];
+                rt[ry[cnt]] = 0, tmp += c[ry[cnt]][cr[ry[cnt]][1]];
+                cnt--;
             }
         }
+        node = 1;
+    }
+    if (cnt == n) {
+        if (cot < ans) ans = cot;
+        return;
     }
 }
+
 int main() {
-    scanf("%d %d", &n, &m);
-    memset(edge, 127, sizeof(edge));
-    ans = **edge;
-    for (int i = 1; i <= m; ++i) {
-        scanf("%d %d %d", &x, &y, &z);
-        edge[x][y] = std::min(edge[x][y], z);
-        edge[y][x] = std::min(edge[y][x], z);
+    int u, v, w;
+    oct::ios();
+    std::cin >> n >> m;
+    memset(c, 100, sizeof(c));
+    for (int i = 1; i <= m; i++) {
+        std::cin >> u >> v >> w;
+        if (c[u][v] < w) continue;
+        if (c[u][v] == **c) cr[u][++d[u]] = v, cr[v][++d[v]] = u;
+        c[u][v] = c[v][u] = w;
     }
-    for (int T = 1; T <= n; ++T) {
-        memset(dis, 127, sizeof(dis));
-        memset(dp, 127, sizeof(dp));
-        dis[T] = 1;
-        dp[1 << (T - 1)] = 0;
-        dfs(1 << (T - 1));
-        ans = std::min(ans, dp[(1 << n) - 1]);
+    for (int i = 1; i <= n; i++) {
+        p = i, std::sort(cr[i] + 1, cr[i] + 1 + d[i], cmp);
+        tmp += c[i][cr[i][1]];
     }
-    printf("%d\n", ans);
+    for (int i = 1; i <= n; i++) {
+        cot = 0, cnt = 1, ry[1] = i, tmp -= c[i][cr[i][1]], rt[i] = 1;
+        dfs(1, 1), rt[i] = 0, tmp += c[i][cr[i][1]];
+    }
+    std::cout << ans << std::endl;
     return 0;
 }

@@ -17,4 +17,5 @@ test*
 *tmp*
 *temp*
 *test*
+!*contest*
 # octinc exfiles end

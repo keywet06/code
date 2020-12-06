@@ -1,3 +1,5 @@
+#ifdef OCT_CODE_REQUIRES
+
 // oct code require pre-document.cpp
 // oct code object pre-document
 #ifndef OCT_CODE_OBJECT_PREx2dDOCUMENT
@@ -144,24 +146,120 @@ inline _Tp gcd(_Tp &x, _Tp &y) {
 #endif
 
 #endif  // oct code end needcpp11.cpp
-// oct code object bint.cpp
-#ifndef OCT_CODE_OBJECT_BINTx2eCPP
-#define OCT_CODE_OBJECT_BINTx2eCPP
 
-template <typename _Tp, _Tp _Mod, typename _Vec = std::vector<_Tp> >
-class bint {
+#endif
+
+// oct code object ubint.cpp
+#ifndef OCT_CODE_OBJECT_UBINTx2eCPP
+#define OCT_CODE_OBJECT_UBINTx2eCPP
+
+namespace oct {
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+class ubint {
    protected:
     _Vec vec;
 
    public:
-    bint() {}
-    bint(_Tp x) { vec.pub(x); }
-    ~bint() {}
+    ubint() {}
+    ubint(_Tp x) {
+        if (!x) vec.pub(0);
+        while (x) vec.pub(x % _Base), x /= _Base;
+    }
+    ubint(std::string s) {
+        for (int i = 0; i < s.size(); ++i) vec.pub(s[i] - '0');
+    }
+    ~ubint() {}
     size_t size() { return vec.size(); }
-    void resize(size_t new_size) { vec.resize(new_size); } 
+    void resize(size_t new_size) { vec.resize(new_size); }
+    void pop() { vec.pob(); }
     _Tp &operator[](size_t x) { return vec[x]; }
+    void update() {
+        for (int i = 0; i < size() - 1; ++i) {
+            vec[i + 1] += vec[i] / _Base, vec[i] %= _Base;
+        }
+        while (vec[size() - 1] >= _Base) {
+            vec.pub(vec[size() - 1] / _Base), vec[size() - 2] %= _Base;
+        }
+    }
 };
 
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator+(ubint<_Tp, _Base, _Vec> x,
+                                  ubint<_Tp, _Base, _Vec> y) {
+    if (x.size() < y.size()) std::swap(x, y);
+    ubint<_Tp, _Base, _Vec> ret(x);
+    for (int i = 0; i < y.size(); ++i) ret[i] += y[i];
+    return ret.update(), ret;
+}
 
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator+(ubint<_Tp, _Base, _Vec> x, _Tp y) {
+    return x + ubint<_Tp, _Base, _Vec>(y);
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator+(_Tp x, ubint<_Tp, _Base, _Vec> y) {
+    return ubint<_Tp, _Base, _Vec>(x) + y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> &operator+=(ubint<_Tp, _Base, _Vec> &x,
+                                    ubint<_Tp, _Base, _Vec> y) {
+    return x = x + y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> &operator+=(ubint<_Tp, _Base, _Vec> &x, _Tp y) {
+    return x = x + y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator-(ubint<_Tp, _Base, _Vec> x,
+                                  ubint<_Tp, _Base, _Vec> y) {
+    ubint<_Tp, _Base, _Vec> ret(x);
+    for (int i = 0; i < y.size(); ++i) {
+        ret[i] = (ret[i] -= y[i]) < 0 ? ret[i] : (--ret[i + 1], ret[i] + _Base);
+    }
+    int i = y.size();
+    while (ret[i] < 0) ret[i] += _Base, --ret[++i];
+    while (!ret[ret.size() - 1]) ret.pop();
+    return ret;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator-(ubint<_Tp, _Base, _Vec> x, _Tp y) {
+    return x - ubint<_Tp, _Base, _Vec>(y);
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> operator-(_Tp x, ubint<_Tp, _Base, _Vec> y) {
+    return ubint<_Tp, _Base, _Vec>(x) - y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> &operator-=(ubint<_Tp, _Base, _Vec> &x,
+                                    ubint<_Tp, _Base, _Vec> y) {
+    return x = x - y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+ubint<_Tp, _Base, _Vec> &operator-=(ubint<_Tp, _Base, _Vec> &x, _Tp y) {
+    return x = x - y;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+std::istream &operator>>(std::istream &in, ubint<_Tp, _Base, _Vec> x) {
+    std::string s;
+    return in >> s, x = s, in;
+}
+
+template <typename _Tp, _Tp _Base, typename _Vec = std::vector<_Tp> >
+std::ostream &operator<<(std::ostream &out, ubint<_Tp, _Base, _Vec> x) {
+    for (int i = x.size() - 1; ~i; --i) out << x[i];
+    return out;
+}
+
+}  // namespace oct
 
 #endif

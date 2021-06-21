@@ -195,15 +195,17 @@ inline node query(int p, int l, int r, int ql, int qr) {
 }
 
 int main() {
-    scanf("%d %d", &n, &m);
-    scanf("%s", s + 1);
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0), std::cout.tie(0);
+    std::cin >> n >> m;
+    std::cin >> s + 1;
     build(1, 1, n);
     while (m--) {
         int l, r;
-        scanf("%d %d", &l, &r);
+        std::cin >> l >> r;
         int ans = query(1, 1, n, l, r).a[0][4];
         ans = ans == INF ? -1 : ans;
-        printf("%d\n", ans);
+        std::cout << ans << '\n';
     }
     return 0;
 }

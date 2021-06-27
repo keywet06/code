@@ -133,7 +133,7 @@ namespace kw {
             }
         }
         return 1;
-    }
+    }   
     inline int operator > (BigInt a, BigInt b) { return !(a <= b); }
     inline int operator >= (BigInt a, BigInt b) { return !(a < b); }
     inline int operator == (BigInt a, BigInt b) {

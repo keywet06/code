@@ -7,7 +7,7 @@ struct node {
     int f, v, s[B], l;
 };
 
-int n, l, r, c, r, s, t, x;
+int n, l, r, c, r, s, t, u, p;
 
 node d[N];
 
@@ -43,6 +43,10 @@ int main() {
     r = c = 1;
     for (int i = 1; i <= n; ++i) {
         std::cin >> l >> r;
+        u = r;
+        while (1) {
+            
+        }
     }
     return 0;
 }

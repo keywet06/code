@@ -23,7 +23,6 @@ void insert(int x, int y) {
 void addedge(int x, int y) { insert(x, y), insert(y, x); }
 
 void dfs(int u) {
-    std::cerr << "dfs(" << u << ")" << std::endl;
     ti[u] = ++clo, rot[clo] = u;
     for (int e = head[u]; e; e = next[e]) {
         if (ti[to[e]]) continue;
@@ -37,9 +36,21 @@ void solve(int x) {
     memset(ti, 0, sizeof(ti));
     deep[x] = 0;
     dfs(x);
+    // std::cerr << "deep = {";
+    // for (int i = 1; i <= n; ++i) std::cerr << deep[i] << ", ";
+    // std::cerr << "...};" << std::endl;
+    // std::cerr << "ti = {";
+    // for (int i = 1; i <= n; ++i) std::cerr << ti[i] << ", ";
+    // std::cerr << "...};" << std::endl;
+    // std::cerr << "lst = {";
+    // for (int i = 1; i <= n; ++i) std::cerr << lst[i] << ", ";
+    // std::cerr << "...};" << std::endl;
+    // std::cerr << "rot = {";
+    // for (int i = 1; i <= n; ++i) std::cerr << rot[i] << ", ";
+    // std::cerr << "...};" << std::endl;
     for (int i = 1; i <= n; ++i) {
         for (int j = ti[i] + 1; j <= lst[i]; ++j) ans += i > rot[j];
-        cnt = 0, ans = ans % P;
+        cnt = 0;
         for (int e = head[i]; e; e = next[e]) {
             if (ti[to[e]] > ti[i]) ss[++cnt] = to[e];
         }
@@ -56,6 +67,7 @@ void solve(int x) {
             }
         }
     }
+    ans %= P;
 }
 
 int64 power(int64 x, int y) {
@@ -76,7 +88,7 @@ int main() {
             dp[i][j] = I * (dp[i - 1][j] + dp[i][j - 1]) % P;
         }
     }
-    for (int i = 1; i <= n; ++i) solve(x);
-    std::cout << ans /** power(n, P - 2) % P*/ << std::endl;
+    for (int i = 1; i <= n; ++i) solve(i);
+    std::cout << ans * power(n, P - 2) % P << std::endl;
     return 0;
 }

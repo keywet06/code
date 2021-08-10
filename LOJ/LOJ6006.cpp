@@ -3,11 +3,11 @@
 using int64 = long long;
 
 const int64 INF = 100000000000000000;
-const int N = 205;
-const int M = 5005;
+const int N = 2005;
+const int M = 200005;
 const int E = M << 1;
 
-int n, m, S, T, cnt = 1, x, y, z;
+int k, n, m, S, T, cnt = 1, x, y, z;
 int head[N], cur[N], dis[N];
 int next[E], to[E];
 
@@ -57,8 +57,19 @@ inline int64 Dinic(int S, int T) {
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0), std::cout.tie(0);
-    std::cin >> n >> m >> S >> T;
-    for (int i = 1; i <= m; ++i) std::cin >> x >> y >> z, addedge(x, y, z);
-    std::cout << Dinic(S, T) << std::endl;
+    std::cin >> k >> n, S = k + n + 1, T = k + n + 2;
+    for (int i = 1; i <= k; ++i) std::cin >> x, z += x, addedge(S, i, x);
+    for (int i = 1; i <= n; ++i) {
+        std::cin >> y, addedge(i + k, T, 1);
+        while (y--) std::cin >> x, addedge(x, i + k, 1);
+    }
+    if (Dinic(S, T) < z) return std::cout << "No Solution!", 0;
+    for (int i = 1; i <= k; ++i) {
+        std::cout << i << ": ";
+        for (int e = head[i]; e; e = next[e]) {
+            if (to[e] != S && !flow[e]) std::cout << to[e] - k << ' ';
+        }
+        std::cout << std::endl;
+    }
     return 0;
 }

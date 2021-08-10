@@ -3,12 +3,12 @@
 using int64 = long long;
 
 const int64 INF = 100000000000000000;
-const int N = 205;
-const int M = 5005;
+const int N = 505;
+const int M = 20005;
 const int E = M << 1;
 
 int n, m, S, T, cnt = 1, x, y, z;
-int head[N], cur[N], dis[N];
+int head[N], cur[N], dis[N], dir[N], hs[N];
 int next[E], to[E];
 
 int64 ans;
@@ -57,8 +57,20 @@ inline int64 Dinic(int S, int T) {
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0), std::cout.tie(0);
-    std::cin >> n >> m >> S >> T;
-    for (int i = 1; i <= m; ++i) std::cin >> x >> y >> z, addedge(x, y, z);
-    std::cout << Dinic(S, T) << std::endl;
+    std::cin >> n >> m, S = 2 * n + 1, T = 2 * n + 2;
+    for (int i = 1; i <= m; ++i) std::cin >> x >> y, addedge(x, y + n, 1);
+    for (int i = 1; i <= n; ++i) addedge(S, i, 1), addedge(n + i, T, 1);
+    ans = n - Dinic(S, T);
+    for (int i = 1; i <= n; ++i) {
+        for (int e = head[i]; e; e = next[e]) {
+            if (!flow[e] && to[e] != S) hs[dir[i] = to[e] - n] = 1;
+        }
+    }
+    for (int i = 1; i <= n; ++i) {
+        if (hs[i]) continue;
+        for (int u = i; u; u = dir[u]) std::cout << u << ' ';
+        std::cout << std::endl;
+    }
+    std::cout << ans << std::endl;
     return 0;
 }

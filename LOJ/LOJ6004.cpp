@@ -3,8 +3,8 @@
 using int64 = long long;
 
 const int64 INF = 100000000000000000;
-const int N = 205;
-const int M = 5005;
+const int N = 505;
+const int M = 50005;
 const int E = M << 1;
 
 int n, m, S, T, cnt = 1, x, y, z;
@@ -57,8 +57,23 @@ inline int64 Dinic(int S, int T) {
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0), std::cout.tie(0);
-    std::cin >> n >> m >> S >> T;
-    for (int i = 1; i <= m; ++i) std::cin >> x >> y >> z, addedge(x, y, z);
-    std::cout << Dinic(S, T) << std::endl;
+    std::cin >> n >> m, S = n + m + 1, T = n + m + 2;
+    for (int i = 1; i <= n; ++i) std::cin >> x, y += x, addedge(S, i, x);
+    for (int i = 1; i <= m; ++i) std::cin >> x, addedge(n + i, T, x);
+    for (int i = 1; i <= n; ++i) {
+        for (int j = 1; j <= m; ++j) addedge(i, n + j, 1);
+    }
+    if (Dinic(S, T) != y) return std::cout << 0 << std::endl, 0;
+    std::cout << 1 << std::endl;
+    for (int i = 1; i <= n; ++i) {
+        x = 0;
+        for (int e = head[i]; e; e = next[e]) {
+            if (to[e] != S && !flow[e]) {
+                if (x) std::cout << ' ';
+                x = 1, std::cout << to[e] - n;
+            }
+        }
+        std::cout << std::endl;
+    }
     return 0;
 }

@@ -1,16 +1,5 @@
 #include <bits/stdc++.h>
 
-namespace oct {
-
-void ios();
-
-inline void ios() {
-    std::ios::sync_with_stdio(0);
-    std::cin.tie(0), std::cout.tie(0);
-}
-
-}  // namespace oct
-
 const int N = 300005;
 bool del[N];
 int n, k, cnt, limit, ans;
@@ -25,7 +14,8 @@ void pre() {
 }
 
 int main() {
-    oct::ios();
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0), std::cout.tie(0);
     std::cin >> n >> k;
     pre();
     long long tot = 0;

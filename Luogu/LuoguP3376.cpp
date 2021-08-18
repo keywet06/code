@@ -1,72 +1,64 @@
 #include <bits/stdc++.h>
-const int N = 505;
-const int M = 10005;
-int S, T, n, m, x, y, z, cnt = 1;
-int head[N], dis[N], vis[N];
-int next[M], to[M];
-long long flow[M];
-inline void insert(int x, int y, int z) {
-    next[++cnt] = head[x];
-    head[x] = cnt;
-    to[cnt] = y;
-    flow[cnt] = z;
+
+using int64 = long long;
+
+const int64 INF = 100000000000000000;
+const int N = 205;
+const int M = 5005;
+const int E = M << 1;
+
+int n, m, S, T, cnt = 1, x, y, z;
+int head[N], cur[N], dis[N];
+int next[E], to[E];
+
+int64 ans;
+int64 flow[E];
+
+inline void insert(int u, int v, int f) {
+    next[++cnt] = head[u], head[u] = cnt;
+    to[cnt] = v, flow[cnt] = f;
 }
-inline void addedge(int x, int y, int z) {
-    insert(x, y, z);
-    insert(y, x, 0);
-}
-inline int SPFA() {
-    memset(dis, 127, sizeof(dis));
-    std::queue<int> queue;
-    queue.push(S);
-    dis[S] = 0;
-    vis[S] = 1;
-    while (!queue.empty()) {
-        int u = queue.front();
-        queue.pop();
-        vis[u] = 0;
+
+inline void addedge(int u, int v, int f) { insert(u, v, f), insert(v, u, 0); }
+
+inline bool SPFA(int S, int T) {
+    std::queue<int> q;
+    memset(dis, 0, sizeof(dis));
+    dis[S] = 1, q.push(S);
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+        if (u == T) break;
         for (int e = head[u]; e; e = next[e]) {
-            if (flow[e] && dis[u] + 1 < dis[to[e]]) {
-                dis[to[e]] = dis[u] + 1;
-                if (!vis[to[e]]) {
-                    queue.push(to[e]);
-                    vis[to[e]] = 1;
-                }
-            }
+            if (flow[e] && !dis[to[e]]) dis[to[e]] = dis[u] + 1, q.push(to[e]);
         }
     }
-    return dis[T] != dis[0];
+    return bool(dis[T]);
 }
-inline long long dfs(int u, long long limit) {
-    if (u == T) return limit;
-    long long rlow = 0, used = 0;
-    for (int e = head[u]; e; e = next[e]) {
-        if (!flow[e] || dis[to[e]] != dis[u] + 1) continue;
-        if (!(rlow = dfs(to[e], std::min(limit - used, flow[e])))) continue;
-        used += rlow;
-        flow[e] -= rlow;
-        flow[e ^ 1] += rlow;
-        if (used == limit) break;
+
+inline int64 dfs(int u, int64 mf) {
+    int64 f, ret = 0;
+    if (u == T) return mf;
+    for (int &e = cur[u]; e; e = next[e]) {
+        if (!flow[e] || dis[u] + 1 != dis[to[e]]) continue;
+        f = dfs(to[e], std::min(mf, flow[e]));
+        flow[e] -= f, flow[e ^ 1] += f, ret += f, mf -= f;
+        if (!mf) return ret;
     }
-    if (!used) dis[u] = 0;
-    return used;
+    return ret;
 }
-inline long long Dinic() {
-    long long ans = 0;
-    while (SPFA()) {
-        ans += dfs(S, 4611686018427387903);
-    }
-    return ans;
+
+inline int64 Dinic(int S, int T) {
+    int64 ret = 0;
+    while (SPFA(S, T)) memcpy(cur, head, sizeof(head)), ret += dfs(S, INF);
+    return ret;
 }
+
 int main() {
     std::ios::sync_with_stdio(0);
-    std::cin.tie(0);
-    std::cout.tie(0);
+    std::cin.tie(0), std::cout.tie(0);
     std::cin >> n >> m >> S >> T;
-    for (int i = 1; i <= m; ++i) {
-        std::cin >> x >> y >> z;
-        addedge(x, y, z);
-    }
-    std::cout << Dinic() << std::endl;
+    for (int i = 1; i <= m; ++i) std::cin >> x >> y >> z, addedge(x, y, z);
+    std::cout << Dinic(S, T) << std::endl;
     return 0;
 }

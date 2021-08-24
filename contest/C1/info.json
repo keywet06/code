@@ -1,0 +1,27 @@
+{
+    "id": 1,
+    "date": "2020/11/20",
+    "title": "模拟赛",
+    "problem": [
+        {
+            "id": 0,
+            "name": "repair",
+            "title": "出了个大阴间题"
+        },
+        {
+            "id": 1,
+            "name": "satellite",
+            "title": "最简单辣快来做"
+        },
+        {
+            "id": 2,
+            "name": "string",
+            "title": "是我的你不要抢"
+        },
+        {
+            "id": 3,
+            "name": "graph",
+            "title": "显然也是我整的"
+        }
+    ]
+}

@@ -2,46 +2,40 @@
 
 using int64 = long long;
 
-inline void ios() {
-    std::ios::sync_with_stdio(0);
-    std::cin.tie(0), std::cout.tie(0);
-}
-
-const int C = 3;
+const int B = 3;
 const int N = 100005;
-const int64 linf = 1ll << 50;
 
 int n;
+int a[N], b[N], d[N];
 
-int64 a[N];
-int64 dp[N][C];
+int64 f[N][B];
 
-std::string s;
-
-inline int64 maxs(int64 a, int64 b, int64 c) {
-    return std::max(a, std::max(b, c));
+int getc() {
+    int x = getchar();
+    while (x != '-' && x != '+') x = getchar();
+    return x == '-';
 }
 
 int main() {
-    ios();
-    std::cin >> n;
-    std::cin >> a[1];
+    std::ios::sync_with_stdio(0);
+    std::cin.tie(0), std::cout.tie(0);
+    std::cin >> n >> a[1];
     for (int i = 2; i <= n; ++i) {
-        std::cin >> s >> a[i];
-        a[i] = s[0] == '+' ? a[i] : -a[i];
+        b[i] = getc(), std::cin >> a[i], d[i] = (b[i] ? -a[i] : a[i]);
     }
-    dp[1][0] = a[1], dp[1][1] = dp[1][2] = -linf;
-    for (int i = 2; i <= n + 1; ++i) {
-        dp[i][0] = maxs(dp[i - 1][0], dp[i - 1][1], dp[i - 2][2]) + a[i];
-        dp[i][1] = a[i] > 0 ? std::max(dp[i - 1][1] - a[i], dp[i - 1][2] - a[i])
-                            : maxs(dp[i - 1][0] + a[i], dp[i - 1][1] - a[i],
-                                   dp[i - 1][2] - a[i]);
-        dp[i][2] = a[i] > 0
-                       ? dp[i - 1][2] + a[i]
-                       : std::max(dp[i - 1][2] + a[i], dp[i - 1][1] - a[i]);
-        std::cout << dp[i][0] << ' ' << dp[i][1] << ' ' << dp[i][2]
-                  << std::endl;
+    memset(f, 128, sizeof(f));
+    f[1][0] = b[1];
+    for (int i = 2; i <= n; ++i) {
+        f[i][0] = std::max(f[i - 1][0] + d[i], f[i - 1][1] + d[i]);
+        f[i][1] = std::max(f[i - 1][0] + d[i], f[i - 1][1] - d[i]);
+        f[i][2] = std::max(std::max(f[i - 1][0] + d[i], f[i - 1][1] - d[i]),
+                           f[i - 1][2] + d[i]);
+        if (b[i]) {
+            f[i][1] = std::max(f[i][1], f[i - 1][0] + d[i]);
+            f[i][2] = std::max(f[i][2], f[i - 1][1] + d[i]);
+        }
     }
-    std::cout << dp[n + 1][0] << std::endl;
+    
+    std::cout << f[n][0] << std::endl;
     return 0;
 }

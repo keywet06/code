@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 
 const int N = 300005;
-
 bool del[N];
 int n, k, cnt, limit, ans;
 int val[N], prime[N];
@@ -32,20 +31,19 @@ int main() {
             if (tot == k) break;
             if (tot - k >= limit / prime[i]) {
                 del[prime[i]] = 1;
-                tot -= limit / prime[i];
-                ans--;
+                tot -= limit / prime[i], ans--;
             }
         }
     }
     if (tot != k) {
-        printf("No\n");
+        std::cout << "No" << std::endl;
     } else {
-        printf("Yes\n");
-        printf("%d\n", ans);
+        std::cout << "Yes" << std::endl;
+        std::cout << ans << std::endl;
         for (int i = 1; i <= limit; i++) {
-            if (!del[i]) printf("%d ", i);
+            if (!del[i]) std::cout << i << ' ';
         }
-        puts("");
+        std::cout << std::endl;
     }
     return 0;
 }

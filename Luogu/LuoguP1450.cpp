@@ -1,41 +1,37 @@
 #include <bits/stdc++.h>
-const int N = 100000;
-const int Np = N + 5;
-int n, x, y, c;
-int a[4], k[4];
-long long ans;
-long long dp[Np];
+
+using uint64 = unsigned long long;
+
+const int B = 4;
+const int N = 100005;
+
+int n, s;
+int c[B], d[B];
+
+uint64 ans, e, h;
+uint64 f[N];
+
 int main() {
     std::ios::sync_with_stdio(0);
-    std::cin.tie(0);
-    std::cout.tie(0);
-    std::cin >> a[0] >> a[1] >> a[2] >> a[3] >> n;
-    dp[0] = 1;
-    for (int i = 0; i < 4; ++i) {
-        for (int j = a[i]; j <= N; ++j) {
-            dp[j] += dp[j - a[i]];
-        }
+    std::cin.tie(0), std::cout.tie(0);
+    for (int i = 0; i < B; ++i) std::cin >> c[i];
+    f[0] = 1;
+    for (int i = 0; i < B; ++i) {
+        for (int j = c[i]; j < N; ++j) f[j] += f[j - c[i]];
     }
-    for (int i = 1; i <= n; ++i) {
-        std::cin >> k[0] >> k[1] >> k[2] >> k[3] >> x;
-        for (int j = 0; j < 4; ++j) {
-            k[j] = a[j] * (k[j] + 1);
-        }
+    std::cin >> n;
+    while (n--) {
+        for (int i = 0; i < B; ++i) std::cin >> d[i];
+        std::cin >> s;
         ans = 0;
-        for (int j = 0; j < 16; ++j) {
-            y = x;
-            c = 1;
-            for (int l = 0; l < 4; ++l) {
-                if (j & (1 << l)) {
-                    y -= k[l];
-                    c = -c;
-                }
+        for (int i = 0; i < 1 << B; ++i) {
+            e = h = 0;
+            for (int j = 0; j < B; ++j) {
+                if (i >> j & 1) ++e, h += c[j] * (d[j] + 1);
             }
-            if (y >= 0) {
-                ans += c * dp[y];
-            }
+            ans += (e & 1 ? -1 : 1) * (h <= s ? f[s - h] : 0);
         }
-        std::cout << ans << std::endl;
+        std::cout << ans << '\n';
     }
     return 0;
 }

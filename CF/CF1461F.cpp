@@ -1,33 +1,59 @@
 #include <bits/stdc++.h>
 
+#define Deb std::cerr
+#define Debug Deb << "[Debug] at Line #" << __LINE__ << " : "
+#define pub push_back
+
 const int N = 100005;
 const int I = N << 3;
 
-int n, fplus, ftime, fredu, x, y, z, l, f, c;
-int a[N], pl[N], pr[N], pk[N], pf[N];
+int n, fplus, fmult, fredu, x, y, z, l, f, c;
+int a[N], pl[N], pr[N], pk[N], pf[N], dp[N], red[N], t[N];
 
 std::string s, ans;
 
 inline void solve(int l, int r) {
-    while (a[l] == 1 && l < r) s += "1+", ++l;
-    if (a[l] == 1) return void(s += "1+");
-    while (a[r] == 1 && l < r) ++x, --r;
+    while (a[l] == 1 && l < r) ans.pub('1'), ans.pub('+'), ++l;
+    if (a[l] == 1) return ans.pub('1'), ans.pub('+'), void(0);
+    while (a[r] == 1 && l < r) ++z, --r;
     x = 1;
     for (int i = l; i <= r; ++i) {
         x *= a[i];
         if (x > I) {
-            for (int i = l; i < r; ++i) std::cout << a[i] << '*';
-            std::cout << a[r] << '+';
-            while (x--) std::cout << "1+";
+            for (int i = l; i < r; ++i) ans.pub(a[i] + '0'), ans.pub('*');
+            ans.pub(a[r] + '0'), ans.pub('+');
+            while (z) ans.pub('1'), ans.pub('+'), --z;
             return;
         }
     }
-    c = 0, x = 1, pl[1] = l;
+    x = 1, pl[c = 1] = l, pk[0] = 1;
     for (int i = l; i <= r; ++i) {
-        if (a[i] > 1 && a[i + 1] == 1)  {
-            pk[i] = x, x = 0;
+        if (i != l && a[i - 1] == 1 && a[i] != 1) {
+            pf[c] = i - pr[c] - 1, pl[++c] = i;
         }
+        x *= a[i];
+        if (a[i] > 1 && a[i + 1] == 1 || i == r) pr[c] = i, pk[c] = x;
     }
+    for (int i = 1; i <= c; ++i) {
+        dp[i] = 0;
+        for (int j = 0; j < i; ++j) {
+            if (dp[j] + pk[i] / pk[j] > dp[i]) {
+                dp[i] = std::max(dp[i], dp[j] + pk[i] / pk[j]);
+                red[i] = j;
+            }
+        }
+        dp[i] += pf[i];
+    }
+    for (int i = 1; i <= c; ++i) t[i] = 0;
+    for (int u = c; u; u = red[u]) t[u] = 1;
+    for (int i = 1; i <= c; ++i) {
+        for (int j = pl[i]; j < pr[i]; ++j) {
+            ans.pub(a[j] + '0'), ans.pub('*');
+        }
+        ans.pub(a[pr[i]] + '0'), ans.pub(t[i] ? '+' : '*');
+        while (pf[i]--) ans.pub('1'), ans.pub(t[i] ? '+' : '*');
+    }
+    while (z) ans.pub('1'), ans.pub('+'), --z;
 }
 
 int main() {
@@ -36,25 +62,26 @@ int main() {
     std::cin >> n;
     for (int i = 1; i <= n; ++i) std::cin >> a[i];
     std::cin >> s;
-    for (char c : s) ftime |= c == '*', fplus |= c == '+', fredu |= c == '-';
-    if (!ftime) {
+    for (char c : s) fmult |= c == '*', fplus |= c == '+', fredu |= c == '-';
+    if (!fmult) {
         for (int i = 1; i < n; ++i) std::cout << a[i] << (fplus ? '+' : '-');
         return std::cout << a[n] << std::endl, 0;
     } else if (!fplus && !fredu) {
         for (int i = 1; i < n; ++i) std::cout << a[i] << '*';
         return std::cout << a[n] << std::endl, 0;
     } else if (!fplus) {
-        for (x = 1; x < n, a[x], a[x + 1]; ++x) std::cout << a[x] << '*';
-        if (x > 1 && x < n) std::cout << a[x] << '-';
+        for (x = 1; x < n && a[x] && a[x + 1]; ++x) std::cout << a[x] << '*';
+        if ((x -= a[1] == 0) && x < n) std::cout << a[x] << '-';
         while (++x < n) std::cout << a[x] << '*';
         return std::cout << a[n] << std::endl, 0;
     }
-    ans = "0+", l = 1;
+    ans.pub('0'), ans.pub('+'), l = 1;
     for (int i = 1; i <= n + 1; ++i) {
         if (a[i]) continue;
         if (a[i - 1]) solve(l, i - 1);
-        std::cout << "0+", l = i + 1;
+        ans.pub('0'), ans.pub('+'), l = i + 1;
     }
+    // Debug << ans << std::endl;
     std::cout << ans.substr(2, (n << 1) - 1) << std::endl;
     return 0;
 }

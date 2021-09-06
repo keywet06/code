@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 
-#define Deb std::cerr
-#define Debug Deb << "[Debug] at Line #" << __LINE__ << " : "
+#define Deb std::cout
+#define Delin Deb << "[Debug] at Line #" << __LINE__
+#define Debug Delin << " : "
+#define Deline Delin << std::endl
 #define pub push_back
 
 const int N = 100005;
@@ -13,6 +15,7 @@ int a[N], pl[N], pr[N], pk[N], pf[N], dp[N], red[N], t[N];
 std::string s, ans;
 
 inline void solve(int l, int r) {
+    // Debug << "solve(" << l << ", " << r << ");" << std::endl;
     while (a[l] == 1 && l < r) ans.pub('1'), ans.pub('+'), ++l;
     if (a[l] == 1) return ans.pub('1'), ans.pub('+'), void(0);
     while (a[r] == 1 && l < r) ++z, --r;
@@ -34,6 +37,7 @@ inline void solve(int l, int r) {
         x *= a[i];
         if (a[i] > 1 && a[i + 1] == 1 || i == r) pr[c] = i, pk[c] = x;
     }
+    pf[c] = 0;
     for (int i = 1; i <= c; ++i) {
         dp[i] = 0;
         for (int j = 0; j < i; ++j) {
@@ -47,6 +51,7 @@ inline void solve(int l, int r) {
     for (int i = 1; i <= c; ++i) t[i] = 0;
     for (int u = c; u; u = red[u]) t[u] = 1;
     for (int i = 1; i <= c; ++i) {
+        // Debug << i << "(" << pl[i] << ", " << pr[i] << ", " << pf[i] << ")" << std::endl;
         for (int j = pl[i]; j < pr[i]; ++j) {
             ans.pub(a[j] + '0'), ans.pub('*');
         }

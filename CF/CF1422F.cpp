@@ -30,6 +30,29 @@ inline int64 power(int64 x, int y) {
     }
 }
 
+struct node {
+    int ls, rs;
+    int64 lcm;
+    node(int64 _lcm = 1, int _ls = -1, int _rs = -1)
+        : lcm(_lcm), ls(_ls), rs(_rs) {}
+};
+
+inline int update(std::vector<node> &tr, int u, int l, int r, int x, int y) {
+    if (~u) {
+        tr.emplace_back(tr[u]);
+    } else {
+        tr.emplace_back();
+    }
+    u = tr.size() - 1;
+    if (l == r) return tr[u].lcm *= y %= P, u;
+    int mid = l + r >> 1;
+    if (x <= mid) tr[u].ls = update(tr, tr[u].ls, l, mid, x, y);
+    if (y > mid) tr[u].rs = update(tr, tr[u].rs, mid + 1, r, x, y);
+    tr[u].lcm = (~tr[u].ls ? tr[tr[u].ls].lcm : 1) *
+                (~tr[u].rs ? tr[tr[u].rs].lcm : 1) % P;
+    return u;
+};
+
 inline std::vector<int> solve(std::vector<int> a, std::vector<pair> b) {
     auto pr = getprime<D>();
     int n = a.size(), m = pr.size(), q = b.size();
@@ -50,7 +73,25 @@ inline std::vector<int> solve(std::vector<int> a, std::vector<pair> b) {
             }
         }
     }
-    
+    const int N = 200005;
+    int lasts[N];
+    int pre[n], lid[n];
+    memset(lasts, -1, sizeof(lasts));
+    memset(lid, -1, sizeof(lid));
+    for (int i = 0; i < n; ++i) {
+        pre[i] = lasts[a[i]], lasts[a[i]] = i;
+        if (~pre[i]) lid[pre[i]] = i;
+    }
+    std::vector<node> tr;
+    int root = -1;
+    for (int i = 0; i < n; ++i) {
+        if (!~pre[i]) root = update(tr, root, 0, n - 1, i, a[i]);
+    }
+    int rt[n];
+    for (int i = 0; i < n; ++i) {
+        rt[i] = i ? rt[i - 1] : root;
+        if (~lid[i]) rt[i] = update(tr, rt[i], 0, n - 1, lid[i], a[lid[i]]);
+    }
     return ret;
 }
 

@@ -1,9 +1,14 @@
 #include <bits/stdc++.h>
 
+#define Deb std::cerr
+#define Delin Deb << "[Debug] at Line " << __LINE__
+#define Debug Delin << " : "
+#define Deline Delin << std::endl
+
 const int N = 200005;
 
 int n, m, k, u, v, w, px;
-int a[N], b[N], p[N], q[N], f[N], c[N], s[N], d[N], t[N], r[N], ans[N];
+int a[N], p[N], q[N], f[N], c[N], s[N], d[N], r[N], ans[N];
 
 std::vector<int> to[N], ban[N];
 
@@ -48,17 +53,17 @@ int main() {
         while (px <= n && a[p[px]] <= c[q[i]]) {
             s[v = u = p[px++]] = 1;
             for (int x : to[u]) {
-                if (s[x] && kind[find(x)].size() > kind[v].size()) v = find(x);
+                if (kind[find(x)].size() > kind[v].size()) v = find(x);
             }
             if (u != v) erase(v), merge(v, u);
             for (int x : to[u]) {
-                if (!s[x] || find(x) == v || t[find(x)] == u) continue;
-                t[find(x)] = u, erase(find(x)), merge(v, find(x));
+                if (!s[x] || find(x) == v) continue;
+                erase(find(x)), merge(v, find(x));
             }
             set.insert(d[v]);
         }
         for (int x : ban[q[i]]) {
-            if (r[find(x)]) continue;
+            if (!s[x] || r[find(x)]) continue;
             r[find(x)] = 1, erase(find(x));
         }
         auto it = set.end();

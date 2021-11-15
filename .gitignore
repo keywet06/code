@@ -3,6 +3,7 @@
 !.gitignore
 !*.cpp
 !*.h
+!*.hpp
 !*.c
 !*.pas
 !*.sh

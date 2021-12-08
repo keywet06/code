@@ -1,95 +1,74 @@
 #include <bits/stdc++.h>
-#define debug std::cerr << "Debug(" << __LINE__ << "): "
-#define pub push_back
-#define pob pop_back
-#define mkp make_pair
-#define fir first
-#define sec second
 
-using uint8 = unsigned char;
-using uint16 = unsigned short int;
-using uint32 = unsigned int;
-using uint64 = unsigned long long;
-using uint128 = __uint128_t;
-using int8 = signed char;
-using int16 = short int;
-using int32 = int;
+template <typename Type>
+inline Type &Mid(Type &x, Type y) {
+    return x < y ? x : (x = y);
+}
+
+template <typename Type>
+inline Type &Mad(Type &x, Type y) {
+    return x > y ? x : (x = y);
+}
+
 using int64 = long long;
-using int128 = __int128_t;
-using pi32 = std::pair<int32, int32>;
-
-namespace oct {
-template <typename _Tp>
-_Tp &mad(_Tp &x, _Tp y);
-template <typename _Tp>
-_Tp &mid(_Tp &x, _Tp y);
-
-template <typename _Tp>
-_Tp &mad(_Tp &x, _Tp y) {
-    return x = std::max(x, y);
-}
-template <typename _Tp>
-_Tp &mid(_Tp &x, _Tp y) {
-    return x = std::min(x, y);
-}
-}  // namespace oct
-
-// the pre-document end
+using float96 = long double;
+using pair = std::pair<int, int>;
 
 const int N = 100005;
-struct node {
-    int x;
+
+struct oper {
+    int type, id;
+    float96 val;
+    oper(){};
+    oper(int _type, int _id, float96 _val) : type(_type), id(_id), val(_val) {}
 };
-int n, m, k, cnt, t, x, y;
-int64 a[N], t1[N], t3[N], so[N], i1[N], ans[N];
-std::vector<pi32> t2[N];
-std::priority_queue<node> pq;
-inline int operator<(node x, node y) {
-    return t2[x.x].rbegin()->fir * a[y.x] < t2[y.x].rbegin()->fir * a[x.x];
-}
-inline node mkn(int x) {
-    node a;
-    a.x = x;
-    return a;
-}
+
+int k, n, m, ot, oi, ob, cnt;
+int a[N];
+
+pair as[N];
+
+std::vector<pair> add[N];
+
+std::vector<oper> p;
+
 int main() {
     std::ios::sync_with_stdio(0);
     std::cin.tie(0), std::cout.tie(0);
     std::cin >> k >> n >> m;
     for (int i = 1; i <= k; ++i) std::cin >> a[i];
     for (int i = 1; i <= n; ++i) {
-        std::cin >> t >> x >> y;
-        if (t == 1) {
-            if (y > t1[x]) t1[x] = y, i1[x] = i;
-        } else if (t == 2) {
-            t2[x].pub(std::mkp(y, i));
+        std::cin >> ot >> oi >> ob;
+        if (ot == 1) {
+            Mad(as[oi], std::make_pair(ob, i));
+        } else if (ot == 2) {
+            add[oi].emplace_back(ob, i);
         } else {
-            t3[i] = y;
+            p.emplace_back(3, i, ob);
         }
-        so[i] = i;
-    }
-    std::sort(so + 1, so + n + 1, [](int x, int y) { return t3[x] < t3[y]; });
-    for (int i = 1; i <= k; ++i) {
-        if (t1[i]) t2[i].pub(std::mkp(t1[i], i1[i]));
     }
     for (int i = 1; i <= k; ++i) {
-        if (!t2[i].size()) continue;
-        std::sort(t2[i].begin(), t2[i].end(),
-                  [](pi32 x, pi32 y) { return x.fir > y.fir; });
-        pq.push(mkn(i));
+        int64 sum = a[i];
+        if (as[i].first > a[i]) {
+            add[i].emplace_back(as[i].first - a[i], -as[i].second);
+        }
+        std::sort(add[i].begin(), add[i].end(),
+                  [](pair x, pair y) { return x > y; });
+        for (pair &pi : add[i]) {
+            if (pi.second > 0) {
+                p.emplace_back(2, pi.second, float96(sum + pi.first) / sum);
+            } else {
+                p.emplace_back(1, -pi.second, float96(sum + pi.first) / sum);
+            }
+            sum += pi.first;
+        }
     }
-    cnt = 0;
-    y = m - n + 1;
-    while (pq.size() &&
-           t2[x = pq.top().x].rbegin()->fir > (t3[cnt + y] - 1) * a[x] &&
-           (pq.pop(), ++cnt <= m)) {
-        ans[cnt] = t2[x].rbegin()->sec;
-    }
-    x = n - m + cnt - 1;
-    while (x <= n && !t3[so[x]]) ++x;
-    while (x <= n) ans[++cnt] = so[x++];
-    std::cout << cnt << std::endl;
-    for (int i = 1; i <= cnt; ++i) std::cout << ans[i] << ' ';
-    std::cout << std::endl;
+    std::sort(p.begin(), p.end(), [](oper x, oper y) { return x.val > y.val; });
+    if (p.size() > m) p.resize(m);
+    std::stable_sort(p.begin(), p.end(),
+                     [](oper x, oper y) { return x.type < y.type; });
+    std::cout << p.size() << '\n';
+    for (oper o : p) std::cout << o.id << ' ';
+    std::cout << '\n';
     return 0;
 }

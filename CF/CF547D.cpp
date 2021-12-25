@@ -1,25 +1,27 @@
 #include <bits/stdc++.h>
 
 const int N = 200005;
-const int M = 400005;
 
-int cnt, n, x, y;
-int hx[N], hy[N], color[N], head[N];
-int to[M], next[M];
+bool Col[N], Vis[N];
 
-void insert(int x, int y) {
-    next[++cnt] = head[x];
-    head[x] = cnt;
-    to[cnt] = y;
+int n;
+int Px[N], Py[N];
+
+std::vector<int> Ex[N], Ey[N], To[N];
+
+inline void Insert(int u, int v) {
+    To[u].push_back(v);
+    To[v].push_back(u);
 }
 
-void addedge(int x, int y) { insert(x, y), insert(y, x); }
+inline void Add(std::vector<int> &V) {
+    for (int i = 0, j = 1; j < V.size(); i += 2, j += 2) Insert(V[i], V[j]);
+}
 
-void dfs(int u) {
-    int v;
-    for (int e = head[u]; e; e = next[e]) {
-        if (color[v = to[e]]) continue;
-        color[v] = 3 - color[u], dfs(v);
+inline void Dfs(int u, bool c) {
+    Col[u] = c, Vis[u] = true;
+    for (int v : To[u]) {
+        if (!Vis[v]) Dfs(v, !c);
     }
 }
 
@@ -28,16 +30,16 @@ int main() {
     std::cin.tie(0), std::cout.tie(0);
     std::cin >> n;
     for (int i = 1; i <= n; ++i) {
-        std::cin >> x >> y;
-        if (hx[x]) addedge(hx[x], i);
-        hx[x] = hx[x] ? 0 : i;
-        if (hy[y]) addedge(hy[y], i);
-        hy[y] = hy[y] ? 0 : i;
+        std::cin >> Px[i] >> Py[i];
+        Ex[Px[i]].push_back(i);
+        Ey[Py[i]].push_back(i);
     }
+    for (std::vector<int> &Vec : Ex) Add(Vec);
+    for (std::vector<int> &Vec : Ey) Add(Vec);
     for (int i = 1; i <= n; ++i) {
-        if (!color[i]) color[i] = 1, dfs(i);
+        if (!Vis[i]) Dfs(i, false);
     }
-    for (int i = 1; i <= n; ++i) std::cout << (color[i] == 1 ? 'r' : 'b');
-    std::cout << std::endl;
+    for (int i = 1; i <= n; ++i) std::cout << "br"[Col[i]];
+    std::cout << '\n';
     return 0;
 }

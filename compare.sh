@@ -6,9 +6,15 @@ if g++ -o $1 $1.cpp -std=c++14 -O2 &&
 
     while true; do
 
-        time ./$3 > $1.in
-        time ./$2 < $1.in > $1.ans
-        time ./$1 < $1.in > $1.out
+        if [ "$4" = '-t' ]; then
+            time ./$3 > $1.in
+            time ./$2 < $1.in > $1.ans
+            time ./$1 < $1.in > $1.out
+        else
+            ./$3 > $1.in
+            ./$2 < $1.in > $1.ans
+            ./$1 < $1.in > $1.out
+        fi
 
         if diff $1.out $1.ans; then
             echo "Success";

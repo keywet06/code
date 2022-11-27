@@ -16,45 +16,69 @@ inline int BiPar(int64 x) { return __builtin_parityll(x); }
 
 const int P = 998244353;
 
-inline int Add(int x, int y) { return (x += y) >= P ? x - P : x; }
-inline int Sub(int x, int y) { return (x -= y) < 0 ? x + P : x; }
-inline int Mul(int x, int y) { return int64(x) * y % P; }
-inline int &Adds(int &x, int y) { return (x += y) >= P ? x -= P : x; }
-inline int &Subs(int &x, int y) { return (x -= y) < 0 ? x += P : x; }
-inline int &Muls(int &x, int y) { return x = int64(x) * y % P; }
+#ifndef OCT_MODINT_HPP
+#define OCT_MODINT_HPP
 
-inline int Sqr(int x) { return Mul(x, x); }
-inline int &Sqrs(int &x) { return Muls(x, x); }
+namespace Oct {
 
-inline int Pow(int Base, int64 Exp) {
-    int Ret(1);
-    while (Exp) {
-        if (Exp & 1) Muls(Ret, Base);
-        Sqrs(Base), Exp >>= 1;
+template <typename Type, Type P, typename MulType = Type>
+class ModInt {
+   protected:
+    Type x;
+
+   public:
+    using Self = ModInt<Type, P, MulType>;
+    ModInt() : x(0) {}
+    ModInt(Type c) : x(c) {}
+    explicit operator Type() { return x; }
+    Type &Data() { return x; }
+    friend Self operator+(Self a, Self b) { return (a.x += b.x) >= P ? a.x - P : a.x; }
+    friend Self operator-(Self a, Self b) { return (a.x -= b.x) < 0 ? a.x + P : a.x; }
+    friend Self operator*(Self a, Self b) { return MulType(a.x) * b.x % P; }
+    friend Self &operator+=(Self &a, Self b) { return (a.x += b.x) >= P ? a.x -= P, a : a; }
+    friend Self &operator-=(Self &a, Self b) { return (a.x -= b.x) < 0 ? a.x += P, a : a; }
+    friend Self &operator*=(Self &a, Self b) { return a.x = MulType(a.x) * b.x % P, a; }
+#define templ template <typename ExpType>
+    templ Self Pow(ExpType Exp) {
+        Self Base(*this), Ret(1);
+        while (Exp) {
+            if (Exp & 1) Ret *= Base;
+            Base *= Base, Exp >>= 1;
+        }
+        return Ret;
     }
-    return Ret;
-}
-
-inline int Inv(int x) { return Pow(x, P - 2); }
-
-inline int &Pows(int &Base, int64 Exp) { return Base = Pow(Base, Exp); }
-inline int &Invs(int &x) { return Pows(x, P - 2); }
-
-inline int Div(int x, int y) { return Mul(x, Inv(y)); }
-inline int &Divs(int &x, int y) { return Muls(x, Inv(y)); }
-
-#define templ template <typename... Args>
-
-templ int Add(int x, int y, Args... args) { return Add(Add(x, y), args...); }
-templ int Sub(int x, int y, Args... args) { return Sub(Sub(x, y), args...); }
-templ int Mul(int x, int y, Args... args) { return Mul(Mul(x, y), args...); }
-templ int Div(int x, Args... args) { return Mul(x, Inv(Mul(args...))); }
-templ int &Adds(int &x, int y, Args... args) { return Adds(Adds(x, y), args...); }
-templ int &Subs(int &x, int y, Args... args) { return Subs(Subs(x, y), args...); }
-templ int &Muls(int &x, int y, Args... args) { return Muls(Muls(x, y), args...); }
-templ int &Divs(int &x, Args... args) { return Muls(x, Inv(Mul(args...))); }
-
+    templ Self &Pows(ExpType Exp) { return *this = Pow(Exp); }
+    templ Self &PowEq(ExpType Exp) { return Pows(Exp); }
+    templ Self &PowEqual(ExpType Exp) { return Pows(Exp); }
+    templ friend Self Pow(Self Base, ExpType Exp) { return Base.Pow(Exp); }
 #undef templ
+    Self Inv() { return Pow(P - 2); }
+    Self &Invs() { return Pows(P - 2); }
+    Self &InvEq() { return Invs(); }
+    Self &InvEqual() { return Invs(); }
+    friend Self Inv(Self x) { return x.Pow(P - 2); }
+    friend Self operator~(Self x) { return x.Inv(); }
+    friend Self operator/(Self a, Self b) { return a * ~b; }
+    friend Self &operator/=(Self &a, Self b) { return a *= ~b; }
+    friend Self &operator++(Self &a) { return a += 1; }
+    friend Self &operator--(Self &a) { return a -= 1; }
+    friend Self operator++(Self &a, int) {
+        Self Tmp = a;
+        return a += 1, Tmp;
+    }
+    friend Self operator--(Self &a, int) {
+        Self Tmp = a;
+        return a -= 1, Tmp;
+    }
+    friend Self operator+(Self a) { return a; }
+    friend Self operator-(Self a) { return 0 - a; }
+    bool operator==(Self a) { return x == Type(a); }
+    bool operator!=(Self a) { return x != Type(a); }
+};
+
+}  // namespace Oct
+
+#endif
 
 inline std::vector<int> Inv(std::vector<int> f) {
     std::vector<int> g(f.size());
